@@ -32,7 +32,7 @@ The following behaviors are considered unacceptable within our community:
 
 ## Reporting Incidents
 
-If you witness or experience any behavior that violates the Code of Conduct, please promptly report it by contacting the project maintainers at [email address or contact information]. All reports will be handled with strict confidentiality.
+If you witness or experience any behavior that violates the Code of Conduct, please promptly report it by contacting the project maintainers at [hirenrathod@att.net]. All reports will be handled with strict confidentiality.
 
 ## Enforcement
 
