@@ -33,7 +33,7 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 
 ## Contributing
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request. Make sure to follow the [contribution guidelines](https://github.com/your-username/your-repository/blob/main/CONTRIBUTING.md) when making contributions to this project.
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request. Make sure to follow the [contribution guidelines](https://github.com/Hiren2001/hiren.js.org/blob/main/CONTRIBUTING.md) when making contributions to this project.
 
 ---
 
