@@ -41,7 +41,3 @@ We expect all contributors to adhere to the [Code of Conduct](CODE_OF_CONDUCT.md
 ## License
 
 By contributing to the HirenJS Code Editor, you agree that your contributions will be licensed under the terms of the [MIT License](LICENSE).
-
----
-
-Please make sure to update the URLs and repository information accordingly if you are hosting the HirenJS Code Editor under a different repository or username.
