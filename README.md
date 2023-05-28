@@ -7,6 +7,8 @@ HirenJS Code Editor: A lightweight, mobile-friendly JavaScript code editor for s
 
 HirenJS Code Editor is an online code editor designed for students who want to learn JavaScript and practice coding on their mobile devices. It provides a convenient way to write, execute, and experiment with JavaScript code directly in the web browser.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7978764.svg)](https://doi.org/10.5281/zenodo.7978764)
+
 ## Features
 
 - **Mobile-friendly:** Accessible and optimized for mobile phones and other devices, allowing you to learn and practice JavaScript on the go.
