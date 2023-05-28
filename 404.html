@@ -28,16 +28,26 @@
       text-decoration: none;
     }
 
+    img {
+      max-width: calc(var(--font-size) * 5);
+      margin-bottom: 20px;
+    }
+
     /* Import Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    /* Set CSS variables for font size and logo size */
+    :root {
+      --font-size: 36px;
+    }
   </style>
 </head>
 
 <body>
-  <img src="/H.png" alt="Logo">
+  <img src="H.png" alt="Logo">
   <h1>404 Not Found</h1>
   <p>The page you are looking for could not be found.</p>
-  <p>Redirecting to <a href="/">homepage</a> in <span id="countdown" class="countdown">5</span> seconds...</p>
+  <p>Redirecting in <span id="countdown">5</span> seconds...</p>
 
   <script>
     // Countdown timer
@@ -59,6 +69,11 @@
 
     // Start the countdown
     setTimeout(updateCountdown, 1000);
+
+    // Set the font size CSS variable dynamically based on the computed font size of the h1 element
+    var h1Element = document.querySelector('h1');
+    var computedFontSize = window.getComputedStyle(h1Element).getPropertyValue('font-size');
+    document.documentElement.style.setProperty('--font-size', computedFontSize);
   </script>
 </body>
 
