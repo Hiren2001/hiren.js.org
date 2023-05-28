@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Not Found</title>
+  <style>
+    body {
+      font-family: 'Pacifico', cursive;
+      text-align: center;
+      margin: 0;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+  </style>
+</head>
+
+<body>
+  <h1>404 Not Found</h1>
+  <p>The page you are looking for could not be found.</p>
+  <p>Redirecting in <span id="countdown">5</span> seconds...</p>
+
+  <script>
+    // Countdown timer
+    var countdownElement = document.getElementById('countdown');
+    var countdown = 5;
+
+    function updateCountdown() {
+      countdown--;
+      countdownElement.textContent = countdown;
+
+      if (countdown === 0) {
+        // Redirect to the desired URL
+        window.location.href = 'https://hiren.js.org';
+      } else {
+        // Schedule the next countdown update
+        setTimeout(updateCountdown, 1000);
+      }
+    }
+
+    // Start the countdown
+    setTimeout(updateCountdown, 1000);
+  </script>
+</body>
+
+</html>
