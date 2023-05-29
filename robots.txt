@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /404.html
+Disallow: /CNAME
+Disallow: /CODE_OF_CONDUCT.md
+Disallow: /CONTRIBUTING.md
+Disallow: /LICENSE 
+Disallow: /SECURITY.md
+
+Allow: /H.png
+Allow: /README.md
+Allow: /index.html
+Allow: /HirenJS.html
+Allow: /Hiren2001/hiren.js.org
