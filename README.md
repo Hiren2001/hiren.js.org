@@ -9,7 +9,6 @@ HirenJS Code Editor is an online code editor designed for students who want to l
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7978764.svg)](https://doi.org/10.5281/zenodo.7978764)
 
-[![Wikipedia](https://img.shields.io/badge/Wikipedia-%23000000.svg?style=for-the-badge&logo=wikipedia&logoColor=white)](https://hi.wikipedia.org/wiki/HirenJS_कोड_संपादक)
 
 ## Features
 
