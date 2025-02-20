@@ -6,24 +6,46 @@
   <meta name="google-adsense-account" content="ca-pub-5120785078009963">
   <title>HirenJS Code Editor</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" rel="stylesheet">
   <link href="H.png" rel="icon" type="image/png">
   <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333333;
+      --toolbar-bg: #f8f9fa;
+    }
+
+    .dark-theme {
+      --bg-color: #1a1a1a;
+      --text-color: #e0e0e0;
+      --toolbar-bg: #2d2d2d;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
     .github-corner { z-index: 9999; position: fixed; top: 0; border: 0; right: 0; }
     .editor-container { height: 60vh; }
-    .footer { padding: 20px; text-align: center; font-size: 14px; color: #888; }
-    #output { min-height: 100px; }
-    .console-log { color: #333; }
+    .footer { padding: 20px; text-align: center; font-size: 14px; }
+    #console { min-height: 200px; }
+    .console-log { color: #28a745; }
     .console-error { color: #dc3545; }
     .console-warn { color: #ffc107; }
     .console-info { color: #17a2b8; }
-    .toolbar-btn { margin-right: 8px; margin-bottom: 8px; }
-    @media (max-width: 768px) { .editor-container { height: 40vh; } }
+    .console-command { color: #007bff; }
+    .toolbar { background-color: var(--toolbar-bg); padding: 10px; border-radius: 5px; }
+
+    @media (max-width: 768px) { 
+      .editor-container { height: 40vh; }
+      .toolbar-btn { margin-bottom: 8px; }
+    }
   </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="dark-theme">
   <div class="container mx-auto px-4">
     <div class="py-8">
       <!-- GitHub Corner SVG -->
@@ -41,7 +63,6 @@
           <select class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded toolbar-btn" id="theme-select">
             <option value="chrome">Light</option>
             <option value="monokai">Dark</option>
-            <option value="twilight">Twilight</option>
           </select>
         </div>
         <div class="flex flex-wrap">
@@ -55,17 +76,17 @@
         </div>
       </div>
       
-      <div class="editor-container shadow-lg bg-white rounded p-4">
-        <div id="editor" style="height: 100%;"></div>
+      <div class="editor-container shadow-lg rounded p-4">
+        <div id="editor"></div>
       </div>
       
       <div class="mt-4">
         <h3 class="text-lg font-semibold mb-2">Console:</h3>
-        <div id="console" class="bg-white rounded border border-gray-300 p-4 overflow-auto" style="max-height: 200px;">
+        <div id="console" class="rounded border p-4 overflow-auto">
           <div id="console-content"></div>
           <div class="console-input mt-2 flex">
             <input type="text" id="console-command" 
-                   class="flex-grow border rounded-l p-2" 
+                   class="flex-grow border rounded-l p-2 bg-transparent" 
                    placeholder="Enter JavaScript command...">
             <button id="console-execute" 
                     class="bg-blue-500 text-white px-4 rounded-r">
@@ -87,12 +108,10 @@
   <script>
     $(document).ready(function () {
       const editor = ace.edit("editor");
-      let history = [];
-      let historyIndex = -1;
-      let currentAnnotations = [];
+      let currentTheme = localStorage.getItem('editorTheme') || 'monokai';
 
-      // Editor Configuration
-      editor.setTheme("ace/theme/chrome");
+      // Initialize Editor
+      editor.setTheme(`ace/theme/${currentTheme}`);
       editor.session.setMode("ace/mode/javascript");
       editor.setOptions({
         fontSize: "14px",
@@ -102,25 +121,20 @@
         printMargin: false,
       });
 
+      // Set initial theme
+      $('#theme-select').val(currentTheme);
+      updateTheme(currentTheme);
+
       // Load saved code
       const savedCode = localStorage.getItem('editorCode');
       if (savedCode) editor.setValue(savedCode);
 
-      // Auto-save with debounce
-      editor.session.on('change', debounce(() => {
-        localStorage.setItem('editorCode', editor.getValue());
-      }, 1000));
-
-      // Keyboard Shortcuts
-      editor.commands.addCommand({
-        name: "runCode",
-        bindKey: { win: "Ctrl-Enter", mac: "Command-Enter" },
-        exec: () => executeCode(editor.getValue())
-      });
-
       // Theme Selector
-      $('#theme-select').change(() => {
-        editor.setTheme(`ace/theme/${$('#theme-select').val()}`);
+      $('#theme-select').change(function() {
+        const theme = $(this).val();
+        editor.setTheme(`ace/theme/${theme}`);
+        updateTheme(theme);
+        localStorage.setItem('editorTheme', theme);
       });
 
       // Format Code
@@ -128,7 +142,7 @@
         try {
           const formatted = prettier.format(editor.getValue(), {
             parser: "babel",
-            plugins: [prettierPlugins],
+            plugins: { babel: prettierPlugins.parserBabel },
             semi: false,
             singleQuote: true
           });
@@ -138,68 +152,24 @@
         }
       });
 
-      // Console Execution
-      $('#console-execute').click(executeConsoleCommand);
-      $('#console-command').keypress(e => {
-        if (e.which === 13) executeConsoleCommand();
+      // Run Code
+      $('#run-btn').click(() => executeCode(editor.getValue()));
+      editor.commands.addCommand({
+        name: "runCode",
+        bindKey: { win: "Ctrl-Enter", mac: "Command-Enter" },
+        exec: () => executeCode(editor.getValue())
       });
 
-      function executeCode(code) {
+      // Reset Code
+      $('#reset-btn').click(() => {
+        editor.setValue('');
+        localStorage.removeItem('editorCode');
         clearConsole();
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
+      });
 
-        try {
-          const script = iframe.contentWindow.document.createElement('script');
-          script.text = `
-            try {
-              ${code}
-            } catch (error) {
-              console.error(error);
-            }
-          `;
-          iframe.contentWindow.console = {
-            log: msg => addConsoleMessage(msg, 'log'),
-            error: msg => addConsoleMessage(msg, 'error'),
-            warn: msg => addConsoleMessage(msg, 'warn'),
-            info: msg => addConsoleMessage(msg, 'info')
-          };
-          iframe.contentWindow.document.body.appendChild(script);
-        } catch (error) {
-          addConsoleMessage(error.message, 'error');
-        }
-        document.body.removeChild(iframe);
-      }
-
-      function executeConsoleCommand() {
-        const command = $('#console-command').val();
-        if (!command) return;
-        
-        try {
-          const result = eval(command);
-          addConsoleMessage(`> ${command}`, 'command');
-          addConsoleMessage(result, 'result');
-        } catch (error) {
-          addConsoleMessage(error.message, 'error');
-        }
-        $('#console-command').val('');
-      }
-
-      function addConsoleMessage(message, type = 'log') {
-        const consoleElement = $('#console-content');
-        const typeClass = `console-${type}`;
-        const formattedMessage = typeof message === 'object' 
-          ? JSON.stringify(message, null, 2) 
-          : message;
-        
-        consoleElement.append(`
-          <div class="${typeClass} text-sm font-mono p-1 border-b">
-            ${formattedMessage}
-          </div>
-        `);
-        consoleElement.scrollTop(consoleElement[0].scrollHeight);
-      }
+      // Console Execution
+      $('#console-execute').click(executeConsoleCommand);
+      $('#console-command').keypress(e => e.which === 13 && executeConsoleCommand());
 
       // Import/Export
       $('#export-btn').click(() => {
@@ -218,17 +188,78 @@
         reader.readAsText(file);
       });
 
-      // Utilities
+      // Theme Management
+      function updateTheme(theme) {
+        document.body.classList.toggle('dark-theme', theme === 'monokai');
+      }
+
+      // Code Execution
+      function executeCode(code) {
+        clearConsole();
+        try {
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+
+          iframe.contentWindow.console = {
+            log: (...args) => args.forEach(arg => addConsoleMessage(arg, 'log')),
+            error: (...args) => args.forEach(arg => addConsoleMessage(arg, 'error')),
+            warn: (...args) => args.forEach(arg => addConsoleMessage(arg, 'warn')),
+            info: (...args) => args.forEach(arg => addConsoleMessage(arg, 'info'))
+          };
+
+          const script = iframe.contentWindow.document.createElement('script');
+          script.text = `try { ${code} } catch(e) { console.error(e); }`;
+          iframe.contentWindow.document.body.appendChild(script);
+          setTimeout(() => document.body.removeChild(iframe), 1000);
+        } catch (error) {
+          addConsoleMessage(error.message, 'error');
+        }
+      }
+
+      function executeConsoleCommand() {
+        const command = $('#console-command').val();
+        if (!command) return;
+        
+        try {
+          const result = eval(command);
+          addConsoleMessage(`> ${command}`, 'command');
+          addConsoleMessage(result, 'log');
+        } catch (error) {
+          addConsoleMessage(error.message, 'error');
+        }
+        $('#console-command').val('');
+      }
+
+      function addConsoleMessage(message, type = 'log') {
+        const consoleElement = $('#console-content');
+        const formatted = typeof message === 'object' 
+          ? JSON.stringify(message, null, 2) 
+          : message.toString();
+        
+        consoleElement.append(`
+          <div class="console-${type} text-sm font-mono p-1 border-b border-gray-200">
+            ${formatted}
+          </div>
+        `);
+        consoleElement.scrollTop(consoleElement[0].scrollHeight);
+      }
+
+      function clearConsole() {
+        $('#console-content').empty();
+      }
+
+      // Auto-save
+      editor.session.on('change', debounce(() => {
+        localStorage.setItem('editorCode', editor.getValue());
+      }, 1000));
+
       function debounce(func, timeout = 300) {
         let timer;
         return (...args) => {
           clearTimeout(timer);
           timer = setTimeout(() => func.apply(this, args), timeout);
         };
-      }
-
-      function clearConsole() {
-        $('#console-content').empty();
       }
     });
   </script>
