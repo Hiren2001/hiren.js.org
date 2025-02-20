@@ -60,6 +60,139 @@
     .doi-badge {
       margin-top: 20px;
     }
+        .beta-container {
+      position: relative;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    .beta-version {
+      background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+      padding: 18px 25px;
+      border-radius: 12px;
+      border: 2px solid #ffd351;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), glow 2s infinite alternate;
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .beta-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pulse-container {
+      position: relative;
+      width: 24px;
+      height: 24px;
+    }
+
+    .pulse-dot {
+      width: 14px;
+      height: 14px;
+      background: #ff6b00;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      animation: pulse 1.8s infinite;
+    }
+
+    .pulse-ring {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #ff6b00;
+      border-radius: 50%;
+      animation: ring 1.8s infinite;
+    }
+
+    .beta-text {
+      color: #856404;
+      font-weight: 600;
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .beta-version .btn {
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      border: 2px solid #ffc107;
+      background: linear-gradient(135deg, #ffc107 0%, #ffaa00 100%);
+      color: #856404;
+    }
+
+    .beta-version .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+      from {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.8);
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes ring {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px rgba(255, 193, 7, 0.2);
+      }
+      to {
+        box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .beta-version {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+      }
+      
+      .beta-content {
+        margin-bottom: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -68,7 +201,20 @@
   <div class="container">
     <h1>HirenJS Code Editor</h1>
     <p>A lightweight, mobile-friendly JavaScript code editor for students to learn and practice coding on the go.</p>
-
+   <div class="beta-container">
+      <div class="beta-version">
+        <div class="beta-content">
+          <div class="pulse-container">
+            <div class="pulse-ring"></div>
+            <div class="pulse-dot"></div>
+          </div>
+          <h3 class="beta-text">Experimental Beta Version Available!</h3>
+        </div>
+        <a href="https://hiren.js.org/beta.html" class="btn btn-warning">
+          <span class="d-none d-md-inline">Try</span> Beta Now →
+        </a>
+      </div>
+   </div>
     <div class="feature">
       <h2>About HirenJS Code Editor</h2>
       <p>HirenJS Code Editor is an online code editor designed for students who want to learn JavaScript and practice coding on their mobile devices. It provides a convenient way to write, execute, and experiment with JavaScript code directly in the web browser.</p>
