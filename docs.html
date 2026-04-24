@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HirenJS Documentation & Learning Guide — Learn JavaScript from scratch with interactive examples, beginner to advanced topics, all optimised for mobile.">
+  <title>HirenJS Docs — JavaScript Learning Guide</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23f7df1e'/><text y='.9em' font-size='85' x='8'>JS</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --bg:      #0f0f1a;
+      --bg2:     #16162a;
+      --bg3:     #1e1e35;
+      --panel:   #1a1a2e;
+      --border:  #2a2a4a;
+      --accent:  #f7df1e;
+      --accent2: #ff6b6b;
+      --accent3: #4ecdc4;
+      --accent4: #a78bfa;
+      --text:    #e8e8f0;
+      --text2:   #8888aa;
+      --success: #6ee7b7;
+      --warn:    #fcd34d;
+      --r:       12px;
+      --rsm:     8px;
+      --mono:    'JetBrains Mono', monospace;
+      --display: 'Syne', system-ui, sans-serif;
+      --shadow:  0 8px 40px rgba(0,0,0,0.45);
+      --sidebar: 260px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { background: var(--bg); color: var(--text); font-family: var(--display); overflow-x: hidden; line-height: 1.6; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* ── Noise ── */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ── NAV ── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 56px;
+      background: rgba(15,15,26,0.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(12px, 4vw, 32px); gap: 12px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; color: var(--text);
+      font-weight: 800; font-size: 1rem; letter-spacing: -0.5px; white-space: nowrap;
+    }
+    .nav-badge { background: var(--accent); color: #000; font-family: var(--mono); font-size: 0.62rem; font-weight: 700; padding: 2px 6px; border-radius: 5px; letter-spacing: 1px; }
+    .nav-pill {
+      background: rgba(247,223,30,0.08); border: 1px solid rgba(247,223,30,0.2);
+      border-radius: 99px; padding: 3px 12px;
+      font-family: var(--mono); font-size: 0.68rem; color: var(--accent); letter-spacing: 1px;
+    }
+    .nav-right { display: flex; gap: 8px; align-items: center; }
+    .nav-btn {
+      background: var(--bg3); border: 1px solid var(--border); color: var(--text2);
+      padding: 6px 14px; border-radius: var(--rsm); font-family: var(--display);
+      font-size: 0.78rem; font-weight: 600; text-decoration: none; cursor: pointer;
+      transition: all 0.15s; white-space: nowrap;
+    }
+    .nav-btn:hover { color: var(--text); border-color: var(--text2); }
+    .nav-btn-primary { background: var(--accent); color: #000; border-color: var(--accent); }
+    .nav-btn-primary:hover { background: #ffe933; box-shadow: 0 0 16px rgba(247,223,30,0.35); color: #000; }
+    .nav-search {
+      flex: 1; max-width: 280px;
+      background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+      font-family: var(--mono); font-size: 0.75rem; padding: 6px 12px;
+      border-radius: var(--rsm); outline: none; transition: border-color 0.15s;
+    }
+    .nav-search::placeholder { color: var(--text2); }
+    .nav-search:focus { border-color: var(--accent); }
+    .menu-toggle { display: none; background: var(--bg3); border: 1px solid var(--border); color: var(--text); width: 34px; height: 34px; border-radius: var(--rsm); cursor: pointer; font-size: 1rem; align-items: center; justify-content: center; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      margin-top: 56px;
+      min-height: calc(100dvh - 56px);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar); flex-shrink: 0;
+      position: fixed; top: 56px; bottom: 0; left: 0;
+      background: var(--bg2); border-right: 1px solid var(--border);
+      overflow-y: auto; z-index: 100;
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    .sidebar-inner { padding: 20px 0 40px; }
+
+    .sidebar-section { margin-bottom: 6px; }
+    .sidebar-heading {
+      font-family: var(--mono); font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2);
+      padding: 10px 20px 6px; display: flex; align-items: center; gap: 6px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 20px; font-size: 0.82rem; font-weight: 500;
+      color: var(--text2); text-decoration: none; border-left: 2px solid transparent;
+      transition: all 0.13s; cursor: pointer;
+    }
+    .sidebar-link:hover { color: var(--text); background: var(--bg3); border-left-color: var(--border); }
+    .sidebar-link.active { color: var(--accent); border-left-color: var(--accent); background: rgba(247,223,30,0.05); font-weight: 600; }
+    .sidebar-link .sl-badge {
+      margin-left: auto; font-family: var(--mono); font-size: 0.58rem;
+      padding: 1px 5px; border-radius: 4px; font-weight: 700;
+    }
+    .badge-beginner { background: rgba(110,231,183,0.15); color: var(--success); }
+    .badge-mid     { background: rgba(252,211,77,0.15); color: var(--warn); }
+    .badge-adv     { background: rgba(255,107,107,0.15); color: var(--accent2); }
+    .badge-new     { background: rgba(247,223,30,0.15); color: var(--accent); }
+    .sidebar-link .sl-icon { font-size: 0.9rem; flex-shrink: 0; }
+
+    /* Progress bar in sidebar */
+    .sidebar-progress { padding: 12px 20px 0; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text2); font-family: var(--mono); margin-bottom: 5px; }
+    .progress-bar { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      margin-left: var(--sidebar);
+      flex: 1; min-width: 0;
+      padding: clamp(24px,4vw,48px) clamp(16px,4vw,48px);
+      max-width: 900px;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      margin-bottom: 40px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      animation: fadeIn 0.4s ease both;
+    }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+
+    .page-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+      color: var(--accent); letter-spacing: 1px; margin-bottom: 10px;
+    }
+    .page-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
+
+    .page-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-bottom: 10px; }
+    .page-sub { color: var(--text2); font-size: 1rem; line-height: 1.7; max-width: 600px; }
+
+    .page-meta { display: flex; gap: 20px; margin-top: 16px; flex-wrap: wrap; }
+    .meta-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text2); font-family: var(--mono); }
+
+    /* ── SECTION HEADINGS ── */
+    .doc-section { margin-bottom: 60px; scroll-margin-top: 80px; }
+    .doc-h2 {
+      font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+      padding-top: 8px;
+    }
+    .doc-h2 .h-anchor { color: var(--border); font-size: 0.9rem; text-decoration: none; opacity: 0; transition: opacity 0.15s; }
+    .doc-h2:hover .h-anchor { opacity: 1; }
+    .doc-h3 { font-size: 1.05rem; font-weight: 700; margin: 28px 0 10px; color: var(--text); }
+    .doc-p { color: var(--text2); font-size: 0.9rem; line-height: 1.8; margin-bottom: 14px; }
+    .doc-p a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(247,223,30,0.3); transition: border-color 0.15s; }
+    .doc-p a:hover { border-bottom-color: var(--accent); }
+
+    /* ── DIVIDER ── */
+    .doc-divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    /* ── CODE BLOCKS ── */
+    .code-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      margin: 16px 0 24px;
+      overflow: hidden;
+      position: relative;
+    }
+    .code-block-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 14px; background: var(--bg3); border-bottom: 1px solid var(--border);
+      font-family: var(--mono); font-size: 0.68rem; color: var(--text2);
+    }
+    .code-block-dots { display: flex; gap: 5px; }
+    .cbd { width: 9px; height: 9px; border-radius: 50%; }
+    .cbd-r { background: #ff5f57; } .cbd-y { background: #febc2e; } .cbd-g { background: #28c840; }
+    .code-block-lang { background: rgba(247,223,30,0.1); color: var(--accent); padding: 1px 7px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
+    .copy-btn {
+      background: none; border: 1px solid var(--border); color: var(--text2);
+      font-family: var(--mono); font-size: 0.65rem; padding: 2px 8px; border-radius: 4px;
+      cursor: pointer; transition: all 0.13s;
+    }
+    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .code-block pre {
+      padding: 18px; overflow-x: auto; font-family: var(--mono); font-size: 0.82rem;
+      line-height: 1.85; tab-size: 2;
+    }
+    /* Syntax colours */
+    .kw  { color: #c084fc; }
+    .fn  { color: #60a5fa; }
+    .str { color: #6ee7b7; }
+    .num { color: #fb923c; }
+    .cm  { color: #4a5568; font-style: italic; }
+    .op  { color: var(--accent); }
+    .pn  { color: #94a3b8; }
+    .vr  { color: var(--text); }
+    .out { color: var(--success); }
+
+    /* ── INLINE CODE ── */
+    code { font-family: var(--mono); font-size: 0.82em; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--accent3); }
+
+    /* ── TIP / WARNING / INFO CARDS ── */
+    .callout {
+      border-radius: var(--rsm); padding: 14px 18px; margin: 18px 0 24px;
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 0.87rem; line-height: 1.7;
+    }
+    .callout-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .callout-body strong { display: block; font-weight: 700; margin-bottom: 3px; }
+    .callout-tip   { background: rgba(110,231,183,0.07); border-left: 3px solid var(--success); }
+    .callout-warn  { background: rgba(252,211,77,0.07); border-left: 3px solid var(--warn); }
+    .callout-info  { background: rgba(96,165,250,0.07); border-left: 3px solid #60a5fa; }
+    .callout-danger{ background: rgba(255,107,107,0.07); border-left: 3px solid var(--accent2); }
+    .callout-tip .callout-body { color: #a7f3d0; }
+    .callout-warn .callout-body { color: #fde68a; }
+    .callout-info .callout-body { color: #bfdbfe; }
+    .callout-danger .callout-body { color: #fca5a5; }
+
+    /* ── TABLE ── */
+    .doc-table-wrap { overflow-x: auto; margin: 16px 0 24px; border-radius: var(--rsm); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { background: var(--bg3); color: var(--text); font-weight: 700; padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.5px; }
+    td { padding: 10px 16px; color: var(--text2); border-bottom: 1px solid rgba(42,42,74,0.5); vertical-align: top; line-height: 1.6; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* ── TOPIC CARDS (index) ── */
+    .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 24px; }
+    .topic-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 20px;
+      text-decoration: none; color: var(--text);
+      transition: all 0.2s; display: flex; flex-direction: column; gap: 8px;
+      cursor: pointer;
+    }
+    .topic-card:hover { border-color: rgba(247,223,30,0.35); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+    .topic-card-icon { font-size: 1.5rem; }
+    .topic-card-title { font-weight: 700; font-size: 0.9rem; }
+    .topic-card-desc { color: var(--text2); font-size: 0.78rem; line-height: 1.5; }
+    .topic-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+    .topic-card-badge { font-family: var(--mono); font-size: 0.58rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+    .topic-card-arrow { color: var(--text2); font-size: 0.85rem; transition: transform 0.15s; }
+    .topic-card:hover .topic-card-arrow { transform: translateX(4px); color: var(--accent); }
+
+    /* ── QUIZ / EXERCISE ── */
+    .quiz-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 24px; margin: 20px 0 28px;
+    }
+    .quiz-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .quiz-badge { background: rgba(167,139,250,0.15); color: var(--accent4); font-family: var(--mono); font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.5px; }
+    .quiz-q { font-weight: 700; font-size: 0.95rem; margin-bottom: 14px; line-height: 1.5; }
+    .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-option {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--rsm); padding: 10px 14px;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; gap: 8px; font-family: var(--mono);
+    }
+    .quiz-option:hover { border-color: var(--accent4); color: var(--text); }
+    .quiz-option.correct { background: rgba(110,231,183,0.1); border-color: var(--success); color: var(--success); }
+    .quiz-option.wrong   { background: rgba(255,107,107,0.1); border-color: var(--accent2); color: var(--accent2); }
+    .quiz-option.disabled { pointer-events: none; }
+    .quiz-feedback { margin-top: 12px; font-size: 0.82rem; padding: 8px 12px; border-radius: var(--rsm); display: none; }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.success { background: rgba(110,231,183,0.1); color: var(--success); }
+    .quiz-feedback.error   { background: rgba(255,107,107,0.1); color: var(--accent2); }
+
+    /* ── PROGRESS TRACKER ── */
+    .lesson-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
+      gap: 12px; flex-wrap: wrap;
+    }
+    .lesson-nav-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text2); text-decoration: none;
+      padding: 10px 18px; border-radius: var(--rsm);
+      font-size: 0.82rem; font-weight: 600;
+      transition: all 0.15s; cursor: pointer;
+    }
+    .lesson-nav-btn:hover { color: var(--text); border-color: var(--text2); }
+    .lesson-nav-btn.next { background: var(--accent); color: #000; border-color: var(--accent); }
+    .lesson-nav-btn.next:hover { background: #ffe933; box-shadow: 0 0 16px rgba(247,223,30,0.3); }
+
+    /* ── TRY IT PANEL ── */
+    .try-it-box {
+      background: var(--bg2); border: 1px solid rgba(247,223,30,0.2);
+      border-radius: var(--r); margin: 20px 0 28px; overflow: hidden;
+    }
+    .try-it-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px; background: rgba(247,223,30,0.05); border-bottom: 1px solid var(--border);
+    }
+    .try-it-label { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); font-weight: 700; letter-spacing: 1px; }
+    .try-it-run {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--accent); color: #000;
+      border: none; border-radius: var(--rsm);
+      font-family: var(--display); font-size: 0.75rem; font-weight: 700;
+      padding: 5px 12px; cursor: pointer; transition: all 0.15s;
+    }
+    .try-it-run:hover { background: #ffe933; }
+    .try-it-textarea {
+      width: 100%; background: transparent; border: none; outline: none;
+      font-family: var(--mono); font-size: 0.82rem; color: var(--text);
+      padding: 16px; resize: vertical; min-height: 100px; line-height: 1.75;
+      tab-size: 2;
+    }
+    .try-it-output {
+      border-top: 1px solid var(--border); padding: 12px 16px;
+      font-family: var(--mono); font-size: 0.8rem;
+      color: var(--success); min-height: 36px;
+      background: rgba(0,0,0,0.2);
+    }
+    .try-it-output:empty::before { content: '// Output appears here…'; color: var(--text2); font-style: italic; }
+
+    /* ── CONCEPT CARD ── */
+    .concept-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0 24px; }
+    @media (max-width: 580px) { .concept-row { grid-template-columns: 1fr; } }
+    .concept-card { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--rsm); padding: 16px; }
+    .concept-card h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .concept-card p { color: var(--text2); font-size: 0.8rem; line-height: 1.6; }
+
+    /* ── CHEATSHEET TABLE ── */
+    .cheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 16px 0 24px; }
+    .cheat-item { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--rsm); padding: 12px 14px; }
+    .cheat-key { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); font-weight: 700; margin-bottom: 4px; }
+    .cheat-val { color: var(--text2); font-size: 0.75rem; line-height: 1.5; }
+
+    /* ── TOC ── */
+    .toc-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--rsm); padding: 18px 20px; margin-bottom: 36px;
+    }
+    .toc-title { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .toc-list a { color: var(--text2); text-decoration: none; font-size: 0.83rem; transition: color 0.13s; }
+    .toc-list a:hover { color: var(--accent); }
+    .toc-list li { counter-increment: toc; display: flex; gap: 8px; align-items: baseline; }
+    .toc-list li::before { content: counter(toc, decimal-leading-zero); font-family: var(--mono); font-size: 0.65rem; color: var(--text2); flex-shrink: 0; }
+    .toc-list { counter-reset: toc; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text2); margin-bottom: 20px; flex-wrap: wrap; font-family: var(--mono); }
+    .breadcrumb a { color: var(--text2); text-decoration: none; transition: color 0.13s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb-sep { color: var(--border); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .menu-toggle { display: flex; }
+      .nav-search { display: none; }
+      .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+      .sidebar-overlay.open { display: block; }
+    }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── COMPLETION BADGE ── */
+    .completion {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(110,231,183,0.07); border: 1px solid rgba(110,231,183,0.25);
+      border-radius: var(--r); padding: 18px 22px; margin-top: 32px;
+    }
+    .completion-icon { font-size: 2rem; }
+    .completion h4 { font-weight: 700; color: var(--success); margin-bottom: 3px; }
+    .completion p { color: var(--text2); font-size: 0.82rem; }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <a href="index.html" class="nav-logo">
+      <span class="nav-badge">JS</span> HirenJS
+    </a>
+    <span class="nav-pill">DOCS</span>
+  </div>
+  <input type="text" class="nav-search" id="docSearch" placeholder="Search docs… (e.g. 'arrays')">
+  <div class="nav-right">
+    <a href="index.html" class="nav-btn">← Home</a>
+    <a href="HirenJS.html" class="nav-btn nav-btn-primary">▶ Editor</a>
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-inner">
+
+    <div class="sidebar-progress">
+      <div class="progress-label"><span>Your progress</span><span id="progressPct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div style="border-bottom:1px solid var(--border);margin:14px 0 6px;"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">🚀 Getting Started</div>
+      <a class="sidebar-link active" data-section="intro" onclick="navigate('intro')">
+        <span class="sl-icon">📖</span> Introduction
+        <span class="sl-badge badge-beginner">BEGINNER</span>
+      </a>
+      <a class="sidebar-link" data-section="setup" onclick="navigate('setup')">
+        <span class="sl-icon">⚙️</span> Using the Editor
+        <span class="sl-badge badge-beginner">BEGINNER</span>
+      </a>
+      <a class="sidebar-link" data-section="shortcuts" onclick="navigate('shortcuts')">
+        <span class="sl-icon">⌨️</span> Keyboard Shortcuts
+        <span class="sl-badge badge-new">NEW</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">📘 JavaScript Basics</div>
+      <a class="sidebar-link" data-section="variables" onclick="navigate('variables')">
+        <span class="sl-icon">📦</span> Variables & Types
+        <span class="sl-badge badge-beginner">BEGINNER</span>
+      </a>
+      <a class="sidebar-link" data-section="operators" onclick="navigate('operators')">
+        <span class="sl-icon">🔢</span> Operators
+        <span class="sl-badge badge-beginner">BEGINNER</span>
+      </a>
+      <a class="sidebar-link" data-section="conditionals" onclick="navigate('conditionals')">
+        <span class="sl-icon">🔀</span> Conditionals
+        <span class="sl-badge badge-beginner">BEGINNER</span>
+      </a>
+      <a class="sidebar-link" data-section="loops" onclick="navigate('loops')">
+        <span class="sl-icon">🔁</span> Loops
+        <span class="sl-badge badge-beginner">BEGINNER</span>
+      </a>
+      <a class="sidebar-link" data-section="functions" onclick="navigate('functions')">
+        <span class="sl-icon">🔧</span> Functions
+        <span class="sl-badge badge-mid">MEDIUM</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">📗 Intermediate</div>
+      <a class="sidebar-link" data-section="arrays" onclick="navigate('arrays')">
+        <span class="sl-icon">🗂️</span> Arrays
+        <span class="sl-badge badge-mid">MEDIUM</span>
+      </a>
+      <a class="sidebar-link" data-section="objects" onclick="navigate('objects')">
+        <span class="sl-icon">🧩</span> Objects
+        <span class="sl-badge badge-mid">MEDIUM</span>
+      </a>
+      <a class="sidebar-link" data-section="es6" onclick="navigate('es6')">
+        <span class="sl-icon">✨</span> ES6+ Features
+        <span class="sl-badge badge-mid">MEDIUM</span>
+      </a>
+      <a class="sidebar-link" data-section="dom" onclick="navigate('dom')">
+        <span class="sl-icon">🌐</span> DOM Basics
+        <span class="sl-badge badge-mid">MEDIUM</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">📕 Advanced</div>
+      <a class="sidebar-link" data-section="async" onclick="navigate('async')">
+        <span class="sl-icon">⏳</span> Async & Promises
+        <span class="sl-badge badge-adv">ADVANCED</span>
+      </a>
+      <a class="sidebar-link" data-section="oop" onclick="navigate('oop')">
+        <span class="sl-icon">🏗️</span> Classes & OOP
+        <span class="sl-badge badge-adv">ADVANCED</span>
+      </a>
+      <a class="sidebar-link" data-section="errorhandling" onclick="navigate('errorhandling')">
+        <span class="sl-icon">🛡️</span> Error Handling
+        <span class="sl-badge badge-adv">ADVANCED</span>
+      </a>
+      <a class="sidebar-link" data-section="patterns" onclick="navigate('patterns')">
+        <span class="sl-icon">🧠</span> Design Patterns
+        <span class="sl-badge badge-adv">ADVANCED</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">🗺️ Reference</div>
+      <a class="sidebar-link" data-section="cheatsheet" onclick="navigate('cheatsheet')">
+        <span class="sl-icon">📋</span> JS Cheatsheet
+        <span class="sl-badge badge-new">NEW</span>
+      </a>
+      <a class="sidebar-link" data-section="snippets" onclick="navigate('snippets')">
+        <span class="sl-icon">📦</span> Snippet Guide
+        <span class="sl-badge badge-new">NEW</span>
+      </a>
+    </div>
+
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main" id="mainContent">
+
+  <!-- ══════════ INTRO ══════════ -->
+  <div class="doc-section" id="sec-intro">
+    <div class="breadcrumb">
+      <a href="index.html">HirenJS</a>
+      <span class="breadcrumb-sep">/</span>
+      <span>Docs</span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Introduction</span>
+    </div>
+    <div class="page-header">
+      <div class="page-tag"><span class="page-tag-dot"></span>GETTING STARTED</div>
+      <h1 class="page-title">Documentation &amp; Learning Guide</h1>
+      <p class="page-sub">A complete, student-friendly guide to JavaScript — from your very first <code>console.log</code> to advanced async patterns. Built to run beautifully on any smartphone.</p>
+      <div class="page-meta">
+        <span class="meta-item">📱 Mobile optimised</span>
+        <span class="meta-item">🆓 100% Free</span>
+        <span class="meta-item">🟡 JavaScript ES2023</span>
+        <span class="meta-item">📚 14 Topics</span>
+      </div>
+    </div>
+
+    <div class="toc-box reveal">
+      <div class="toc-title">ON THIS PAGE</div>
+      <ul class="toc-list">
+        <li><a href="#sec-intro">What is HirenJS?</a></li>
+        <li><a href="#sec-setup">Using the Editor</a></li>
+        <li><a href="#sec-variables">Variables &amp; Types</a></li>
+        <li><a href="#sec-functions">Functions</a></li>
+        <li><a href="#sec-arrays">Arrays</a></li>
+        <li><a href="#sec-objects">Objects &amp; ES6+</a></li>
+        <li><a href="#sec-async">Async &amp; Promises</a></li>
+        <li><a href="#sec-oop">Classes &amp; OOP</a></li>
+        <li><a href="#sec-cheatsheet">Cheatsheet</a></li>
+      </ul>
+    </div>
+
+    <div class="topic-grid reveal">
+      <div class="topic-card" onclick="navigate('variables')">
+        <div class="topic-card-icon">📦</div>
+        <div class="topic-card-title">Variables &amp; Types</div>
+        <div class="topic-card-desc">Learn var, let, const and data types.</div>
+        <div class="topic-card-footer">
+          <span class="topic-card-badge badge-beginner">BEGINNER</span>
+          <span class="topic-card-arrow">→</span>
+        </div>
+      </div>
+      <div class="topic-card" onclick="navigate('loops')">
+        <div class="topic-card-icon">🔁</div>
+        <div class="topic-card-title">Loops</div>
+        <div class="topic-card-desc">for, while, forEach and more.</div>
+        <div class="topic-card-footer">
+          <span class="topic-card-badge badge-beginner">BEGINNER</span>
+          <span class="topic-card-arrow">→</span>
+        </div>
+      </div>
+      <div class="topic-card" onclick="navigate('functions')">
+        <div class="topic-card-icon">🔧</div>
+        <div class="topic-card-title">Functions</div>
+        <div class="topic-card-desc">Declaration, arrow functions, closures.</div>
+        <div class="topic-card-footer">
+          <span class="topic-card-badge badge-mid">MEDIUM</span>
+          <span class="topic-card-arrow">→</span>
+        </div>
+      </div>
+      <div class="topic-card" onclick="navigate('arrays')">
+        <div class="topic-card-icon">🗂️</div>
+        <div class="topic-card-title">Arrays</div>
+        <div class="topic-card-desc">map, filter, reduce and array methods.</div>
+        <div class="topic-card-footer">
+          <span class="topic-card-badge badge-mid">MEDIUM</span>
+          <span class="topic-card-arrow">→</span>
+        </div>
+      </div>
+      <div class="topic-card" onclick="navigate('async')">
+        <div class="topic-card-icon">⏳</div>
+        <div class="topic-card-title">Async &amp; Promises</div>
+        <div class="topic-card-desc">Callbacks, Promises, async/await.</div>
+        <div class="topic-card-footer">
+          <span class="topic-card-badge badge-adv">ADVANCED</span>
+          <span class="topic-card-arrow">→</span>
+        </div>
+      </div>
+      <div class="topic-card" onclick="navigate('oop')">
+        <div class="topic-card-icon">🏗️</div>
+        <div class="topic-card-title">Classes &amp; OOP</div>
+        <div class="topic-card-desc">class, extends, super, polymorphism.</div>
+        <div class="topic-card-footer">
+          <span class="topic-card-badge badge-adv">ADVANCED</span>
+          <span class="topic-card-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SETUP ══════════ -->
+  <div class="doc-section" id="sec-setup" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Using the Editor</span></div>
+    <div class="page-header">
+      <div class="page-tag"><span class="page-tag-dot"></span>GETTING STARTED</div>
+      <h1 class="page-title">Using the HirenJS Editor</h1>
+      <p class="page-sub">A quick tour of every feature so you can get the most out of your coding sessions — even on a small screen.</p>
+    </div>
+    <div class="doc-h2">📱 Mobile Bottom Bar</div>
+    <p class="doc-p">On phones, HirenJS shows a bottom action bar for the most-used actions so you don't have to scroll to reach buttons.</p>
+    <div class="doc-table-wrap reveal"><table><thead><tr><th>Button</th><th>Action</th></tr></thead><tbody>
+      <tr><td>▶ Run (yellow circle)</td><td>Execute your code — output appears in the Console panel below.</td></tr>
+      <tr><td>↩ Undo</td><td>Undo the last edit.</td></tr>
+      <tr><td>🗑 Clear</td><td>Wipe the editor clean (with confirmation).</td></tr>
+      <tr><td>✨ Format</td><td>Auto-indent your code.</td></tr>
+      <tr><td>🎨 Theme</td><td>Cycle through 6 editor colour themes.</td></tr>
+    </tbody></table></div>
+    <div class="doc-h2">⌨️ Keyboard Shortcuts</div>
+    <div class="doc-table-wrap reveal"><table><thead><tr><th>Shortcut</th><th>Action</th></tr></thead><tbody>
+      <tr><td><code>Ctrl + Enter</code></td><td>Run code</td></tr>
+      <tr><td><code>Ctrl + Shift + F</code></td><td>Format code</td></tr>
+      <tr><td><code>Ctrl + K</code></td><td>Open snippet library</td></tr>
+      <tr><td><code>Ctrl + L</code></td><td>Clear output</td></tr>
+      <tr><td><code>Ctrl + Z / Y</code></td><td>Undo / Redo</td></tr>
+      <tr><td><code>Ctrl + /</code></td><td>Toggle comment</td></tr>
+    </tbody></table></div>
+    <div class="callout callout-tip reveal"><div class="callout-icon">💡</div><div class="callout-body"><strong>Pro tip — Share your code!</strong>Hit the 🔗 Share button in the editor header to generate a URL that contains your code. Send it to your teacher or a friend — they'll see exactly what you wrote.</div></div>
+    <div class="lesson-nav">
+      <button class="lesson-nav-btn" onclick="navigate('intro')">← Introduction</button>
+      <button class="lesson-nav-btn next" onclick="navigate('variables')">Variables → </button>
+    </div>
+  </div>
+
+  <!-- ══════════ VARIABLES ══════════ -->
+  <div class="doc-section" id="sec-variables" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Variables &amp; Types</span></div>
+    <div class="page-header">
+      <div class="page-tag"><span class="page-tag-dot"></span>BASICS · BEGINNER</div>
+      <h1 class="page-title">Variables &amp; Data Types</h1>
+      <p class="page-sub">Variables store data. Understanding the three keywords — <code>var</code>, <code>let</code>, <code>const</code> — and the different data types is your very first step in JavaScript.</p>
+    </div>
+
+    <div class="doc-h2">Declaring Variables</div>
+    <div class="concept-row reveal">
+      <div class="concept-card"><h4>🔒 const</h4><p>Use for values that <strong>never change</strong>. Best practice — always start with const.</p></div>
+      <div class="concept-card"><h4>🔄 let</h4><p>Use when the value <strong>will change</strong> later in your program. Block-scoped.</p></div>
+      <div class="concept-card"><h4>⚠️ var</h4><p>Old way — avoid in modern code. Function-scoped and can cause confusing bugs.</p></div>
+      <div class="concept-card"><h4>📐 Scope</h4><p><code>let</code> and <code>const</code> are block-scoped (inside <code>{ }</code>). <code>var</code> leaks out of blocks.</p></div>
+    </div>
+
+    <div class="code-block reveal">
+      <div class="code-block-header">
+        <div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span class="code-window-title" style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">variables.js</span></div>
+        <div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      </div>
+<pre><span class="cm">// ── const: value that won't change ──────────────────</span>
+<span class="kw">const</span> <span class="vr">name</span> <span class="op">=</span> <span class="str">"Hiren"</span><span class="pn">;</span>
+<span class="kw">const</span> <span class="vr">PI</span>   <span class="op">=</span> <span class="num">3.14159</span><span class="pn">;</span>
+
+<span class="cm">// ── let: value that can change ──────────────────────</span>
+<span class="kw">let</span> <span class="vr">score</span>  <span class="op">=</span> <span class="num">0</span><span class="pn">;</span>
+<span class="vr">score</span>      <span class="op">=</span> <span class="num">100</span><span class="pn">;</span>   <span class="cm">// ✅ allowed</span>
+
+<span class="cm">// ── Data types ──────────────────────────────────────</span>
+<span class="kw">const</span> <span class="vr">num</span>    <span class="op">=</span> <span class="num">42</span><span class="pn">;</span>               <span class="cm">// Number</span>
+<span class="kw">const</span> <span class="vr">text</span>   <span class="op">=</span> <span class="str">"Hello!"</span><span class="pn">;</span>         <span class="cm">// String</span>
+<span class="kw">const</span> <span class="vr">flag</span>   <span class="op">=</span> <span class="kw">true</span><span class="pn">;</span>            <span class="cm">// Boolean</span>
+<span class="kw">const</span> <span class="vr">empty</span>  <span class="op">=</span> <span class="kw">null</span><span class="pn">;</span>            <span class="cm">// Null (intentional empty)</span>
+<span class="kw">let</span>   <span class="vr">undef</span><span class="pn">;</span>                     <span class="cm">// Undefined (not assigned)</span>
+
+<span class="cm">// ── Template literals ───────────────────────────────</span>
+<span class="kw">const</span> <span class="vr">greeting</span> <span class="op">=</span> <span class="str">`Hello, <span class="op">${</span><span class="vr">name</span><span class="op">}</span>! Score: <span class="op">${</span><span class="vr">score</span><span class="op">}</span>`</span><span class="pn">;</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">greeting</span><span class="pn">);</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="kw">typeof</span> <span class="vr">num</span><span class="pn">,</span> <span class="kw">typeof</span> <span class="vr">text</span><span class="pn">,</span> <span class="kw">typeof</span> <span class="vr">flag</span><span class="pn">);</span></pre>
+    </div>
+
+    <div class="callout callout-tip reveal"><div class="callout-icon">💡</div><div class="callout-body"><strong>Golden Rule</strong> — Always use <code>const</code> first. Switch to <code>let</code> only if you later need to reassign the variable. Never use <code>var</code> in new code.</div></div>
+
+    <div class="doc-h3">Try it yourself</div>
+    <div class="try-it-box reveal">
+      <div class="try-it-header">
+        <span class="try-it-label">▸ TRY IT — edit &amp; run</span>
+        <button class="try-it-run" onclick="runTryIt(this)">▶ Run</button>
+      </div>
+      <textarea class="try-it-textarea" spellcheck="false">const myName = "Student";
+let age = 18;
+const message = `My name is ${myName} and I am ${age} years old.`;
+console.log(message);
+console.log(typeof myName, typeof age);</textarea>
+      <div class="try-it-output"></div>
+    </div>
+
+    <div class="doc-h3">Quick Quiz</div>
+    <div class="quiz-card reveal">
+      <div class="quiz-header"><span class="quiz-badge">QUIZ</span><span style="font-size:0.78rem;color:var(--text2);font-family:var(--mono);">Question 1 of 2</span></div>
+      <div class="quiz-q">Which keyword should you use for a variable that will NEVER change its value?</div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="answer(this, false)"><span>A</span> var</div>
+        <div class="quiz-option" onclick="answer(this, false)"><span>B</span> let</div>
+        <div class="quiz-option" onclick="answer(this, true)"><span>C</span> const</div>
+        <div class="quiz-option" onclick="answer(this, false)"><span>D</span> static</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="lesson-nav">
+      <button class="lesson-nav-btn" onclick="navigate('setup')">← Editor Setup</button>
+      <button class="lesson-nav-btn next" onclick="navigate('operators')">Operators →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ OPERATORS ══════════ -->
+  <div class="doc-section" id="sec-operators" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Operators</span></div>
+    <div class="page-header">
+      <div class="page-tag"><span class="page-tag-dot"></span>BASICS · BEGINNER</div>
+      <h1 class="page-title">Operators</h1>
+      <p class="page-sub">Operators let you do math, compare values, and combine logic. They're the building blocks of every expression.</p>
+    </div>
+    <div class="doc-h2">Arithmetic & Comparison</div>
+    <div class="code-block reveal">
+      <div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">operators.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="cm">// Arithmetic</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">10</span> <span class="op">+</span> <span class="num">3</span><span class="pn">);</span>   <span class="cm">// 13</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">10</span> <span class="op">-</span> <span class="num">3</span><span class="pn">);</span>   <span class="cm">// 7</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">10</span> <span class="op">*</span> <span class="num">3</span><span class="pn">);</span>   <span class="cm">// 30</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">10</span> <span class="op">/</span> <span class="num">3</span><span class="pn">);</span>   <span class="cm">// 3.333…</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">10</span> <span class="op">%</span> <span class="num">3</span><span class="pn">);</span>   <span class="cm">// 1  (remainder)</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">2</span> <span class="op">**</span> <span class="num">8</span><span class="pn">);</span>   <span class="cm">// 256 (power)</span>
+
+<span class="cm">// Comparison — always use === not ==</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">5</span> <span class="op">===</span> <span class="num">5</span><span class="pn">);</span>  <span class="cm">// true</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">5</span> <span class="op">!==</span> <span class="num">4</span><span class="pn">);</span>  <span class="cm">// true</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="num">10</span> <span class="op">></span> <span class="num">5</span><span class="pn">);</span>   <span class="cm">// true</span>
+
+<span class="cm">// Logical</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="kw">true</span> <span class="op">&&</span> <span class="kw">false</span><span class="pn">);</span> <span class="cm">// false (AND)</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="kw">true</span> <span class="op">||</span> <span class="kw">false</span><span class="pn">);</span> <span class="cm">// true  (OR)</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(!</span><span class="kw">true</span><span class="pn">);</span>          <span class="cm">// false (NOT)</span></pre>
+    </div>
+    <div class="callout callout-warn reveal"><div class="callout-icon">⚠️</div><div class="callout-body"><strong>Always use === instead of ==</strong> — The double-equals <code>==</code> does type coercion which causes tricky bugs. For example <code>"5" == 5</code> is <code>true</code> with <code>==</code> but <code>false</code> with <code>===</code>. Always use <code>===</code>.</div></div>
+    <div class="lesson-nav">
+      <button class="lesson-nav-btn" onclick="navigate('variables')">← Variables</button>
+      <button class="lesson-nav-btn next" onclick="navigate('conditionals')">Conditionals →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ CONDITIONALS ══════════ -->
+  <div class="doc-section" id="sec-conditionals" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Conditionals</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>BASICS · BEGINNER</div><h1 class="page-title">Conditionals</h1><p class="page-sub">Make decisions in your code with if/else and switch.</p></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">conditionals.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="kw">const</span> <span class="vr">score</span> <span class="op">=</span> <span class="num">85</span><span class="pn">;</span>
+
+<span class="cm">// if / else if / else</span>
+<span class="kw">if</span> <span class="pn">(</span><span class="vr">score</span> <span class="op">>=</span> <span class="num">90</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Grade: A"</span><span class="pn">);</span>
+<span class="pn">}</span> <span class="kw">else if</span> <span class="pn">(</span><span class="vr">score</span> <span class="op">>=</span> <span class="num">75</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Grade: B"</span><span class="pn">);</span>
+<span class="pn">}</span> <span class="kw">else</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Grade: C"</span><span class="pn">);</span>
+<span class="pn">}</span>
+
+<span class="cm">// Ternary — short one-liner if/else</span>
+<span class="kw">const</span> <span class="vr">result</span> <span class="op">=</span> <span class="vr">score</span> <span class="op">>=</span> <span class="num">50</span> <span class="op">?</span> <span class="str">"Pass"</span> <span class="op">:</span> <span class="str">"Fail"</span><span class="pn">;</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">result</span><span class="pn">);</span>
+
+<span class="cm">// Switch</span>
+<span class="kw">const</span> <span class="vr">day</span> <span class="op">=</span> <span class="str">"Monday"</span><span class="pn">;</span>
+<span class="kw">switch</span> <span class="pn">(</span><span class="vr">day</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="kw">case</span> <span class="str">"Monday"</span><span class="pn">:</span>   <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Start of week!"</span><span class="pn">);</span> <span class="kw">break</span><span class="pn">;</span>
+  <span class="kw">case</span> <span class="str">"Friday"</span><span class="pn">:</span>   <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Weekend soon!"</span><span class="pn">);</span> <span class="kw">break</span><span class="pn">;</span>
+  <span class="kw">default</span><span class="pn">:</span>          <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Midweek grind"</span><span class="pn">);</span>
+<span class="pn">}</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('operators')">← Operators</button><button class="lesson-nav-btn next" onclick="navigate('loops')">Loops →</button></div>
+  </div>
+
+  <!-- ══════════ LOOPS ══════════ -->
+  <div class="doc-section" id="sec-loops" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Loops</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>BASICS · BEGINNER</div><h1 class="page-title">Loops</h1><p class="page-sub">Repeat actions without repeating yourself. Loops are one of the most powerful tools in programming.</p></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">loops.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="cm">// for loop</span>
+<span class="kw">for</span> <span class="pn">(</span><span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">1</span><span class="pn">;</span> <span class="vr">i</span> <span class="op"><=</span> <span class="num">5</span><span class="pn">;</span> <span class="vr">i</span><span class="op">++</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">`Count: <span class="op">${</span><span class="vr">i</span><span class="op">}</span>`</span><span class="pn">);</span>
+<span class="pn">}</span>
+
+<span class="cm">// while loop</span>
+<span class="kw">let</span> <span class="vr">n</span> <span class="op">=</span> <span class="num">0</span><span class="pn">;</span>
+<span class="kw">while</span> <span class="pn">(</span><span class="vr">n</span> <span class="op"><</span> <span class="num">3</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"n ="</span><span class="pn">,</span> <span class="vr">n</span><span class="pn">);</span>
+  <span class="vr">n</span><span class="op">++</span><span class="pn">;</span>
+<span class="pn">}</span>
+
+<span class="cm">// for...of — great for arrays</span>
+<span class="kw">const</span> <span class="vr">fruits</span> <span class="op">=</span> <span class="pn">[</span><span class="str">"Mango"</span><span class="pn">,</span> <span class="str">"Apple"</span><span class="pn">,</span> <span class="str">"Banana"</span><span class="pn">]</span><span class="pn">;</span>
+<span class="kw">for</span> <span class="pn">(</span><span class="kw">const</span> <span class="vr">fruit</span> <span class="kw">of</span> <span class="vr">fruits</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"🍎"</span><span class="pn">,</span> <span class="vr">fruit</span><span class="pn">);</span>
+<span class="pn">}</span>
+
+<span class="cm">// forEach — array method style</span>
+<span class="vr">fruits</span><span class="pn">.</span><span class="fn">forEach</span><span class="pn">((</span><span class="vr">fruit</span><span class="pn">,</span> <span class="vr">index</span><span class="pn">)</span> <span class="op">=></span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">index</span><span class="pn">,</span> <span class="vr">fruit</span><span class="pn">);</span>
+<span class="pn">});</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('conditionals')">← Conditionals</button><button class="lesson-nav-btn next" onclick="navigate('functions')">Functions →</button></div>
+  </div>
+
+  <!-- ══════════ FUNCTIONS ══════════ -->
+  <div class="doc-section" id="sec-functions" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Functions</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>BASICS · MEDIUM</div><h1 class="page-title">Functions</h1><p class="page-sub">Functions are reusable blocks of code. They are the most important building block of any JavaScript program.</p></div>
+    <div class="doc-h2">Three Ways to Write Functions</div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">functions.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="cm">// 1. Function Declaration (hoisted — works before defined)</span>
+<span class="kw">function</span> <span class="fn">add</span><span class="pn">(</span><span class="vr">a</span><span class="pn">,</span> <span class="vr">b</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="kw">return</span> <span class="vr">a</span> <span class="op">+</span> <span class="vr">b</span><span class="pn">;</span>
+<span class="pn">}</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">add</span><span class="pn">(</span><span class="num">3</span><span class="pn">,</span> <span class="num">4</span><span class="pn">));</span>  <span class="cm">// 7</span>
+
+<span class="cm">// 2. Arrow Function (modern, concise)</span>
+<span class="kw">const</span> <span class="fn">multiply</span> <span class="op">=</span> <span class="pn">(</span><span class="vr">a</span><span class="pn">,</span> <span class="vr">b</span><span class="pn">)</span> <span class="op">=></span> <span class="vr">a</span> <span class="op">*</span> <span class="vr">b</span><span class="pn">;</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">multiply</span><span class="pn">(</span><span class="num">5</span><span class="pn">,</span> <span class="num">6</span><span class="pn">));</span>  <span class="cm">// 30</span>
+
+<span class="cm">// 3. Default parameters</span>
+<span class="kw">const</span> <span class="fn">greet</span> <span class="op">=</span> <span class="pn">(</span><span class="vr">name</span> <span class="op">=</span> <span class="str">"Student"</span><span class="pn">)</span> <span class="op">=></span> <span class="str">`Hello, <span class="op">${</span><span class="vr">name</span><span class="op">}</span>!`</span><span class="pn">;</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">greet</span><span class="pn">());</span>           <span class="cm">// Hello, Student!</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">greet</span><span class="pn">(</span><span class="str">"Hiren"</span><span class="pn">));</span>    <span class="cm">// Hello, Hiren!</span>
+
+<span class="cm">// Closure — function that remembers outer variable</span>
+<span class="kw">function</span> <span class="fn">makeCounter</span><span class="pn">()</span> <span class="pn">{</span>
+  <span class="kw">let</span> <span class="vr">count</span> <span class="op">=</span> <span class="num">0</span><span class="pn">;</span>
+  <span class="kw">return</span> <span class="pn">()</span> <span class="op">=></span> <span class="op">++</span><span class="vr">count</span><span class="pn">;</span>
+<span class="pn">}</span>
+<span class="kw">const</span> <span class="vr">counter</span> <span class="op">=</span> <span class="fn">makeCounter</span><span class="pn">();</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">counter</span><span class="pn">(),</span> <span class="fn">counter</span><span class="pn">(),</span> <span class="fn">counter</span><span class="pn">());</span>  <span class="cm">// 1 2 3</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('loops')">← Loops</button><button class="lesson-nav-btn next" onclick="navigate('arrays')">Arrays →</button></div>
+  </div>
+
+  <!-- ══════════ ARRAYS ══════════ -->
+  <div class="doc-section" id="sec-arrays" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Arrays</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>INTERMEDIATE · MEDIUM</div><h1 class="page-title">Arrays</h1><p class="page-sub">Arrays hold ordered lists of data. Master <code>map</code>, <code>filter</code>, and <code>reduce</code> and you unlock 80% of real-world JavaScript.</p></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">arrays.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="kw">const</span> <span class="vr">nums</span> <span class="op">=</span> <span class="pn">[</span><span class="num">1</span><span class="pn">,</span><span class="num">2</span><span class="pn">,</span><span class="num">3</span><span class="pn">,</span><span class="num">4</span><span class="pn">,</span><span class="num">5</span><span class="pn">,</span><span class="num">6</span><span class="pn">,</span><span class="num">7</span><span class="pn">,</span><span class="num">8</span><span class="pn">]</span><span class="pn">;</span>
+
+<span class="cm">// map — transform every element</span>
+<span class="kw">const</span> <span class="vr">doubled</span> <span class="op">=</span> <span class="vr">nums</span><span class="pn">.</span><span class="fn">map</span><span class="pn">(</span><span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">*</span> <span class="num">2</span><span class="pn">);</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Doubled:"</span><span class="pn">,</span> <span class="vr">doubled</span><span class="pn">);</span>
+
+<span class="cm">// filter — keep only matching elements</span>
+<span class="kw">const</span> <span class="vr">evens</span> <span class="op">=</span> <span class="vr">nums</span><span class="pn">.</span><span class="fn">filter</span><span class="pn">(</span><span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">%</span> <span class="num">2</span> <span class="op">===</span> <span class="num">0</span><span class="pn">);</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Evens:"</span><span class="pn">,</span> <span class="vr">evens</span><span class="pn">);</span>
+
+<span class="cm">// reduce — collapse to single value</span>
+<span class="kw">const</span> <span class="vr">sum</span> <span class="op">=</span> <span class="vr">nums</span><span class="pn">.</span><span class="fn">reduce</span><span class="pn">((</span><span class="vr">acc</span><span class="pn">,</span> <span class="vr">n</span><span class="pn">)</span> <span class="op">=></span> <span class="vr">acc</span> <span class="op">+</span> <span class="vr">n</span><span class="pn">,</span> <span class="num">0</span><span class="pn">);</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Sum:"</span><span class="pn">,</span> <span class="vr">sum</span><span class="pn">);</span>
+
+<span class="cm">// find, some, every</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">nums</span><span class="pn">.</span><span class="fn">find</span><span class="pn">(</span><span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">></span> <span class="num">5</span><span class="pn">));</span>    <span class="cm">// 6</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">nums</span><span class="pn">.</span><span class="fn">some</span><span class="pn">(</span><span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">></span> <span class="num">7</span><span class="pn">));</span>    <span class="cm">// true</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">nums</span><span class="pn">.</span><span class="fn">every</span><span class="pn">(</span><span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">></span> <span class="num">0</span><span class="pn">));</span>    <span class="cm">// true</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="pn">[...</span><span class="vr">nums</span><span class="pn">].</span><span class="fn">reverse</span><span class="pn">());</span>      <span class="cm">// [8,7,6,5,4,3,2,1]</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('functions')">← Functions</button><button class="lesson-nav-btn next" onclick="navigate('objects')">Objects →</button></div>
+  </div>
+
+  <!-- ══════════ OBJECTS ══════════ -->
+  <div class="doc-section" id="sec-objects" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Objects</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>INTERMEDIATE · MEDIUM</div><h1 class="page-title">Objects</h1><p class="page-sub">Objects store data as key-value pairs. They are the fundamental data structure of JavaScript.</p></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">objects.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="kw">const</span> <span class="vr">student</span> <span class="op">=</span> <span class="pn">{</span>
+  <span class="vr">name</span><span class="pn">:</span> <span class="str">"Hiren"</span><span class="pn">,</span>
+  <span class="vr">age</span><span class="pn">:</span>  <span class="num">22</span><span class="pn">,</span>
+  <span class="vr">city</span><span class="pn">:</span> <span class="str">"Ahmedabad"</span><span class="pn">,</span>
+  <span class="fn">greet</span><span class="pn">:</span> <span class="kw">function</span><span class="pn">()</span> <span class="pn">{</span>
+    <span class="kw">return</span> <span class="str">`Hi, I'm <span class="op">${</span><span class="kw">this</span><span class="pn">.</span><span class="vr">name</span><span class="op">}</span>`</span><span class="pn">;</span>
+  <span class="pn">}</span>
+<span class="pn">};</span>
+
+<span class="cm">// Access properties</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">student</span><span class="pn">.</span><span class="vr">name</span><span class="pn">);</span>          <span class="cm">// Hiren</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">student</span><span class="pn">[</span><span class="str">"city"</span><span class="pn">]);</span>        <span class="cm">// Ahmedabad</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">student</span><span class="pn">.</span><span class="fn">greet</span><span class="pn">());</span>        <span class="cm">// Hi, I'm Hiren</span>
+
+<span class="cm">// Destructuring</span>
+<span class="kw">const</span> <span class="pn">{</span> <span class="vr">name</span><span class="pn">,</span> <span class="vr">age</span> <span class="pn">}</span> <span class="op">=</span> <span class="vr">student</span><span class="pn">;</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">name</span><span class="pn">,</span> <span class="vr">age</span><span class="pn">);</span>              <span class="cm">// Hiren 22</span>
+
+<span class="cm">// Spread — copy / merge objects</span>
+<span class="kw">const</span> <span class="vr">updated</span> <span class="op">=</span> <span class="pn">{</span> <span class="op">...</span><span class="vr">student</span><span class="pn">,</span> <span class="vr">age</span><span class="pn">:</span> <span class="num">23</span> <span class="pn">};</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">updated</span><span class="pn">);</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('arrays')">← Arrays</button><button class="lesson-nav-btn next" onclick="navigate('es6')">ES6+ →</button></div>
+  </div>
+
+  <!-- ══════════ ES6 ══════════ -->
+  <div class="doc-section" id="sec-es6" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>ES6+ Features</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>INTERMEDIATE · MEDIUM</div><h1 class="page-title">ES6+ Modern Features</h1><p class="page-sub">ES6 (2015) and later added dozens of powerful features. These are the ones you'll use every single day.</p></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">es6.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="cm">// Optional chaining (?.) — safe property access</span>
+<span class="kw">const</span> <span class="vr">user</span> <span class="op">=</span> <span class="kw">null</span><span class="pn">;</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">user</span><span class="op">?.</span><span class="vr">name</span><span class="pn">);</span>            <span class="cm">// undefined (no crash!)</span>
+
+<span class="cm">// Nullish coalescing (??) — default values</span>
+<span class="kw">const</span> <span class="vr">val</span> <span class="op">=</span> <span class="kw">null</span> <span class="op">??</span> <span class="str">"default"</span><span class="pn">;</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">val</span><span class="pn">);</span>                    <span class="cm">// "default"</span>
+
+<span class="cm">// Spread & rest</span>
+<span class="kw">const</span> <span class="fn">sum</span> <span class="op">=</span> <span class="pn">(...</span><span class="vr">nums</span><span class="pn">)</span> <span class="op">=></span> <span class="vr">nums</span><span class="pn">.</span><span class="fn">reduce</span><span class="pn">((</span><span class="vr">a</span><span class="pn">,</span><span class="vr">b</span><span class="pn">)</span> <span class="op">=></span> <span class="vr">a</span><span class="op">+</span><span class="vr">b</span><span class="pn">,</span><span class="num">0</span><span class="pn">);</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">sum</span><span class="pn">(</span><span class="num">1</span><span class="pn">,</span><span class="num">2</span><span class="pn">,</span><span class="num">3</span><span class="pn">,</span><span class="num">4</span><span class="pn">));</span>          <span class="cm">// 10</span>
+
+<span class="cm">// Array / Object destructuring with rename</span>
+<span class="kw">const</span> <span class="pn">[</span><span class="vr">first</span><span class="pn">,</span> <span class="pn">,</span> <span class="vr">third</span><span class="pn">]</span> <span class="op">=</span> <span class="pn">[</span><span class="num">10</span><span class="pn">,</span><span class="num">20</span><span class="pn">,</span><span class="num">30</span><span class="pn">];</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">first</span><span class="pn">,</span> <span class="vr">third</span><span class="pn">);</span>           <span class="cm">// 10 30</span>
+
+<span class="cm">// Short-circuit evaluation</span>
+<span class="kw">const</span> <span class="vr">isLoggedIn</span> <span class="op">=</span> <span class="kw">true</span><span class="pn">;</span>
+<span class="vr">isLoggedIn</span> <span class="op">&&</span> <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Welcome back!"</span><span class="pn">);</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('objects')">← Objects</button><button class="lesson-nav-btn next" onclick="navigate('async')">Async →</button></div>
+  </div>
+
+  <!-- ══════════ ASYNC ══════════ -->
+  <div class="doc-section" id="sec-async" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Async &amp; Promises</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>ADVANCED</div><h1 class="page-title">Async &amp; Promises</h1><p class="page-sub">JavaScript runs on a single thread. Async lets you handle time-consuming tasks (like fetching data) without freezing the page.</p></div>
+    <div class="doc-h2">The Evolution: Callback → Promise → Async/Await</div>
+    <div class="callout callout-info reveal"><div class="callout-icon">ℹ️</div><div class="callout-body"><strong>Key concept</strong> — When you call fetch() or set a timer, JS doesn't wait. It moves on and comes back when the result is ready. Promises and async/await give you clean ways to handle this.</div></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">async.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="cm">// ── Promises ─────────────────────────────────────────</span>
+<span class="kw">const</span> <span class="fn">fetchUser</span> <span class="op">=</span> <span class="pn">()</span> <span class="op">=></span> <span class="kw">new</span> <span class="fn">Promise</span><span class="pn">((</span><span class="vr">resolve</span><span class="pn">,</span> <span class="vr">reject</span><span class="pn">)</span> <span class="op">=></span> <span class="pn">{</span>
+  <span class="fn">setTimeout</span><span class="pn">(()</span> <span class="op">=></span> <span class="fn">resolve</span><span class="pn">({</span> <span class="vr">name</span><span class="pn">:</span> <span class="str">"Hiren"</span><span class="pn">,</span> <span class="vr">role</span><span class="pn">:</span> <span class="str">"Dev"</span> <span class="pn">}),</span> <span class="num">500</span><span class="pn">);</span>
+<span class="pn">});</span>
+
+<span class="cm">// ── async/await (cleaner syntax) ─────────────────────</span>
+<span class="kw">async function</span> <span class="fn">loadUser</span><span class="pn">()</span> <span class="pn">{</span>
+  <span class="kw">try</span> <span class="pn">{</span>
+    <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Loading…"</span><span class="pn">);</span>
+    <span class="kw">const</span> <span class="vr">user</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetchUser</span><span class="pn">();</span>
+    <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"User:"</span><span class="pn">,</span> <span class="vr">user</span><span class="pn">);</span>
+  <span class="pn">}</span> <span class="kw">catch</span> <span class="pn">(</span><span class="vr">err</span><span class="pn">)</span> <span class="pn">{</span>
+    <span class="vr">console</span><span class="pn">.</span><span class="fn">error</span><span class="pn">(</span><span class="str">"Error:"</span><span class="pn">,</span> <span class="vr">err</span><span class="pn">);</span>
+  <span class="pn">}</span>
+<span class="pn">}</span>
+<span class="fn">loadUser</span><span class="pn">();</span>
+
+<span class="cm">// ── Real fetch example ───────────────────────────────</span>
+<span class="kw">async function</span> <span class="fn">getJoke</span><span class="pn">()</span> <span class="pn">{</span>
+  <span class="kw">const</span> <span class="vr">res</span>  <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span><span class="pn">(</span><span class="str">"https://v2.jokeapi.dev/joke/Programming?type=single"</span><span class="pn">);</span>
+  <span class="kw">const</span> <span class="vr">data</span> <span class="op">=</span> <span class="kw">await</span> <span class="vr">res</span><span class="pn">.</span><span class="fn">json</span><span class="pn">();</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Joke:"</span><span class="pn">,</span> <span class="vr">data</span><span class="pn">.</span><span class="vr">joke</span><span class="pn">);</span>
+<span class="pn">}</span>
+<span class="fn">getJoke</span><span class="pn">();</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('es6')">← ES6+</button><button class="lesson-nav-btn next" onclick="navigate('oop')">Classes →</button></div>
+  </div>
+
+  <!-- ══════════ OOP ══════════ -->
+  <div class="doc-section" id="sec-oop" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Classes &amp; OOP</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>ADVANCED</div><h1 class="page-title">Classes &amp; Object-Oriented Programming</h1><p class="page-sub">Classes let you create objects from a blueprint. Inheritance, encapsulation, and polymorphism are the pillars of OOP.</p></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">classes.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="kw">class</span> <span class="fn">Animal</span> <span class="pn">{</span>
+  <span class="kw">#</span><span class="vr">name</span><span class="pn">;</span>                        <span class="cm">// private field</span>
+  <span class="fn">constructor</span><span class="pn">(</span><span class="vr">name</span><span class="pn">,</span> <span class="vr">sound</span><span class="pn">)</span> <span class="pn">{</span>
+    <span class="kw">this</span><span class="pn">.</span><span class="kw">#</span><span class="vr">name</span>  <span class="op">=</span> <span class="vr">name</span><span class="pn">;</span>
+    <span class="kw">this</span><span class="pn">.</span><span class="vr">sound</span> <span class="op">=</span> <span class="vr">sound</span><span class="pn">;</span>
+  <span class="pn">}</span>
+  <span class="fn">speak</span><span class="pn">()</span> <span class="pn">{</span> <span class="kw">return</span> <span class="str">`<span class="op">${</span><span class="kw">this</span><span class="pn">.</span><span class="kw">#</span><span class="vr">name</span><span class="op">}</span> says <span class="op">${</span><span class="kw">this</span><span class="pn">.</span><span class="vr">sound</span><span class="op">}</span>!`</span><span class="pn">;</span> <span class="pn">}</span>
+  <span class="kw">get</span> <span class="fn">name</span><span class="pn">()</span> <span class="pn">{</span> <span class="kw">return</span> <span class="kw">this</span><span class="pn">.</span><span class="kw">#</span><span class="vr">name</span><span class="pn">;</span> <span class="pn">}</span>
+<span class="pn">}</span>
+
+<span class="kw">class</span> <span class="fn">Dog</span> <span class="kw">extends</span> <span class="fn">Animal</span> <span class="pn">{</span>
+  <span class="fn">constructor</span><span class="pn">(</span><span class="vr">name</span><span class="pn">)</span> <span class="pn">{</span>
+    <span class="kw">super</span><span class="pn">(</span><span class="vr">name</span><span class="pn">,</span> <span class="str">"Woof"</span><span class="pn">);</span>
+  <span class="pn">}</span>
+  <span class="fn">fetch</span><span class="pn">()</span> <span class="pn">{</span> <span class="kw">return</span> <span class="str">`<span class="op">${</span><span class="kw">this</span><span class="pn">.</span><span class="vr">name</span><span class="op">}</span> fetches the ball! 🎾`</span><span class="pn">;</span> <span class="pn">}</span>
+<span class="pn">}</span>
+
+<span class="kw">const</span> <span class="vr">dog</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Dog</span><span class="pn">(</span><span class="str">"Buddy"</span><span class="pn">);</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">dog</span><span class="pn">.</span><span class="fn">speak</span><span class="pn">());</span>   <span class="cm">// Buddy says Woof!</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">dog</span><span class="pn">.</span><span class="fn">fetch</span><span class="pn">());</span>   <span class="cm">// Buddy fetches the ball! 🎾</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">dog</span> <span class="kw">instanceof</span> <span class="fn">Animal</span><span class="pn">);</span> <span class="cm">// true</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('async')">← Async</button><button class="lesson-nav-btn next" onclick="navigate('errorhandling')">Error Handling →</button></div>
+  </div>
+
+  <!-- ══════════ ERROR HANDLING ══════════ -->
+  <div class="doc-section" id="sec-errorhandling" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Error Handling</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>ADVANCED</div><h1 class="page-title">Error Handling</h1><p class="page-sub">Errors happen. Good code handles them gracefully instead of crashing.</p></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">errors.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="cm">// try / catch / finally</span>
+<span class="kw">function</span> <span class="fn">divide</span><span class="pn">(</span><span class="vr">a</span><span class="pn">,</span> <span class="vr">b</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="kw">if</span> <span class="pn">(</span><span class="vr">b</span> <span class="op">===</span> <span class="num">0</span><span class="pn">)</span> <span class="kw">throw new</span> <span class="fn">Error</span><span class="pn">(</span><span class="str">"Division by zero!"</span><span class="pn">);</span>
+  <span class="kw">return</span> <span class="vr">a</span> <span class="op">/</span> <span class="vr">b</span><span class="pn">;</span>
+<span class="pn">}</span>
+
+<span class="kw">try</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">divide</span><span class="pn">(</span><span class="num">10</span><span class="pn">,</span> <span class="num">2</span><span class="pn">));</span>  <span class="cm">// 5</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">divide</span><span class="pn">(</span><span class="num">5</span><span class="pn">,</span>  <span class="num">0</span><span class="pn">));</span>  <span class="cm">// throws!</span>
+<span class="pn">}</span> <span class="kw">catch</span> <span class="pn">(</span><span class="vr">err</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">error</span><span class="pn">(</span><span class="str">"Caught:"</span><span class="pn">,</span> <span class="vr">err</span><span class="pn">.</span><span class="vr">message</span><span class="pn">);</span>
+<span class="pn">}</span> <span class="kw">finally</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Always runs ✔"</span><span class="pn">);</span>
+<span class="pn">}</span>
+
+<span class="cm">// Custom error types</span>
+<span class="kw">class</span> <span class="fn">ValidationError</span> <span class="kw">extends</span> <span class="fn">Error</span> <span class="pn">{</span>
+  <span class="fn">constructor</span><span class="pn">(</span><span class="vr">msg</span><span class="pn">)</span> <span class="pn">{</span> <span class="kw">super</span><span class="pn">(</span><span class="vr">msg</span><span class="pn">);</span> <span class="kw">this</span><span class="pn">.</span><span class="vr">name</span> <span class="op">=</span> <span class="str">"ValidationError"</span><span class="pn">;</span> <span class="pn">}</span>
+<span class="pn">}</span>
+<span class="kw">try</span> <span class="pn">{</span>
+  <span class="kw">throw new</span> <span class="fn">ValidationError</span><span class="pn">(</span><span class="str">"Name cannot be empty"</span><span class="pn">);</span>
+<span class="pn">}</span> <span class="kw">catch</span> <span class="pn">(</span><span class="vr">e</span><span class="pn">)</span> <span class="pn">{</span>
+  <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">e</span><span class="pn">.</span><span class="vr">name</span><span class="pn">,</span> <span class="str">"-"</span><span class="pn">,</span> <span class="vr">e</span><span class="pn">.</span><span class="vr">message</span><span class="pn">);</span>
+<span class="pn">}</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('oop')">← Classes</button><button class="lesson-nav-btn next" onclick="navigate('cheatsheet')">Cheatsheet →</button></div>
+  </div>
+
+  <!-- ══════════ DOM ══════════ -->
+  <div class="doc-section" id="sec-dom" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>DOM Basics</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>INTERMEDIATE · MEDIUM</div><h1 class="page-title">DOM Manipulation</h1><p class="page-sub">The DOM (Document Object Model) lets JavaScript talk to your HTML. Use the HTML Preview tab in HirenJS to experiment with DOM code!</p></div>
+    <div class="callout callout-tip reveal"><div class="callout-icon">💡</div><div class="callout-body"><strong>Tip</strong> — Switch to <strong>HTML</strong> mode in HirenJS and use the Preview tab to see DOM changes live on screen.</div></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">dom.html</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">HTML</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="pn">&lt;</span><span class="kw">button</span> <span class="fn">id</span><span class="op">="btn"</span><span class="pn">&gt;</span><span class="vr">Click me!</span><span class="pn">&lt;/</span><span class="kw">button</span><span class="pn">&gt;</span>
+<span class="pn">&lt;</span><span class="kw">p</span> <span class="fn">id</span><span class="op">="output"</span><span class="pn">&gt;</span><span class="pn">&lt;/</span><span class="kw">p</span><span class="pn">&gt;</span>
+
+<span class="pn">&lt;</span><span class="kw">script</span><span class="pn">&gt;</span>
+  <span class="kw">const</span> <span class="vr">btn</span>    <span class="op">=</span> <span class="vr">document</span><span class="pn">.</span><span class="fn">getElementById</span><span class="pn">(</span><span class="str">"btn"</span><span class="pn">);</span>
+  <span class="kw">const</span> <span class="vr">output</span> <span class="op">=</span> <span class="vr">document</span><span class="pn">.</span><span class="fn">getElementById</span><span class="pn">(</span><span class="str">"output"</span><span class="pn">);</span>
+  <span class="kw">let</span> <span class="vr">count</span> <span class="op">=</span> <span class="num">0</span><span class="pn">;</span>
+  <span class="vr">btn</span><span class="pn">.</span><span class="fn">addEventListener</span><span class="pn">(</span><span class="str">"click"</span><span class="pn">,</span> <span class="pn">()</span> <span class="op">=></span> <span class="pn">{</span>
+    <span class="vr">count</span><span class="op">++</span><span class="pn">;</span>
+    <span class="vr">output</span><span class="pn">.</span><span class="vr">textContent</span> <span class="op">=</span> <span class="str">`Clicked <span class="op">${</span><span class="vr">count</span><span class="op">}</span> time(s)!`</span><span class="pn">;</span>
+    <span class="vr">btn</span><span class="pn">.</span><span class="vr">style</span><span class="pn">.</span><span class="vr">background</span> <span class="op">=</span> <span class="str">`hsl(<span class="op">${</span><span class="vr">count</span><span class="op">*</span><span class="num">40</span><span class="op">}</span>,80%,60%)`</span><span class="pn">;</span>
+  <span class="pn">});</span>
+<span class="pn">&lt;/</span><span class="kw">script</span><span class="pn">&gt;</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('es6')">← ES6+</button><button class="lesson-nav-btn next" onclick="navigate('async')">Async →</button></div>
+  </div>
+
+  <!-- ══════════ PATTERNS ══════════ -->
+  <div class="doc-section" id="sec-patterns" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Design Patterns</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>ADVANCED</div><h1 class="page-title">Design Patterns</h1><p class="page-sub">Patterns are proven solutions to common problems. Learning them makes you think like an experienced developer.</p></div>
+    <div class="code-block reveal"><div class="code-block-header"><div style="display:flex;align-items:center;gap:8px;"><div class="code-block-dots"><span class="cbd cbd-r"></span><span class="cbd cbd-y"></span><span class="cbd cbd-g"></span></div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--text2);">patterns.js</span></div><div style="display:flex;align-items:center;gap:8px;"><span class="code-block-lang">JS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div></div>
+<pre><span class="cm">// ── Singleton ─────────────────────────────────────────</span>
+<span class="kw">const</span> <span class="vr">Config</span> <span class="op">=</span> <span class="pn">(() => {</span>
+  <span class="kw">let</span> <span class="vr">instance</span><span class="pn">;</span>
+  <span class="kw">return</span> <span class="pn">{</span>
+    <span class="fn">getInstance</span><span class="pn">:</span> <span class="pn">()</span> <span class="op">=></span> <span class="pn">{</span>
+      <span class="kw">if</span> <span class="pn">(!</span><span class="vr">instance</span><span class="pn">)</span> <span class="vr">instance</span> <span class="op">=</span> <span class="pn">{</span> <span class="vr">theme</span><span class="pn">:</span> <span class="str">"dark"</span> <span class="pn">};</span>
+      <span class="kw">return</span> <span class="vr">instance</span><span class="pn">;</span>
+    <span class="pn">}</span>
+  <span class="pn">};</span>
+<span class="pn">})();</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">Config</span><span class="pn">.</span><span class="fn">getInstance</span><span class="pn">().</span><span class="vr">theme</span><span class="pn">);</span>  <span class="cm">// dark</span>
+
+<span class="cm">// ── Observer (pub/sub) ────────────────────────────────</span>
+<span class="kw">class</span> <span class="fn">EventBus</span> <span class="pn">{</span>
+  <span class="fn">constructor</span><span class="pn">()</span> <span class="pn">{</span> <span class="kw">this</span><span class="pn">.</span><span class="vr">events</span> <span class="op">=</span> <span class="pn">{};</span> <span class="pn">}</span>
+  <span class="fn">on</span><span class="pn">(</span><span class="vr">e</span><span class="pn">,</span> <span class="vr">fn</span><span class="pn">)</span>   <span class="pn">{</span> <span class="pn">(</span><span class="kw">this</span><span class="pn">.</span><span class="vr">events</span><span class="pn">[</span><span class="vr">e</span><span class="pn">]</span> <span class="op">||=</span> <span class="pn">[]).</span><span class="fn">push</span><span class="pn">(</span><span class="vr">fn</span><span class="pn">);</span> <span class="pn">}</span>
+  <span class="fn">emit</span><span class="pn">(</span><span class="vr">e</span><span class="pn">,</span> <span class="vr">data</span><span class="pn">)</span> <span class="pn">{</span> <span class="pn">(</span><span class="kw">this</span><span class="pn">.</span><span class="vr">events</span><span class="pn">[</span><span class="vr">e</span><span class="pn">]</span> <span class="op">||</span> <span class="pn">[]).</span><span class="fn">forEach</span><span class="pn">(</span><span class="vr">fn</span> <span class="op">=></span> <span class="fn">fn</span><span class="pn">(</span><span class="vr">data</span><span class="pn">));</span> <span class="pn">}</span>
+<span class="pn">}</span>
+<span class="kw">const</span> <span class="vr">bus</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">EventBus</span><span class="pn">();</span>
+<span class="vr">bus</span><span class="pn">.</span><span class="fn">on</span><span class="pn">(</span><span class="str">"login"</span><span class="pn">,</span> <span class="vr">u</span> <span class="op">=></span> <span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="str">"Logged in:"</span><span class="pn">,</span> <span class="vr">u</span><span class="pn">));</span>
+<span class="vr">bus</span><span class="pn">.</span><span class="fn">emit</span><span class="pn">(</span><span class="str">"login"</span><span class="pn">,</span> <span class="str">"Hiren"</span><span class="pn">);</span></pre></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('errorhandling')">← Error Handling</button><button class="lesson-nav-btn next" onclick="navigate('cheatsheet')">Cheatsheet →</button></div>
+  </div>
+
+  <!-- ══════════ CHEATSHEET ══════════ -->
+  <div class="doc-section" id="sec-cheatsheet" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Cheatsheet</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>REFERENCE</div><h1 class="page-title">JavaScript Cheatsheet</h1><p class="page-sub">Quick-reference for the most important JavaScript patterns. Bookmark this page!</p></div>
+    <div class="doc-h2">String Methods</div>
+    <div class="cheat-grid reveal">
+      <div class="cheat-item"><div class="cheat-key">.length</div><div class="cheat-val">Number of characters</div></div>
+      <div class="cheat-item"><div class="cheat-key">.toUpperCase()</div><div class="cheat-val">Convert to UPPERCASE</div></div>
+      <div class="cheat-item"><div class="cheat-key">.trim()</div><div class="cheat-val">Remove whitespace</div></div>
+      <div class="cheat-item"><div class="cheat-key">.includes(x)</div><div class="cheat-val">Check if string contains x</div></div>
+      <div class="cheat-item"><div class="cheat-key">.split(',')</div><div class="cheat-val">Split into array</div></div>
+      <div class="cheat-item"><div class="cheat-key">.replace(a,b)</div><div class="cheat-val">Replace a with b</div></div>
+      <div class="cheat-item"><div class="cheat-key">.slice(0,3)</div><div class="cheat-val">Extract substring</div></div>
+      <div class="cheat-item"><div class="cheat-key">`${var}`</div><div class="cheat-val">Template literal</div></div>
+    </div>
+    <div class="doc-h2">Array Methods</div>
+    <div class="cheat-grid reveal">
+      <div class="cheat-item"><div class="cheat-key">.push(x)</div><div class="cheat-val">Add to end</div></div>
+      <div class="cheat-item"><div class="cheat-key">.pop()</div><div class="cheat-val">Remove from end</div></div>
+      <div class="cheat-item"><div class="cheat-key">.map(fn)</div><div class="cheat-val">Transform each item</div></div>
+      <div class="cheat-item"><div class="cheat-key">.filter(fn)</div><div class="cheat-val">Keep matching items</div></div>
+      <div class="cheat-item"><div class="cheat-key">.reduce(fn,0)</div><div class="cheat-val">Collapse to one value</div></div>
+      <div class="cheat-item"><div class="cheat-key">.find(fn)</div><div class="cheat-val">First match</div></div>
+      <div class="cheat-item"><div class="cheat-key">.includes(x)</div><div class="cheat-val">Check if item exists</div></div>
+      <div class="cheat-item"><div class="cheat-key">.sort()</div><div class="cheat-val">Sort array in-place</div></div>
+      <div class="cheat-item"><div class="cheat-key">[...arr]</div><div class="cheat-val">Copy / spread array</div></div>
+      <div class="cheat-item"><div class="cheat-key">.join(', ')</div><div class="cheat-val">Array to string</div></div>
+    </div>
+    <div class="doc-h2">Number Methods</div>
+    <div class="cheat-grid reveal">
+      <div class="cheat-item"><div class="cheat-key">Math.round()</div><div class="cheat-val">Round to nearest int</div></div>
+      <div class="cheat-item"><div class="cheat-key">Math.floor()</div><div class="cheat-val">Round down</div></div>
+      <div class="cheat-item"><div class="cheat-key">Math.ceil()</div><div class="cheat-val">Round up</div></div>
+      <div class="cheat-item"><div class="cheat-key">Math.random()</div><div class="cheat-val">Random 0–1</div></div>
+      <div class="cheat-item"><div class="cheat-key">Math.max(a,b)</div><div class="cheat-val">Largest value</div></div>
+      <div class="cheat-item"><div class="cheat-key">parseInt(str)</div><div class="cheat-val">String → Integer</div></div>
+    </div>
+    <div class="completion reveal">
+      <div class="completion-icon">🎉</div>
+      <div>
+        <h4>You've reached the end of the guide!</h4>
+        <p>Ready to apply what you've learned? Open the editor and start building something amazing.</p>
+      </div>
+      <a href="HirenJS.html" style="background:var(--accent);color:#000;padding:10px 20px;border-radius:var(--rsm);font-weight:700;text-decoration:none;font-size:0.85rem;flex-shrink:0;">▶ Open Editor</a>
+    </div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('patterns')">← Design Patterns</button><button class="lesson-nav-btn next" onclick="navigate('snippets')">Snippets Guide →</button></div>
+  </div>
+
+  <!-- ══════════ SNIPPETS GUIDE ══════════ -->
+  <div class="doc-section" id="sec-snippets" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Snippet Guide</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>REFERENCE</div><h1 class="page-title">Snippet Library Guide</h1><p class="page-sub">HirenJS ships with 12 ready-made code snippets. Here's what each one does and how to use it as a learning exercise.</p></div>
+    <div class="doc-table-wrap reveal"><table><thead><tr><th>Snippet</th><th>Tag</th><th>What to try</th></tr></thead><tbody>
+      <tr><td><strong>Hello World</strong></td><td>Basic</td><td>Change the message. Try console.warn() and console.error() instead of log.</td></tr>
+      <tr><td><strong>Arrow Function</strong></td><td>Function</td><td>Add a third parameter. Try calling the function without arguments to see undefined.</td></tr>
+      <tr><td><strong>Array Methods</strong></td><td>Array</td><td>Chain filter and map together. Change the filter condition.</td></tr>
+      <tr><td><strong>Promises & Async</strong></td><td>Async</td><td>Reduce the setTimeout delay. Try rejecting the promise and catching the error.</td></tr>
+      <tr><td><strong>Classes & OOP</strong></td><td>OOP</td><td>Add a Cat class that extends Animal with a different sound.</td></tr>
+      <tr><td><strong>Destructuring</strong></td><td>ES6</td><td>Add a default value in the destructuring. Rename a key.</td></tr>
+      <tr><td><strong>Spread & Rest</strong></td><td>ES6</td><td>Try spreading 3 arrays together. Add type checking to the sum function.</td></tr>
+      <tr><td><strong>Fetch API</strong></td><td>Network</td><td>Try fetching from a different API. Add loading state before the fetch.</td></tr>
+      <tr><td><strong>Fibonacci</strong></td><td>Algorithm</td><td>Rewrite it with a loop instead of recursion. Compare performance.</td></tr>
+      <tr><td><strong>Debounce</strong></td><td>Utility</td><td>Change the delay. Try using it with a simulated search input.</td></tr>
+      <tr><td><strong>Try/Catch</strong></td><td>Error</td><td>Add a custom error class. Try throwing a string instead of an Error object.</td></tr>
+    </tbody></table></div>
+    <div class="callout callout-tip reveal"><div class="callout-icon">💡</div><div class="callout-body"><strong>How to open snippets</strong> — In HirenJS editor, press <code>Ctrl+K</code> or tap the 📦 icon in the top right. Use the search box to find snippets by name or tag. Click any snippet to insert it instantly.</div></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('cheatsheet')">← Cheatsheet</button><button class="lesson-nav-btn next" onclick="navigate('intro')">Back to Start →</button></div>
+  </div>
+
+  <!-- ══════════ SHORTCUTS ══════════ -->
+  <div class="doc-section" id="sec-shortcuts" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="navigate('intro')">Docs</a><span class="breadcrumb-sep">/</span><span>Shortcuts</span></div>
+    <div class="page-header"><div class="page-tag"><span class="page-tag-dot"></span>REFERENCE · NEW</div><h1 class="page-title">Keyboard Shortcuts</h1><p class="page-sub">All keyboard shortcuts available in the HirenJS editor.</p></div>
+    <div class="doc-table-wrap reveal"><table><thead><tr><th>Action</th><th>Shortcut</th><th>Mobile</th></tr></thead><tbody>
+      <tr><td>Run code</td><td><code>Ctrl + Enter</code></td><td>▶ Run button</td></tr>
+      <tr><td>Format / indent code</td><td><code>Ctrl + Shift + F</code></td><td>✨ Format button</td></tr>
+      <tr><td>Open snippet library</td><td><code>Ctrl + K</code></td><td>📦 icon</td></tr>
+      <tr><td>Clear output console</td><td><code>Ctrl + L</code></td><td>—</td></tr>
+      <tr><td>Undo</td><td><code>Ctrl + Z</code></td><td>↩ Undo button</td></tr>
+      <tr><td>Redo</td><td><code>Ctrl + Y</code></td><td>—</td></tr>
+      <tr><td>Comment / uncomment line</td><td><code>Ctrl + /</code></td><td>—</td></tr>
+      <tr><td>Select all</td><td><code>Ctrl + A</code></td><td>—</td></tr>
+      <tr><td>Copy selected</td><td><code>Ctrl + C</code></td><td>—</td></tr>
+      <tr><td>Find in file</td><td><code>Ctrl + F</code></td><td>—</td></tr>
+      <tr><td>Toggle keyboard shortcuts</td><td><code>Ctrl + ?</code> (menu)</td><td>⌨️ icon</td></tr>
+    </tbody></table></div>
+    <div class="lesson-nav"><button class="lesson-nav-btn" onclick="navigate('setup')">← Editor Setup</button><button class="lesson-nav-btn next" onclick="navigate('variables')">Variables →</button></div>
+  </div>
+
+</main>
+
+<script>
+// ── Navigation ───────────────────────────────────────────────────────
+const SECTIONS = ['intro','setup','shortcuts','variables','operators','conditionals','loops','functions','arrays','objects','es6','dom','async','oop','errorhandling','patterns','cheatsheet','snippets'];
+let completed = JSON.parse(localStorage.getItem('hirenjs_docs_progress') || '[]');
+
+function navigate(id) {
+  // Hide all
+  document.querySelectorAll('.doc-section').forEach(s => s.style.display = 'none');
+  // Show target
+  const target = document.getElementById('sec-' + id);
+  if (target) { target.style.display = ''; window.scrollTo({top:0,behavior:'smooth'}); }
+  // Update sidebar
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.toggle('active', l.dataset.section === id));
+  // Mark completed
+  if (!completed.includes(id)) { completed.push(id); localStorage.setItem('hirenjs_docs_progress', JSON.stringify(completed)); }
+  updateProgress();
+  // Close sidebar on mobile
+  closeSidebar();
+  // Re-trigger reveals
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (!el.classList.contains('visible')) observer.observe(el);
+    });
+  }, 50);
+}
+
+function updateProgress() {
+  const pct = Math.round((completed.length / SECTIONS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+updateProgress();
+
+// ── Mobile sidebar ───────────────────────────────────────────────────
+const menuBtn = document.getElementById('menuToggle');
+const sidebar  = document.getElementById('sidebar');
+const overlay  = document.getElementById('sidebarOverlay');
+
+menuBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+});
+overlay.addEventListener('click', closeSidebar);
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('open'); }
+
+// ── Copy code buttons ────────────────────────────────────────────────
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = '✓ Copied';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+
+// ── Try-it runner ────────────────────────────────────────────────────
+function runTryIt(btn) {
+  const box = btn.closest('.try-it-box');
+  const code = box.querySelector('.try-it-textarea').value;
+  const out  = box.querySelector('.try-it-output');
+  const logs = [];
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  try {
+    iframe.contentWindow.console = {
+      log:   (...a) => logs.push({ t:'log', v:a }),
+      error: (...a) => logs.push({ t:'err', v:a }),
+      warn:  (...a) => logs.push({ t:'wrn', v:a }),
+    };
+    const s = iframe.contentWindow.document.createElement('script');
+    s.textContent = `try{${code}}catch(e){console.error(e.message)}`;
+    iframe.contentWindow.document.body.appendChild(s);
+  } catch(e) { logs.push({t:'err',v:[e.message]}); }
+  document.body.removeChild(iframe);
+  out.innerHTML = logs.map(l => {
+    const col = l.t==='err' ? '#ff6b6b' : l.t==='wrn' ? '#fcd34d' : '#6ee7b7';
+    const pfx = l.t==='err' ? '✖' : l.t==='wrn' ? '⚠' : '›';
+    return `<span style="color:${col}">${pfx} ${l.v.map(v => typeof v==='object'?JSON.stringify(v,null,2):String(v)).join(' ')}</span>`;
+  }).join('\n') || '<span style="color:var(--text2)">// No output</span>';
+}
+
+// ── Quiz ─────────────────────────────────────────────────────────────
+function answer(el, correct) {
+  const opts = el.parentElement.querySelectorAll('.quiz-option');
+  const fb   = el.closest('.quiz-card').querySelector('.quiz-feedback');
+  opts.forEach(o => o.classList.add('disabled'));
+  if (correct) {
+    el.classList.add('correct');
+    fb.className = 'quiz-feedback show success';
+    fb.textContent = '✅ Correct! Great job.';
+  } else {
+    el.classList.add('wrong');
+    opts.forEach(o => { if (o.onclick && o.onclick.toString().includes('true')) o.classList.add('correct'); });
+    fb.className = 'quiz-feedback show error';
+    fb.textContent = '❌ Not quite — the correct answer is highlighted in green.';
+  }
+}
+
+// ── Scroll reveal ────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 50);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Search ───────────────────────────────────────────────────────────
+const searchMap = {
+  'variable': 'variables', 'let': 'variables', 'const': 'variables', 'var': 'variables',
+  'loop': 'loops', 'for': 'loops', 'while': 'loops', 'foreach': 'loops',
+  'function': 'functions', 'arrow': 'functions', 'closure': 'functions',
+  'array': 'arrays', 'map': 'arrays', 'filter': 'arrays', 'reduce': 'arrays',
+  'object': 'objects', 'key': 'objects', 'value': 'objects',
+  'async': 'async', 'await': 'async', 'promise': 'async', 'fetch': 'async',
+  'class': 'oop', 'extends': 'oop', 'super': 'oop', 'oop': 'oop',
+  'error': 'errorhandling', 'try': 'errorhandling', 'catch': 'errorhandling',
+  'cheat': 'cheatsheet', 'reference': 'cheatsheet',
+  'shortcut': 'shortcuts', 'keyboard': 'shortcuts',
+  'es6': 'es6', 'spread': 'es6', 'destructur': 'es6',
+  'dom': 'dom', 'document': 'dom', 'element': 'dom',
+  'pattern': 'patterns', 'singleton': 'patterns', 'observer': 'patterns',
+};
+document.getElementById('docSearch').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.toLowerCase().trim();
+  const match = Object.entries(searchMap).find(([k]) => q.includes(k));
+  if (match) { navigate(match[1]); e.target.value = ''; }
+  else { e.target.style.borderColor = 'var(--accent2)'; setTimeout(() => e.target.style.borderColor = '', 1000); }
+});
+</script>
+</body>
+</html>

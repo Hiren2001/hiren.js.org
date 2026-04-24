@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-adsense-account" content="ca-pub-5120785078009963">
+  <meta name="description" content="HirenJS — A free, open-source JavaScript playground built for students who learn on smartphones. Write, run, and experiment with JS right in your browser.">
+  <meta name="keywords" content="JavaScript, code editor, online IDE, mobile coding, students, HirenJS, Hiren Rathod">
+  <meta name="author" content="Hiren Rathod">
+  <meta property="og:title" content="HirenJS — JavaScript Playground for Students">
+  <meta property="og:description" content="Free, open-source JS playground. Mobile-first. No install needed.">
+  <meta property="og:type" content="website">
+  <title>HirenJS — JavaScript Playground for Students</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23f7df1e'/><text y='.9em' font-size='85' x='8'>JS</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Design tokens (matches editor) ───────────────────────────── */
+    :root {
+      --bg:      #0f0f1a;
+      --bg2:     #16162a;
+      --bg3:     #1e1e35;
+      --panel:   #1a1a2e;
+      --border:  #2a2a4a;
+      --accent:  #f7df1e;   /* JS yellow */
+      --accent2: #ff6b6b;
+      --accent3: #4ecdc4;
+      --accent4: #a78bfa;
+      --text:    #e8e8f0;
+      --text2:   #8888aa;
+      --success: #6ee7b7;
+      --r:       14px;
+      --rsm:     8px;
+      --mono:    'JetBrains Mono', monospace;
+      --display: 'Syne', system-ui, sans-serif;
+      --shadow:  0 8px 40px rgba(0,0,0,0.5);
+      --glow:    0 0 40px rgba(247,223,30,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--display);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* ─── Noise overlay ─────────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ─── Grid lines bg ─────────────────────────────────────────────── */
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(42,42,74,0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,42,74,0.4) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent);
+    }
+
+    /* ─── NAV ───────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(16px, 5vw, 60px);
+      height: 60px;
+      background: rgba(15,15,26,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text);
+      font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px;
+    }
+    .nav-badge {
+      background: var(--accent); color: #000;
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 6px; letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-link {
+      color: var(--text2); text-decoration: none;
+      font-size: 0.82rem; font-weight: 600;
+      padding: 6px 12px; border-radius: var(--rsm);
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--bg3); }
+
+    .nav-cta {
+      background: var(--accent); color: #000;
+      padding: 8px 18px; border-radius: var(--rsm);
+      font-weight: 700; font-size: 0.82rem;
+      text-decoration: none; transition: all 0.15s;
+      box-shadow: 0 0 16px rgba(247,223,30,0.25);
+    }
+    .nav-cta:hover { background: #ffe933; box-shadow: 0 0 28px rgba(247,223,30,0.45); transform: translateY(-1px); }
+
+    .nav-mobile-cta { display: none; }
+
+    /* ─── HERO ──────────────────────────────────────────────────────── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100dvh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px clamp(16px,5vw,80px) 60px;
+      overflow: hidden;
+    }
+
+    /* Glowing orbs */
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); pointer-events: none; z-index: 0;
+    }
+    .orb1 { width: 500px; height: 500px; background: rgba(247,223,30,0.07); top: -100px; left: -100px; animation: orbFloat 8s ease-in-out infinite; }
+    .orb2 { width: 400px; height: 400px; background: rgba(167,139,250,0.07); bottom: 0; right: -80px; animation: orbFloat 10s ease-in-out infinite reverse; }
+    .orb3 { width: 300px; height: 300px; background: rgba(78,205,196,0.05); top: 40%; left: 50%; transform: translateX(-50%); animation: orbFloat 12s ease-in-out infinite 2s; }
+    @keyframes orbFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(247,223,30,0.08); border: 1px solid rgba(247,223,30,0.2);
+      border-radius: 99px; padding: 5px 14px;
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); letter-spacing: 1px;
+      margin-bottom: 24px; position: relative; z-index: 1;
+      animation: fadeUp 0.6s ease both;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+    .hero-title {
+      position: relative; z-index: 1;
+      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-weight: 800; line-height: 1.05; letter-spacing: -2px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+    .hero-title .accent { color: var(--accent); position: relative; display: inline-block; }
+    .hero-title .accent::after {
+      content: '';
+      position: absolute; left: 0; bottom: -4px; right: 0;
+      height: 3px; background: var(--accent); border-radius: 2px;
+      transform: scaleX(0); transform-origin: left;
+      animation: underlineIn 0.5s ease 0.8s both;
+    }
+    @keyframes underlineIn { to { transform: scaleX(1); } }
+
+    .hero-sub {
+      position: relative; z-index: 1;
+      max-width: 560px; margin: 0 auto 36px;
+      color: var(--text2); font-size: clamp(1rem, 2.5vw, 1.15rem);
+      font-weight: 400; line-height: 1.7;
+      animation: fadeUp 0.6s ease 0.2s both;
+    }
+
+    .hero-actions {
+      position: relative; z-index: 1;
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.6s ease 0.3s both;
+    }
+
+    .btn-hero {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: var(--rsm);
+      font-family: var(--display); font-weight: 700; font-size: 0.95rem;
+      text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
+    }
+    .btn-hero-primary {
+      background: var(--accent); color: #000;
+      box-shadow: 0 0 28px rgba(247,223,30,0.3);
+    }
+    .btn-hero-primary:hover { background: #ffe933; box-shadow: 0 0 44px rgba(247,223,30,0.5); transform: translateY(-2px); }
+    .btn-hero-secondary {
+      background: var(--bg3); color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-hero-secondary:hover { border-color: var(--text2); transform: translateY(-2px); }
+    .btn-hero-ghost {
+      background: transparent; color: var(--text2);
+      border: 1px solid var(--border);
+    }
+    .btn-hero-ghost:hover { color: var(--text); border-color: var(--text2); }
+
+    /* ── Code preview window ── */
+    .hero-code {
+      position: relative; z-index: 1;
+      margin-top: 56px;
+      max-width: 680px; width: 100%;
+      animation: fadeUp 0.6s ease 0.45s both;
+    }
+
+    .code-window {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: var(--shadow), var(--glow);
+    }
+    .code-window-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 11px 14px;
+      background: var(--bg3); border-bottom: 1px solid var(--border);
+    }
+    .wdot { width: 10px; height: 10px; border-radius: 50%; }
+    .wd-r { background: #ff6b6b; }
+    .wd-y { background: #f7df1e; }
+    .wd-g { background: #6ee7b7; }
+    .code-window-title { font-family: var(--mono); font-size: 0.72rem; color: var(--text2); margin-left: 8px; }
+    .code-window-body { padding: 20px; text-align: left; overflow-x: auto; }
+    pre { font-family: var(--mono); font-size: 0.82rem; line-height: 1.8; }
+
+    /* Syntax colours */
+    .kw { color: #c084fc; }
+    .fn { color: #60a5fa; }
+    .str { color: #6ee7b7; }
+    .num { color: #fb923c; }
+    .cm { color: var(--text2); font-style: italic; }
+    .op { color: var(--accent); }
+    .pn { color: var(--text2); }
+    .vr { color: var(--text); }
+    .typing-cursor { display: inline-block; width: 2px; height: 1em; background: var(--accent); vertical-align: middle; animation: blink 1s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ─── STATS BAR ─────────────────────────────────────────────────── */
+    .stats-bar {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .stat-item {
+      flex: 1; min-width: 140px;
+      padding: 28px 20px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-size: 2.2rem; font-weight: 800;
+      color: var(--accent); letter-spacing: -1px; display: block;
+      font-family: var(--mono);
+    }
+    .stat-label { font-size: 0.78rem; color: var(--text2); font-weight: 500; letter-spacing: 0.5px; }
+
+    /* ─── SECTIONS shared ───────────────────────────────────────────── */
+    section { position: relative; z-index: 1; }
+
+    .section-inner {
+      max-width: 1100px; margin: 0 auto;
+      padding: clamp(60px,8vw,100px) clamp(16px,5vw,60px);
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800; line-height: 1.1; letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+    .section-sub {
+      color: var(--text2); font-size: 1.05rem; max-width: 560px; line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    /* ─── FEATURES GRID ─────────────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 28px;
+      transition: all 0.25s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(247,223,30,0.06), transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card:hover {
+      border-color: rgba(247,223,30,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    }
+
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: var(--rsm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 16px;
+    }
+    .fi-yellow { background: rgba(247,223,30,0.1); }
+    .fi-green  { background: rgba(110,231,183,0.1); }
+    .fi-purple { background: rgba(167,139,250,0.1); }
+    .fi-red    { background: rgba(255,107,107,0.1); }
+    .fi-teal   { background: rgba(78,205,196,0.1); }
+    .fi-blue   { background: rgba(96,165,250,0.1); }
+
+    .feature-title { font-size: 1.02rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-desc { color: var(--text2); font-size: 0.875rem; line-height: 1.65; }
+
+    .feature-tag {
+      display: inline-block; margin-top: 12px;
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px;
+    }
+    .ft-new { background: rgba(110,231,183,0.12); color: var(--success); }
+    .ft-pro { background: rgba(247,223,30,0.1); color: var(--accent); }
+    .ft-open { background: rgba(167,139,250,0.12); color: var(--accent4); }
+
+    /* ─── BETA BANNER ───────────────────────────────────────────────── */
+    .beta-banner {
+      background: linear-gradient(135deg, rgba(247,223,30,0.08), rgba(167,139,250,0.08));
+      border: 1px solid rgba(247,223,30,0.25);
+      border-radius: var(--r);
+      padding: 28px 32px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      flex-wrap: wrap;
+      position: relative; overflow: hidden;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%,100%{box-shadow:0 0 20px rgba(247,223,30,0.08);}
+      50%{box-shadow:0 0 40px rgba(247,223,30,0.18);}
+    }
+    .beta-banner::before {
+      content: 'BETA';
+      position: absolute; right: -20px; top: 12px;
+      font-family: var(--mono); font-size: 4rem; font-weight: 800;
+      color: rgba(247,223,30,0.04); letter-spacing: 4px; pointer-events: none;
+    }
+
+    .beta-pulse { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
+    .beta-pulse-dot { width: 12px; height: 12px; background: var(--accent2); border-radius: 50%; position: absolute; top: 4px; left: 4px; animation: pulse 1.8s infinite; }
+    .beta-pulse-ring { position: absolute; inset: 0; border: 2px solid var(--accent2); border-radius: 50%; animation: ringAnim 1.8s infinite; }
+    @keyframes ringAnim { 0%{transform:scale(0.8);opacity:0.6} 100%{transform:scale(1.5);opacity:0} }
+
+    .beta-text-group { flex: 1; min-width: 200px; }
+    .beta-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .beta-desc { color: var(--text2); font-size: 0.85rem; }
+
+    /* ─── HOW IT WORKS ──────────────────────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+    .step {
+      padding: 32px 24px;
+      border-right: 1px solid var(--border);
+      position: relative;
+      transition: background 0.2s;
+    }
+    .step:last-child { border-right: none; }
+    .step:hover { background: var(--bg3); }
+    .step-num {
+      font-family: var(--mono); font-size: 2.5rem; font-weight: 800;
+      color: rgba(247,223,30,0.12); line-height: 1; margin-bottom: 16px;
+      display: block;
+    }
+    .step-title { font-weight: 700; margin-bottom: 8px; font-size: 1rem; }
+    .step-desc { color: var(--text2); font-size: 0.82rem; line-height: 1.6; }
+    .step-arrow {
+      position: absolute; right: 16px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--border); font-size: 1.2rem;
+    }
+
+    /* ─── ABOUT / MISSION ───────────────────────────────────────────── */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 720px) { .mission-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+    .mission-visual {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 32px;
+      position: relative; overflow: hidden;
+    }
+    .mission-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 30%, rgba(247,223,30,0.06), transparent 60%);
+    }
+    .mission-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent4));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 800; color: #000;
+      margin-bottom: 20px; font-family: var(--mono);
+    }
+    .mission-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; }
+    .mission-role { color: var(--accent); font-family: var(--mono); font-size: 0.78rem; margin-bottom: 16px; }
+    .mission-bio { color: var(--text2); font-size: 0.88rem; line-height: 1.7; }
+
+    .mission-links { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .mission-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg3); border: 1px solid var(--border);
+      color: var(--text2); text-decoration: none;
+      font-size: 0.78rem; font-weight: 600; padding: 6px 12px;
+      border-radius: var(--rsm); transition: all 0.15s;
+    }
+    .mission-link:hover { color: var(--text); border-color: var(--text2); }
+
+    .mission-quote {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 700; line-height: 1.4;
+      margin-bottom: 20px;
+    }
+    .mission-quote span { color: var(--accent); }
+
+    .mission-points { display: flex; flex-direction: column; gap: 14px; }
+    .mission-point {
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .mission-point-icon {
+      width: 32px; height: 32px; flex-shrink: 0;
+      border-radius: var(--rsm); display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+    }
+    .mpi-y { background: rgba(247,223,30,0.1); }
+    .mpi-g { background: rgba(110,231,183,0.1); }
+    .mpi-p { background: rgba(167,139,250,0.1); }
+    .mission-point-text h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; }
+    .mission-point-text p { font-size: 0.8rem; color: var(--text2); line-height: 1.5; }
+
+    /* ─── OPEN SOURCE ───────────────────────────────────────────────── */
+    .oss-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 40px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .oss-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(167,139,250,0.08), transparent);
+    }
+    .oss-icon { font-size: 3rem; margin-bottom: 20px; }
+    .oss-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; }
+    .oss-desc { color: var(--text2); max-width: 540px; margin: 0 auto 28px; line-height: 1.7; }
+
+    .oss-meta {
+      display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .oss-badge {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--rsm); padding: 7px 14px;
+      font-family: var(--mono); font-size: 0.75rem; color: var(--text2);
+    }
+    .oss-badge-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .ob-yellow { background: var(--accent); }
+    .ob-green  { background: var(--success); }
+    .ob-purple { background: var(--accent4); }
+
+    /* ─── SNIPPETS preview ──────────────────────────────────────────── */
+    .snippets-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .sp-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--rsm); padding: 14px 16px;
+      transition: all 0.2s;
+    }
+    .sp-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .sp-card-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+    .sp-card-tag {
+      font-family: var(--mono); font-size: 0.62rem; font-weight: 600;
+      padding: 1px 6px; border-radius: 4px; color: var(--accent4);
+      background: rgba(167,139,250,0.1);
+    }
+    .sp-card-desc { color: var(--text2); font-size: 0.72rem; margin-top: 6px; font-family: var(--mono); }
+
+    /* ─── TESTIMONIALS ──────────────────────────────────────────────── */
+    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .testi-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .testi-card:hover { border-color: rgba(247,223,30,0.25); }
+    .testi-stars { color: var(--accent); font-size: 0.8rem; margin-bottom: 12px; }
+    .testi-text { color: var(--text2); font-size: 0.875rem; line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 10px; }
+    .testi-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; font-weight: 700;
+    }
+    .testi-name { font-size: 0.82rem; font-weight: 700; }
+    .testi-role { font-size: 0.72rem; color: var(--text2); }
+
+    /* ─── FAQ ───────────────────────────────────────────────────────── */
+    .faq-list { display: flex; flex-direction: column; gap: 10px; max-width: 700px; }
+    .faq-item {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--rsm); overflow: hidden;
+    }
+    .faq-q {
+      padding: 16px 20px; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 600; font-size: 0.9rem;
+      transition: background 0.15s;
+      user-select: none;
+    }
+    .faq-q:hover { background: var(--bg3); }
+    .faq-chevron { transition: transform 0.25s; font-size: 0.8rem; color: var(--text2); }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s;
+      color: var(--text2); font-size: 0.85rem; line-height: 1.7;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 20px 16px; }
+
+    /* ─── CTA SECTION ───────────────────────────────────────────────── */
+    .cta-section {
+      background: linear-gradient(135deg, rgba(247,223,30,0.06), rgba(167,139,250,0.06));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .cta-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800; letter-spacing: -1.5px; margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .cta-sub { color: var(--text2); max-width: 500px; margin: 0 auto 32px; font-size: 1rem; line-height: 1.7; }
+
+    /* ─── FOOTER ────────────────────────────────────────────────────── */
+    footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 40px clamp(16px,5vw,60px);
+      position: relative; z-index: 1;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between;
+    }
+    .footer-brand .nav-logo { margin-bottom: 10px; }
+    .footer-brand p { color: var(--text2); font-size: 0.82rem; max-width: 240px; line-height: 1.6; }
+
+    .footer-col h4 { font-weight: 700; font-size: 0.85rem; margin-bottom: 14px; letter-spacing: 0.5px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-col li a {
+      color: var(--text2); text-decoration: none; font-size: 0.82rem;
+      transition: color 0.15s;
+    }
+    .footer-col li a:hover { color: var(--accent); }
+
+    .footer-bottom {
+      max-width: 1100px; margin: 32px auto 0;
+      padding-top: 24px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { color: var(--text2); font-size: 0.78rem; }
+    .footer-doi {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .doi-link {
+      font-family: var(--mono); font-size: 0.68rem; color: var(--accent4);
+      text-decoration: none; border: 1px solid rgba(167,139,250,0.3);
+      padding: 3px 8px; border-radius: 4px;
+      transition: border-color 0.15s;
+    }
+    .doi-link:hover { border-color: var(--accent4); }
+
+    /* ─── Animations shared ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── Responsive ────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .nav-mobile-cta { display: block; }
+      .stat-item { min-width: 50%; }
+      .step-arrow { display: none; }
+      .steps { grid-template-columns: 1fr; }
+      .step { border-right: none; border-bottom: 1px solid var(--border); }
+      .step:last-child { border-bottom: none; }
+      .beta-banner::before { display: none; }
+    }
+
+    /* ─── GitHub Corner ─────────────────────────────────────────────── */
+    .github-corner { z-index: 200; position: fixed; top: 0; right: 0; }
+    .github-corner svg { fill: #151513; color: #fff; }
+    .github-corner:hover .octo-arm { animation: octocat-wave 560ms ease-in-out; }
+    @keyframes octocat-wave {
+      0%,100%{transform:rotate(0)} 20%,60%{transform:rotate(-25deg)} 40%,80%{transform:rotate(10deg)}
+    }
+    @media (max-width:500px){
+      .github-corner { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="nav-badge">JS</span>
+    HirenJS
+  </a>
+  <div class="nav-links">
+    <a href="#features" class="nav-link">Features</a>
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#oss" class="nav-link">Open Source</a>
+    <a href="https://github.com/Hiren2001/hiren.js.org" class="nav-link" target="_blank">GitHub</a>
+    <a href="/docs.html" class="nav-link">Documentation</a>
+    <a href="HirenJS.html" class="nav-cta">Launch Editor ▶</a>
+  </div>
+  <a href="HirenJS.html" class="nav-mobile-cta nav-cta">Launch ▶</a>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="hero-eyebrow">
+    <span class="eyebrow-dot"></span>
+    Free · Open Source · Mobile-First
+  </div>
+
+  <h1 class="hero-title">
+    Code JavaScript<br>
+    from <span class="accent">any device</span>
+  </h1>
+
+  <p class="hero-sub">
+    HirenJS is a free, open-source JavaScript playground built for students who only have a smartphone. Write, run, and experiment with JS right in your browser — no installation needed.
+  </p>
+
+  <div class="hero-actions">
+    <a href="HirenJS.html" class="btn-hero btn-hero-primary">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M2 1.5l11 5.5-11 5.5V1.5z"/></svg>
+      Launch Editor
+    </a>
+    <a href="beta.html" class="btn-hero btn-hero-secondary">⚡ Try Beta</a>
+    <a href="https://github.com/Hiren2001/hiren.js.org" class="btn-hero btn-hero-ghost" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+  </div>
+
+  <div class="hero-code">
+    <div class="code-window">
+      <div class="code-window-bar">
+        <span class="wdot wd-r"></span>
+        <span class="wdot wd-y"></span>
+        <span class="wdot wd-g"></span>
+        <span class="code-window-title">script.js — HirenJS</span>
+      </div>
+      <div class="code-window-body">
+<pre><span class="cm">// 👋 Welcome to HirenJS — paste or type below</span>
+
+<span class="kw">const</span> <span class="vr">greet</span> <span class="op">=</span> <span class="pn">(</span><span class="vr">name</span><span class="pn">)</span> <span class="op">=></span> <span class="pn">{</span>
+  <span class="kw">return</span> <span class="str">`Hello, <span class="op">${</span><span class="vr">name</span><span class="op">}</span>! Welcome to HirenJS 🚀`</span><span class="pn">;</span>
+<span class="pn">};</span>
+
+<span class="kw">const</span> <span class="vr">nums</span> <span class="op">=</span> <span class="pn">[</span><span class="num">1</span><span class="pn">,</span><span class="num">2</span><span class="pn">,</span><span class="num">3</span><span class="pn">,</span><span class="num">4</span><span class="pn">,</span><span class="num">5</span><span class="pn">];</span>
+<span class="kw">const</span> <span class="vr">doubled</span> <span class="op">=</span> <span class="vr">nums</span><span class="pn">.</span><span class="fn">map</span><span class="pn">(</span><span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">*</span> <span class="num">2</span><span class="pn">);</span>
+
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">greet</span><span class="pn">(</span><span class="str">"Student"</span><span class="pn">));</span>  <span class="cm">// → Hello, Student! 🚀</span>
+<span class="vr">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="vr">doubled</span><span class="pn">);</span>           <span class="cm">// → [2,4,6,8,10]</span>
+<span class="typing-cursor"></span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ STATS ══════════════════ -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="12">0</span>
+    <span class="stat-label">Built-in Snippets</span>
+  </div>
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="5">0</span>
+    <span class="stat-label">Languages Supported</span>
+  </div>
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="100">0</span>
+    <span class="stat-label">% Free Forever</span>
+  </div>
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="0">0</span>
+    <span class="stat-label">Installation Required</span>
+  </div>
+</div>
+
+<!-- ══════════════════ BETA BANNER ══════════════════ -->
+<section>
+  <div class="section-inner">
+    <div class="beta-banner reveal">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <div class="beta-pulse">
+          <div class="beta-pulse-ring"></div>
+          <div class="beta-pulse-dot"></div>
+        </div>
+        <div class="beta-text-group">
+          <div class="beta-title">⚡ If You want to code in old version</div>
+          <div class="beta-desc">New features, improved performance, and a redesigned output console </div>
+        </div>
+      </div>
+      <a href="/legacy/HirenJS.html" class="btn-hero btn-hero-primary" style="flex-shrink:0;"> Old version</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURES ══════════════════ -->
+<section id="features">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">Features</span>
+      <h2 class="section-title">Everything a student needs</h2>
+      <p class="section-sub">No fancy computer required. HirenJS packs a professional coding environment into a single webpage that loads on any device.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-yellow">📱</div>
+        <div class="feature-title">Mobile-First Editor</div>
+        <div class="feature-desc">Designed from the ground up for touchscreens. Resizable panels, large tap targets, and a bottom action bar mean you can code comfortably on any smartphone.</div>
+        <span class="feature-tag ft-pro">Core</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-green">⚡</div>
+        <div class="feature-title">Instant Execution</div>
+        <div class="feature-desc">Run your code with Ctrl+Enter or one tap. Execution happens in a sandboxed iframe so errors never crash the page. See results in milliseconds.</div>
+        <span class="feature-tag ft-pro">Core</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-purple">🎨</div>
+        <div class="feature-title">6 Editor Themes</div>
+        <div class="feature-desc">Cycle between One Dark, Monokai, Dracula, GitHub, Night Bright, and Cobalt with one tap. Light and dark app themes included too.</div>
+        <span class="feature-tag ft-new">New</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-teal">📦</div>
+        <div class="feature-title">12 Code Snippets</div>
+        <div class="feature-desc">Searchable snippet library covering Hello World, Promises, Classes, Array Methods, Fetch API, Algorithms, and more — great for learning patterns fast.</div>
+        <span class="feature-tag ft-new">New</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-blue">🔗</div>
+        <div class="feature-title">Share Your Code</div>
+        <div class="feature-desc">Generate a shareable URL with your code baked in — send to a teacher, friend, or post on social media. No account needed.</div>
+        <span class="feature-tag ft-new">New</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-yellow">🌐</div>
+        <div class="feature-title">HTML Preview Mode</div>
+        <div class="feature-desc">Switch to HTML language and see a live rendered preview in the Preview tab. Perfect for learning DOM manipulation and building mini web pages.</div>
+        <span class="feature-tag ft-new">New</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-green">💾</div>
+        <div class="feature-title">Auto-Save</div>
+        <div class="feature-desc">Your code is automatically saved to localStorage. Close the tab, open it later — your code is still there. Never lose your work again.</div>
+        <span class="feature-tag ft-pro">Core</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-red">🧠</div>
+        <div class="feature-title">Live Autocomplete</div>
+        <div class="feature-desc">Powered by Ace Editor's language tools — get intelligent completions for JavaScript built-ins, your own variables, and common patterns as you type.</div>
+        <span class="feature-tag ft-pro">Core</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-purple">✨</div>
+        <div class="feature-title">Code Formatter</div>
+        <div class="feature-desc">One-tap code formatting with automatic indentation normalisation. Clean up messy code instantly without any external tools.</div>
+        <span class="feature-tag ft-open">Open Source</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ HOW IT WORKS ══════════════════ -->
+<section id="how" style="background: var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:40px;">
+      <span class="section-tag">How it works</span>
+      <h2 class="section-title">Start coding in 3 steps</h2>
+      <p class="section-sub" style="margin:0 auto;">No accounts. No downloads. Just open and code.</p>
+    </div>
+
+    <div class="steps reveal">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-title">Open the Editor</div>
+        <div class="step-desc">Visit hiren.js.org on any device — phone, tablet, or PC. The editor loads instantly in your browser.</div>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-title">Write Your Code</div>
+        <div class="step-desc">Use the built-in snippets to get started fast, or type from scratch. Autocomplete helps you as you write.</div>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-title">Run & Learn</div>
+        <div class="step-desc">Hit Run (or Ctrl+Enter) and see instant output. Errors are highlighted clearly so you learn from them.</div>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <div class="step-title">Share It</div>
+        <div class="step-desc">Copy a shareable link and send your experiment to a teacher or friend. No login required.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SNIPPET PREVIEW ══════════════════ -->
+<section>
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">Built-in Library</span>
+      <h2 class="section-title">Snippets to jumpstart learning</h2>
+      <p class="section-sub">Click any snippet in the editor and the code is inserted instantly — great for exploring new concepts without starting from scratch.</p>
+    </div>
+
+    <div class="snippets-preview reveal">
+      <div class="sp-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="sp-card-title">Hello World</div><span class="sp-card-tag">Basic</span></div><div class="sp-card-desc">console.log("Hello, World!")</div></div>
+      <div class="sp-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="sp-card-title">Arrow Function</div><span class="sp-card-tag">Function</span></div><div class="sp-card-desc">const fn = () => {}</div></div>
+      <div class="sp-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="sp-card-title">Array Methods</div><span class="sp-card-tag">Array</span></div><div class="sp-card-desc">map · filter · reduce</div></div>
+      <div class="sp-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="sp-card-title">Async / Await</div><span class="sp-card-tag">Async</span></div><div class="sp-card-desc">Promise + async pattern</div></div>
+      <div class="sp-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="sp-card-title">Classes & OOP</div><span class="sp-card-tag">OOP</span></div><div class="sp-card-desc">class + extends + super</div></div>
+      <div class="sp-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="sp-card-title">Fetch API</div><span class="sp-card-tag">Network</span></div><div class="sp-card-desc">fetch().then().catch()</div></div>
+      <div class="sp-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="sp-card-title">Destructuring</div><span class="sp-card-tag">ES6</span></div><div class="sp-card-desc">Object & array unpack</div></div>
+      <div class="sp-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="sp-card-title">Fibonacci</div><span class="sp-card-tag">Algorithm</span></div><div class="sp-card-desc">Recursive sequence</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ABOUT / MISSION ══════════════════ -->
+<section id="about" style="background: var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="mission-grid">
+      <div>
+        <div class="reveal">
+          <span class="section-tag">Our Mission</span>
+          <h2 class="section-title">Code should be<br>accessible to everyone</h2>
+        </div>
+        <p class="mission-quote reveal">
+          "Every student deserves a <span>professional coding environment</span> — regardless of what device they own."
+        </p>
+        <div class="mission-points">
+          <div class="mission-point reveal">
+            <div class="mission-point-icon mpi-y">🎯</div>
+            <div class="mission-point-text">
+              <h4>Built for real students</h4>
+              <p>Most students in India and around the world only have access to a smartphone. HirenJS makes sure that's enough to learn programming.</p>
+            </div>
+          </div>
+          <div class="mission-point reveal">
+            <div class="mission-point-icon mpi-g">🌍</div>
+            <div class="mission-point-text">
+              <h4>Zero barriers</h4>
+              <p>No account creation, no credit card, no App Store download. Open a URL and start coding — that's the whole process.</p>
+            </div>
+          </div>
+          <div class="mission-point reveal">
+            <div class="mission-point-icon mpi-p">🔓</div>
+            <div class="mission-point-text">
+              <h4>Forever open source</h4>
+              <p>HirenJS is MIT-licensed and will remain free forever. Fork it, improve it, use it in your classroom — no restrictions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mission-visual reveal">
+        <div class="mission-avatar">H</div>
+        <div class="mission-name">Hiren Rathod</div>
+        <div class="mission-role">// Creator & Developer · hiren.js.org</div>
+        <p class="mission-bio">
+          Hiren Rathod is a developer from Surendranagar, Gujarat, India who built HirenJS to solve a real problem — most online code editors are desktop-only or require heavy installs. HirenJS was born out of the belief that a student with only a phone should be able to learn JavaScript just as effectively as one with a laptop.
+          <br><br>
+          The project has been assigned a <strong>DOI (Digital Object Identifier)</strong> making it citable in academic work, and is actively maintained on GitHub.
+        </p>
+        <div class="mission-links">
+          <a href="https://github.com/Hiren2001/hiren.js.org" class="mission-link" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+          <a href="https://doi.org/10.5281/zenodo.7978764" class="mission-link" target="_blank">📄 DOI Citation</a>
+          <a href="https://github.com/Hiren2001/hiren.js.org/blob/main/LICENSE" class="mission-link" target="_blank">⚖️ MIT License</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ OPEN SOURCE ══════════════════ -->
+<section id="oss">
+  <div class="section-inner">
+    <div class="oss-card reveal">
+      <div class="oss-icon">⚡</div>
+      <h2 class="oss-title">Open Source & Free Forever</h2>
+      <p class="oss-desc">
+        HirenJS is 100% open source under the MIT License. Every line of code is on GitHub — fork it, customise it for your classroom, report bugs, or contribute new features. The community makes it better for everyone.
+      </p>
+
+      <div class="oss-meta">
+        <div class="oss-badge">
+          <span class="oss-badge-dot ob-yellow"></span>
+          JavaScript · Primary Language
+        </div>
+        <div class="oss-badge">
+          <span class="oss-badge-dot ob-green"></span>
+          MIT Licensed
+        </div>
+        <div class="oss-badge">
+          <span class="oss-badge-dot ob-purple"></span>
+          DOI: 10.5281/zenodo.7978764
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="https://github.com/Hiren2001/hiren.js.org" class="btn-hero btn-hero-primary" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          View on GitHub
+        </a>
+        <a href="https://github.com/Hiren2001/hiren.js.org/issues" class="btn-hero btn-hero-secondary" target="_blank">🐛 Report Issue</a>
+        <a href="https://doi.org/10.5281/zenodo.7978764" class="btn-hero btn-hero-ghost" target="_blank">📄 Cite DOI</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ TESTIMONIALS ══════════════════ -->
+<section style="background: var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:40px;">
+      <span class="section-tag">Community</span>
+      <h2 class="section-title">What students say</h2>
+    </div>
+    <div class="testimonials">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"I only have an old Android phone and couldn't afford a laptop for college. HirenJS is the only editor that actually works well on my screen. I've learned so much JavaScript because of it."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(247,223,30,0.15);color:var(--accent);">A</div>
+          <div>
+            <div class="testi-name">Ritik V.</div>
+            <div class="testi-role">CS Student, Gujarat</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The snippet library is amazing for beginners. I can see real working code and then modify it to understand how it works. Way better than reading a textbook."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(110,231,183,0.15);color:var(--success);">P</div>
+          <div>
+            <div class="testi-name">Sachin S.</div>
+            <div class="testi-role">Self-taught Developer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"I teach a JavaScript workshop to underprivileged students. I now recommend HirenJS as the first tool because it works on any phone and there is zero setup. Brilliant project."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(167,139,250,0.15);color:var(--accent4);">R</div>
+          <div>
+            <div class="testi-name">Bhumit B.</div>
+            <div class="testi-role">Programming Educator</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FAQ ══════════════════ -->
+<section>
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">FAQ</span>
+      <h2 class="section-title">Common questions</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <div class="faq-q">Is HirenJS really free? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Yes, completely free — forever. HirenJS is open source under the MIT license. There are no paid plans, no premium features, and no sign-up required.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I need to install anything? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">No. HirenJS runs entirely in your browser. Just open hiren.js.org on your phone, tablet, or computer and start coding. It works offline too once loaded.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Which languages does it support? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">The editor supports JavaScript (primary), HTML (with live preview), CSS, JSON, and TypeScript. More languages may be added in future updates.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is my code saved? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Yes! Your code is automatically saved to your browser's localStorage every time you type. Close the tab and reopen it — your code will still be there. You can also share code via URL.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I use it in my school or classroom? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Absolutely. HirenJS is MIT licensed so you can use it, share it, and even fork it for your institution. Teachers are encouraged to use it as a free classroom tool.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I cite HirenJS in an academic paper? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">HirenJS has been assigned a DOI: 10.5281/zenodo.7978764. You can use this to formally cite the project in academic work. Visit doi.org/10.5281/zenodo.7978764 for citation formats.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CTA ══════════════════ -->
+<section class="cta-section">
+  <div class="section-inner" style="text-align:center;">
+    <div class="reveal">
+      <span class="section-tag">Get Started</span>
+      <h2 class="cta-title">Start coding<br><span style="color:var(--accent);">right now</span></h2>
+      <p class="cta-sub">Open the editor on your phone, tablet, or computer. No account. No download. Just JavaScript.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="HirenJS.html" class="btn-hero btn-hero-primary" style="font-size:1.05rem;padding:16px 32px;">
+          <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M2 1.5l11 5.5-11 5.5V1.5z"/></svg>
+          Launch Editor Free
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="margin-bottom:10px;display:inline-flex;">
+        <span class="nav-badge">JS</span> HirenJS
+      </a>
+      <p>A free, open-source JavaScript playground built for students who learn on smartphones.</p>
+      <div style="margin-top:12px;">
+        <a href="https://doi.org/10.5281/zenodo.7978764" class="doi-link" target="_blank">DOI: 10.5281/zenodo.7978764</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="HirenJS.html">Editor</a></li>
+        <li><a href="beta.html">Beta Version</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How it works</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Open Source</h4>
+      <ul>
+        <li><a href="https://github.com/Hiren2001/hiren.js.org" target="_blank">GitHub Repository</a></li>
+        <li><a href="https://github.com/Hiren2001/hiren.js.org/blob/main/LICENSE" target="_blank">MIT License</a></li>
+        <li><a href="https://github.com/Hiren2001/hiren.js.org/issues" target="_blank">Report Issues</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.7978764" target="_blank">Cite via DOI</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://github.com/Hiren2001" target="_blank">Hiren on GitHub</a></li>
+        <li><a href="#about">About the Creator</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© Hiren Rathod · hiren.js.org · Released under MIT License</p>
+    <div class="footer-doi">
+      <a href="https://doi.org/10.5281/zenodo.7978764" target="_blank">
+        <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.7978764.svg" alt="DOI" style="height:20px;">
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── Scroll reveal ───────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── Animated counters ───────────────────────────────────────────────
+const counters = document.querySelectorAll('[data-target]');
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const target = parseInt(el.dataset.target);
+    const duration = 900;
+    const step = duration / 60;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += target / (duration / 16);
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = Math.floor(current) + (el.dataset.suffix || '');
+    }, 16);
+    countObserver.unobserve(el);
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => countObserver.observe(c));
+
+// ─── FAQ accordion ───────────────────────────────────────────────────
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// ─── Feature card mouse glow ─────────────────────────────────────────
+document.querySelectorAll('.feature-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty('--mx', x + '%');
+    card.style.setProperty('--my', y + '%');
+  });
+});
+
+// ─── Stagger nav-link animation on load ──────────────────────────────
+document.querySelectorAll('.nav-link').forEach((l, i) => {
+  l.style.animationDelay = (i * 0.05) + 's';
+});
+</script>
+</body>
+</html>
