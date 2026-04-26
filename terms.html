@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Terms of Service for HirenJS — the rules and guidelines for using our free JavaScript playground.">
+  <meta name="robots" content="index, follow">
+  <title>Terms of Service — HirenJS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23f7df1e'/><text y='.9em' font-size='85' x='8'>JS</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0f0f1a; --bg2:#16162a; --bg3:#1e1e35; --border:#2a2a4a;
+      --accent:#f7df1e; --accent2:#ff6b6b; --accent3:#4ecdc4; --accent4:#a78bfa;
+      --text:#e8e8f0; --text2:#8888aa; --success:#6ee7b7;
+      --mono:'JetBrains Mono',monospace; --display:'Syne',system-ui,sans-serif;
+      --r:12px; --rsm:8px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--display);line-height:1.7;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--bg2);} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.025;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,5vw,60px);height:56px;background:rgba(15,15,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+    .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:800;font-size:1rem;}
+    .nav-badge{background:var(--accent);color:#000;font-family:var(--mono);font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:5px;letter-spacing:1px;}
+    .nav-links{display:flex;gap:8px;}
+    .nav-link{color:var(--text2);text-decoration:none;font-size:0.78rem;font-weight:600;padding:6px 12px;border-radius:var(--rsm);transition:all 0.15s;}
+    .nav-link:hover{color:var(--text);background:var(--bg3);}
+    .nav-cta{background:var(--accent);color:#000;padding:7px 16px;border-radius:var(--rsm);font-weight:700;font-size:0.78rem;text-decoration:none;transition:all 0.15s;}
+    .nav-cta:hover{background:#ffe933;}
+    @media(max-width:600px){.nav-links{display:none;}}
+    .page-hero{position:relative;z-index:1;text-align:center;padding:clamp(48px,8vw,96px) clamp(16px,5vw,60px) clamp(32px,5vw,60px);border-bottom:1px solid var(--border);background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(255,107,107,0.06),transparent);}
+    .hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.25);border-radius:99px;padding:4px 14px;font-family:var(--mono);font-size:0.68rem;color:var(--accent2);letter-spacing:1px;margin-bottom:18px;}
+    .hero-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.4)}}
+    .page-hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;margin-bottom:12px;}
+    .page-hero p{color:var(--text2);max-width:520px;margin:0 auto;font-size:0.95rem;line-height:1.7;}
+    .last-updated{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:0.7rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:4px 12px;border-radius:99px;}
+    .layout{display:flex;max-width:1100px;margin:0 auto;padding:clamp(24px,4vw,48px) clamp(16px,4vw,32px);gap:40px;position:relative;z-index:1;}
+    .toc-sidebar{width:220px;flex-shrink:0;}
+    .toc-sticky{position:sticky;top:72px;}
+    .toc-label{font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:12px;}
+    .toc-nav{display:flex;flex-direction:column;gap:4px;}
+    .toc-nav a{color:var(--text2);text-decoration:none;font-size:0.8rem;padding:5px 10px;border-radius:var(--rsm);border-left:2px solid transparent;transition:all 0.13s;}
+    .toc-nav a:hover{color:var(--accent2);border-left-color:var(--accent2);background:rgba(255,107,107,0.05);}
+    @media(max-width:800px){.toc-sidebar{display:none;}}
+    .article{flex:1;min-width:0;max-width:720px;}
+    .section{margin-bottom:48px;scroll-margin-top:80px;}
+    h2{font-size:1.35rem;font-weight:800;letter-spacing:-0.3px;margin-bottom:12px;display:flex;align-items:center;gap:10px;padding-top:8px;}
+    h2 .h-num{font-family:var(--mono);font-size:0.72rem;color:var(--accent2);background:rgba(255,107,107,0.1);padding:2px 8px;border-radius:4px;font-weight:700;}
+    p{color:var(--text2);font-size:0.9rem;line-height:1.8;margin-bottom:12px;}
+    a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(255,107,107,0.3);transition:border-color 0.15s;}
+    a:hover{border-bottom-color:var(--accent2);}
+    ul,ol{color:var(--text2);font-size:0.9rem;line-height:1.8;padding-left:20px;margin-bottom:14px;}
+    li{margin-bottom:4px;}
+    strong{color:var(--text);font-weight:700;}
+    .divider{border:none;border-top:1px solid var(--border);margin:0 0 40px;}
+    .callout{background:rgba(255,107,107,0.06);border-left:3px solid var(--accent2);border-radius:var(--rsm);padding:14px 18px;margin:16px 0 20px;}
+    .callout p{margin:0;color:#fca5a5;font-size:0.87rem;}
+    .callout-info{background:rgba(247,223,30,0.06);border-left:3px solid var(--accent);}
+    .callout-info p{color:#fde68a;}
+    code{font-family:var(--mono);font-size:0.82em;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 5px;color:var(--accent2);}
+    .contact-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-top:24px;}
+    .contact-card h3{font-size:1rem;font-weight:700;margin-bottom:8px;}
+    .contact-card p{margin:0;}
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px clamp(16px,5vw,60px);text-align:center;position:relative;z-index:1;}
+    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;}
+    .footer-links a{color:var(--text2);text-decoration:none;font-size:0.8rem;border:none;transition:color 0.15s;}
+    .footer-links a:hover{color:var(--accent);}
+    footer p{color:var(--text2);font-size:0.78rem;}
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity 0.45s ease,transform 0.45s ease;}
+    .reveal.visible{opacity:1;transform:none;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo"><span class="nav-badge">JS</span> HirenJS</a>
+  <div class="nav-links">
+    <a href="../index.html" class="nav-link">Home</a>
+    <a href="../docs.html" class="nav-link">Docs</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </div>
+  <a href="HirenJS.html" class="nav-cta">▶ Editor</a>
+</nav>
+
+<div class="page-hero">
+  <div class="hero-tag"><span class="hero-dot"></span>LEGAL DOCUMENT</div>
+  <h1>Terms of Service</h1>
+  <p>Please read these terms carefully before using HirenJS. By using our service you agree to these terms.</p>
+  <span class="last-updated">Last updated: January 1, 2025</span>
+</div>
+
+<div class="layout">
+  <aside class="toc-sidebar">
+    <div class="toc-sticky">
+      <div class="toc-label">On this page</div>
+      <nav class="toc-nav">
+        <a href="#acceptance">Acceptance</a>
+        <a href="#description">Service Description</a>
+        <a href="#acceptable">Acceptable Use</a>
+        <a href="#prohibited">Prohibited Use</a>
+        <a href="#ip">Intellectual Property</a>
+        <a href="#disclaimer">Disclaimer</a>
+        <a href="#liability">Limitation of Liability</a>
+        <a href="#ads">Advertising</a>
+        <a href="#termination">Termination</a>
+        <a href="#governing">Governing Law</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </aside>
+
+  <article class="article">
+
+    <div class="section reveal" id="acceptance">
+      <h2><span class="h-num">01</span> Acceptance of Terms</h2>
+      <p>By accessing and using <strong>HirenJS</strong> ("the Service"), available at <strong>hiren.js.org</strong>, you accept and agree to be bound by these Terms of Service ("Terms"). These Terms apply to all visitors, users, and others who access or use the Service.</p>
+      <p>If you disagree with any part of these Terms, you may not access the Service.</p>
+      <div class="callout callout-info"><p>These Terms were last updated on January 1, 2025. We reserve the right to modify these terms at any time. Continued use of the Service after changes constitutes acceptance.</p></div>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="description">
+      <h2><span class="h-num">02</span> Description of Service</h2>
+      <p>HirenJS is a <strong>free, open-source, browser-based JavaScript playground</strong> designed for students who want to learn and practise JavaScript programming. The Service includes:</p>
+      <ul>
+        <li>An online code editor (powered by Ace Editor) supporting JavaScript, HTML, CSS, JSON, and TypeScript</li>
+        <li>A built-in library of learning code snippets</li>
+        <li>A documentation and learning guide</li>
+        <li>Code sharing via URL encoding</li>
+        <li>A live HTML preview panel</li>
+      </ul>
+      <p>The Service is provided <strong>free of charge</strong> and is hosted on GitHub Pages. No account registration is required to use any feature of HirenJS.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="acceptable">
+      <h2><span class="h-num">03</span> Acceptable Use</h2>
+      <p>You may use HirenJS for the following purposes:</p>
+      <ul>
+        <li>Learning and practising JavaScript and web programming</li>
+        <li>Testing and experimenting with code in a sandboxed environment</li>
+        <li>Sharing code snippets with teachers, classmates, or colleagues for educational purposes</li>
+        <li>Using the documentation and learning guides to develop programming skills</li>
+        <li>Embedding or linking to HirenJS in educational materials</li>
+      </ul>
+      <p>You are responsible for any code you write and execute in the editor. All code execution happens in your own browser — no code is transmitted to or executed on our servers.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="prohibited">
+      <h2><span class="h-num">04</span> Prohibited Use</h2>
+      <p>You agree <strong>not</strong> to use HirenJS to:</p>
+      <ul>
+        <li>Write, test, or distribute malicious code, malware, spyware, ransomware, or any harmful software</li>
+        <li>Attempt to attack, disrupt, or gain unauthorised access to any computer system or network</li>
+        <li>Engage in any activity that violates applicable local, national, or international laws</li>
+        <li>Harvest or scrape data from the HirenJS website using automated tools</li>
+        <li>Use the Service in any way that could damage, disable, or impair the website</li>
+        <li>Misrepresent the origin or ownership of code shared via HirenJS</li>
+        <li>Use shared code URLs for phishing, spam, or deceptive practices</li>
+      </ul>
+      <div class="callout"><p>Violation of these terms may result in us taking steps to block access from your IP address and, where required by law, reporting the activity to relevant authorities.</p></div>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="ip">
+      <h2><span class="h-num">05</span> Intellectual Property</h2>
+      <p><strong>HirenJS Source Code:</strong> The HirenJS website, editor, documentation, and associated source code are released under the <strong>MIT License</strong>. You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software, subject to the conditions of the MIT License.</p>
+      <p><strong>Your Code:</strong> Any code you write in the HirenJS editor belongs to you. We make no claim of ownership over code you write or share using the Service.</p>
+      <p><strong>Third-Party Components:</strong> HirenJS uses Ace Editor (BSD licence), Google Fonts, and other open-source components. Their respective licences apply.</p>
+      <p>The "HirenJS" name, logo, and branding are the property of Hiren Rathod. You may not use these for commercial purposes without written permission.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="disclaimer">
+      <h2><span class="h-num">06</span> Disclaimer of Warranties</h2>
+      <p>HirenJS is provided on an <strong>"AS IS" and "AS AVAILABLE"</strong> basis without any warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
+      <p>We do not warrant that:</p>
+      <ul>
+        <li>The Service will be uninterrupted, error-free, or available at all times</li>
+        <li>The results obtained from using the Service will be accurate or reliable</li>
+        <li>Any errors or defects in the Service will be corrected</li>
+      </ul>
+      <p>As HirenJS is hosted on GitHub Pages, its availability is subject to GitHub's own terms and availability.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="liability">
+      <h2><span class="h-num">07</span> Limitation of Liability</h2>
+      <p>To the maximum extent permitted by applicable law, <strong>Hiren Rathod and HirenJS shall not be liable</strong> for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of data, loss of profits, or loss of goodwill, arising from your use of or inability to use the Service.</p>
+      <p>Because code execution happens entirely in your own browser, we are not liable for any damages resulting from code you write or execute using HirenJS.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="ads">
+      <h2><span class="h-num">08</span> Advertising</h2>
+      <p>HirenJS displays advertisements through <strong>Google AdSense</strong> to support the free availability of the Service. By using HirenJS, you acknowledge that:</p>
+      <ul>
+        <li>Advertisements may be displayed on the website</li>
+        <li>Google AdSense may use cookies and tracking technologies to serve personalised ads</li>
+        <li>You can opt out of personalised advertising through Google's Ad Settings</li>
+        <li>Ad blockers may affect how the site displays but will not affect core editor functionality</li>
+      </ul>
+      <p>We are not responsible for the content of third-party advertisements. Clicking advertisements may take you to external sites governed by their own terms and privacy policies.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="termination">
+      <h2><span class="h-num">09</span> Termination</h2>
+      <p>We reserve the right to restrict or terminate access to HirenJS for any user who violates these Terms or engages in any behaviour that we determine, in our sole discretion, to be harmful to other users, the Service, or third parties.</p>
+      <p>As HirenJS requires no account, "termination" would take the form of IP-level blocking in cases of clear abuse (e.g., automated scraping or denial-of-service attempts).</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="governing">
+      <h2><span class="h-num">10</span> Governing Law</h2>
+      <p>These Terms shall be governed by and construed in accordance with the laws of <strong>India</strong>, without regard to its conflict of law provisions.</p>
+      <p>Any disputes arising from these Terms or your use of HirenJS shall be subject to the exclusive jurisdiction of the courts located in <strong>Ahmedabad, Gujarat, India</strong>.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="contact">
+      <h2><span class="h-num">11</span> Contact</h2>
+      <p>If you have questions about these Terms of Service, please contact us:</p>
+      <div class="contact-card">
+        <h3>Hiren Rathod — HirenJS</h3>
+        <p>🌐 <a href="https://hiren.js.org" target="_blank" rel="noopener">hiren.js.org</a><br>
+        💻 <a href="https://github.com/Hiren2001/hiren.js.org" target="_blank" rel="noopener">github.com/Hiren2001/hiren.js.org</a><br>
+        📧 Contact form: <a href="contact.html">hiren.js.org/contact</a></p>
+      </div>
+    </div>
+
+  </article>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="../index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+    <a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="../docs.html">Docs</a>
+  </div>
+  <p>© 2025 Hiren Rathod · HirenJS · MIT License</p>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

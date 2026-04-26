@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Privacy Policy for HirenJS — Learn how we collect, use, and protect your data when you use our free JavaScript playground.">
+  <meta name="robots" content="index, follow">
+  <title>Privacy Policy — HirenJS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23f7df1e'/><text y='.9em' font-size='85' x='8'>JS</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f1a; --bg2: #16162a; --bg3: #1e1e35;
+      --border: #2a2a4a; --accent: #f7df1e; --accent4: #a78bfa;
+      --text: #e8e8f0; --text2: #8888aa;
+      --success: #6ee7b7;
+      --mono: 'JetBrains Mono', monospace;
+      --display: 'Syne', system-ui, sans-serif;
+      --r: 12px; --rsm: 8px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--display); line-height: 1.7; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: var(--bg2); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* noise */
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.025;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px; }
+
+    /* nav */
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between;
+      padding:0 clamp(16px,5vw,60px); height:56px;
+      background:rgba(15,15,26,0.92); backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border); }
+    .nav-logo { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--text); font-weight:800; font-size:1rem; }
+    .nav-badge { background:var(--accent); color:#000; font-family:var(--mono); font-size:0.62rem; font-weight:700; padding:2px 6px; border-radius:5px; letter-spacing:1px; }
+    .nav-links { display:flex; gap:8px; }
+    .nav-link { color:var(--text2); text-decoration:none; font-size:0.78rem; font-weight:600; padding:6px 12px; border-radius:var(--rsm); transition:all 0.15s; }
+    .nav-link:hover { color:var(--text); background:var(--bg3); }
+    .nav-cta { background:var(--accent); color:#000; padding:7px 16px; border-radius:var(--rsm); font-weight:700; font-size:0.78rem; text-decoration:none; transition:all 0.15s; }
+    .nav-cta:hover { background:#ffe933; }
+    @media(max-width:600px){ .nav-links { display:none; } }
+
+    /* hero */
+    .page-hero {
+      position:relative; z-index:1; text-align:center;
+      padding:clamp(48px,8vw,96px) clamp(16px,5vw,60px) clamp(32px,5vw,60px);
+      border-bottom:1px solid var(--border);
+      background:radial-gradient(ellipse 60% 50% at 50% 0%, rgba(167,139,250,0.07), transparent);
+    }
+    .hero-tag { display:inline-flex; align-items:center; gap:7px; background:rgba(167,139,250,0.1); border:1px solid rgba(167,139,250,0.25); border-radius:99px; padding:4px 14px; font-family:var(--mono); font-size:0.68rem; color:var(--accent4); letter-spacing:1px; margin-bottom:18px; }
+    .hero-dot { width:6px; height:6px; border-radius:50%; background:var(--accent4); animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
+    .page-hero h1 { font-size:clamp(2rem,5vw,3.2rem); font-weight:800; letter-spacing:-1px; margin-bottom:12px; }
+    .page-hero p { color:var(--text2); max-width:520px; margin:0 auto; font-size:0.95rem; line-height:1.7; }
+    .last-updated { display:inline-block; margin-top:16px; font-family:var(--mono); font-size:0.7rem; color:var(--text2); background:var(--bg3); border:1px solid var(--border); padding:4px 12px; border-radius:99px; }
+
+    /* layout */
+    .layout { display:flex; max-width:1100px; margin:0 auto; padding:clamp(24px,4vw,48px) clamp(16px,4vw,32px); gap:40px; position:relative; z-index:1; }
+
+    /* toc */
+    .toc-sidebar { width:220px; flex-shrink:0; }
+    .toc-sticky { position:sticky; top:72px; }
+    .toc-label { font-family:var(--mono); font-size:0.62rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text2); margin-bottom:12px; }
+    .toc-nav { display:flex; flex-direction:column; gap:4px; }
+    .toc-nav a { color:var(--text2); text-decoration:none; font-size:0.8rem; padding:5px 10px; border-radius:var(--rsm); border-left:2px solid transparent; transition:all 0.13s; }
+    .toc-nav a:hover { color:var(--accent4); border-left-color:var(--accent4); background:rgba(167,139,250,0.05); }
+    @media(max-width:800px){ .toc-sidebar { display:none; } }
+
+    /* article */
+    .article { flex:1; min-width:0; max-width:720px; }
+    .section { margin-bottom:48px; scroll-margin-top:80px; }
+    h2 { font-size:1.35rem; font-weight:800; letter-spacing:-0.3px; margin-bottom:12px; display:flex; align-items:center; gap:10px; padding-top:8px; }
+    h2 .h-num { font-family:var(--mono); font-size:0.72rem; color:var(--accent4); background:rgba(167,139,250,0.1); padding:2px 8px; border-radius:4px; font-weight:700; }
+    p { color:var(--text2); font-size:0.9rem; line-height:1.8; margin-bottom:12px; }
+    a { color:var(--accent4); text-decoration:none; border-bottom:1px solid rgba(167,139,250,0.3); transition:border-color 0.15s; }
+    a:hover { border-bottom-color:var(--accent4); }
+    ul, ol { color:var(--text2); font-size:0.9rem; line-height:1.8; padding-left:20px; margin-bottom:14px; }
+    li { margin-bottom:4px; }
+    strong { color:var(--text); font-weight:700; }
+    .divider { border:none; border-top:1px solid var(--border); margin:0 0 40px; }
+    .callout { background:rgba(167,139,250,0.06); border-left:3px solid var(--accent4); border-radius:var(--rsm); padding:14px 18px; margin:16px 0 20px; }
+    .callout p { margin:0; color:#c4b5fd; font-size:0.87rem; }
+    code { font-family:var(--mono); font-size:0.82em; background:var(--bg3); border:1px solid var(--border); border-radius:4px; padding:1px 5px; color:var(--accent4); }
+
+    /* contact card */
+    .contact-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r); padding:24px; margin-top:24px; }
+    .contact-card h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+    .contact-card p { margin:0; }
+
+    /* footer */
+    footer { background:var(--bg2); border-top:1px solid var(--border); padding:28px clamp(16px,5vw,60px); text-align:center; position:relative; z-index:1; }
+    .footer-links { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-bottom:12px; }
+    .footer-links a { color:var(--text2); text-decoration:none; font-size:0.8rem; border:none; transition:color 0.15s; }
+    .footer-links a:hover { color:var(--accent); }
+    footer p { color:var(--text2); font-size:0.78rem; }
+
+    /* reveal */
+    .reveal { opacity:0; transform:translateY(16px); transition:opacity 0.45s ease, transform 0.45s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-badge">JS</span> HirenJS</a>
+  <div class="nav-links">
+    <a href="../index.html" class="nav-link">Home</a>
+    <a href="../docs.html" class="nav-link">Docs</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </div>
+  <a href="HirenJS.html" class="nav-cta">▶ Editor</a>
+</nav>
+
+<div class="page-hero">
+  <div class="hero-tag"><span class="hero-dot"></span>LEGAL DOCUMENT</div>
+  <h1>Privacy Policy</h1>
+  <p>We are committed to protecting your privacy. This policy explains clearly what data HirenJS collects and how it is used.</p>
+</div>
+
+<div class="layout">
+  <aside class="toc-sidebar">
+    <div class="toc-sticky">
+      <div class="toc-label">On this page</div>
+      <nav class="toc-nav">
+        <a href="#overview">Overview</a>
+        <a href="#information">Information We Collect</a>
+        <a href="#cookies">Cookies & Tracking</a>
+        <a href="#adsense">Google AdSense</a>
+        <a href="#analytics">Analytics</a>
+        <a href="#third-party">Third-Party Links</a>
+        <a href="#children">Children's Privacy</a>
+        <a href="#your-rights">Your Rights</a>
+        <a href="#changes">Policy Changes</a>
+        <a href="#contact">Contact Us</a>
+      </nav>
+    </div>
+  </aside>
+
+  <article class="article">
+
+    <div class="section reveal" id="overview">
+      <h2><span class="h-num">01</span> Overview</h2>
+      <p>Welcome to <strong>HirenJS</strong> ("we", "our", "us"), available at <strong>hiren.js.org</strong>. This Privacy Policy describes how we handle information when you visit our website and use our free, open-source JavaScript playground.</p>
+      <p>HirenJS is a free educational tool created by <strong>Hiren Rathod</strong> for students who want to learn and practise JavaScript programming. We are committed to transparency and protecting the privacy of our users, especially students and minors.</p>
+      <div class="callout"><p>By using HirenJS, you agree to the collection and use of information in accordance with this policy. If you do not agree, please discontinue use of the site.</p></div>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="information">
+      <h2><span class="h-num">02</span> Information We Collect</h2>
+      <p>HirenJS is designed to be minimal. We do <strong>not</strong> require you to create an account, sign in, or provide any personal information to use the editor.</p>
+      <p><strong>Information stored locally on your device:</strong></p>
+      <ul>
+        <li>Your code is automatically saved to <code>localStorage</code> in your own browser. This data never leaves your device and is never sent to our servers.</li>
+        <li>Editor preferences (theme, font size, word wrap) are stored in <code>localStorage</code> on your device.</li>
+        <li>Documentation progress is saved in <code>localStorage</code> on your device.</li>
+      </ul>
+      <p><strong>Information collected automatically:</strong></p>
+      <ul>
+        <li>Standard server logs may include your IP address, browser type, pages visited, and date/time of visits. These are retained for security and performance purposes only.</li>
+        <li>We do not build personal profiles from this data.</li>
+      </ul>
+      <p>We do <strong>not</strong> collect your name, email address, phone number, or any other identifying personal information unless you voluntarily contact us via the Contact page.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="cookies">
+      <h2><span class="h-num">03</span> Cookies &amp; Tracking Technologies</h2>
+      <p>HirenJS itself does not use first-party cookies to track users. However, third-party services we use — specifically Google AdSense and Google Analytics — may place cookies on your device.</p>
+      <p><strong>What are cookies?</strong> Cookies are small text files stored by your browser that allow websites and services to remember information about your visit.</p>
+      <ul>
+        <li><strong>Essential cookies:</strong> We do not use any essential first-party cookies.</li>
+        <li><strong>Advertising cookies:</strong> Google AdSense uses cookies to serve ads relevant to your interests. These are third-party cookies managed by Google.</li>
+        <li><strong>Analytics cookies:</strong> Google Analytics may use cookies to help us understand how visitors interact with our site.</li>
+      </ul>
+      <p>You can control and delete cookies through your browser settings. Disabling cookies may affect how ads are displayed but will not affect your ability to use the HirenJS code editor.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="adsense">
+      <h2><span class="h-num">04</span> Google AdSense &amp; Advertising</h2>
+      <p>HirenJS displays advertisements provided by <strong>Google AdSense</strong> (Publisher ID: <code>ca-pub-5120785078009963</code>). These ads help us keep HirenJS free for everyone.</p>
+      <p>Google AdSense uses cookies and similar technologies to serve ads based on your prior visits to this website and other sites. Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to HirenJS and/or other sites on the Internet.</p>
+      <p>You may opt out of personalised advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google's Ads Settings</a>. Alternatively, you can opt out of a third-party vendor's use of cookies for personalised advertising by visiting <a href="http://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info</a>.</p>
+      <p>For more information about how Google uses data, please visit the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
+      <div class="callout"><p>We only display ads to support free access to HirenJS. We never sell your personal data to advertisers or any third parties.</p></div>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="analytics">
+      <h2><span class="h-num">05</span> Analytics</h2>
+      <p>We may use <strong>Google Analytics</strong> to collect anonymised, aggregated data about how visitors use HirenJS. This helps us understand which features are most useful and how to improve the learning experience for students.</p>
+      <p>Data collected by Google Analytics includes pages visited, time spent on pages, browser type, and approximate geographic location (country/city level). This data is aggregated and <strong>cannot identify you personally</strong>.</p>
+      <p>You can prevent Google Analytics from collecting data about you by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a>.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="third-party">
+      <h2><span class="h-num">06</span> Third-Party Links &amp; Services</h2>
+      <p>HirenJS may contain links to external websites such as GitHub, Zenodo (DOI), and public APIs used in code examples. We are not responsible for the privacy practices of these external sites. We encourage you to review their privacy policies.</p>
+      <p>External services and CDNs used by HirenJS include:</p>
+      <ul>
+        <li><strong>Ace Editor</strong> (via cdnjs.cloudflare.com) — the code editor engine</li>
+        <li><strong>Google Fonts</strong> — for typography (JetBrains Mono, Syne)</li>
+        <li><strong>GitHub</strong> — for open-source repository hosting</li>
+        <li><strong>Zenodo</strong> — for academic DOI citation</li>
+        <li><strong>JokeAPI</strong> (v2.jokeapi.dev) — used only in optional code snippets</li>
+      </ul>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="children">
+      <h2><span class="h-num">07</span> Children's Privacy</h2>
+      <p>HirenJS is designed to be a safe educational tool for students of all ages, including those under 13. We do <strong>not</strong> knowingly collect personal information from children under 13.</p>
+      <p>Because HirenJS requires no registration or login, no personal data is submitted by users of any age when using the code editor itself.</p>
+      <p>If you believe a child has inadvertently provided personal information through our contact form, please contact us immediately at the email address below and we will promptly delete that information.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="your-rights">
+      <h2><span class="h-num">08</span> Your Rights &amp; Data Control</h2>
+      <p>Since HirenJS stores all user data (code, preferences) exclusively in your own browser's <code>localStorage</code>, you have full control:</p>
+      <ul>
+        <li><strong>Access:</strong> Open your browser's DevTools → Application → Local Storage to view your stored data.</li>
+        <li><strong>Delete:</strong> Clear your browser's site data or localStorage at any time to remove all HirenJS data from your device.</li>
+        <li><strong>Portability:</strong> Use the Share button in the editor to export your code as a URL.</li>
+      </ul>
+      <p>For data collected by Google (AdSense, Analytics), you can exercise your rights through <a href="https://myaccount.google.com/privacy" target="_blank" rel="noopener">Google's My Account Privacy controls</a>.</p>
+      <p>If you are located in the European Union (EU) or European Economic Area (EEA), you have additional rights under the <strong>General Data Protection Regulation (GDPR)</strong>, including the right to access, rectify, erase, and port your personal data.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="changes">
+      <h2><span class="h-num">09</span> Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time to reflect changes in our practices or applicable laws. When we make significant changes, we will update the "Last updated" date at the top of this page.</p>
+      <p>We encourage you to review this Privacy Policy periodically. Continued use of HirenJS after any changes constitutes your acceptance of the updated policy.</p>
+    </div>
+    <hr class="divider">
+
+    <div class="section reveal" id="contact">
+      <h2><span class="h-num">10</span> Contact Us</h2>
+      <p>If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us:</p>
+      <div class="contact-card">
+        <h3>Hiren Rathod — Creator of HirenJS</h3>
+        <p>📍 Surendranagar, Gujarat, India<br>
+        🌐 Website: <a href="https://hiren.js.org" target="_blank" rel="noopener">hiren.js.org</a><br>
+        💻 GitHub: <a href="https://github.com/Hiren2001" target="_blank" rel="noopener">github.com/Hiren2001</a><br>
+        📧 Contact form: <a href="contact.html">hiren.js.org/contact</a></p>
+      </div>
+    </div>
+
+  </article>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="../index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="../docs.html">Docs</a>
+  </div>
+  <p>© Hiren Rathod · HirenJS · MIT License</p>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } }), { threshold:0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

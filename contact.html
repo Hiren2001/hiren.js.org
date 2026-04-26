@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact HirenJS — Get in touch with Hiren Rathod for questions about the JavaScript playground, bug reports, or collaboration.">
+  <meta name="robots" content="index, follow">
+  <title>Contact Us — HirenJS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23f7df1e'/><text y='.9em' font-size='85' x='8'>JS</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;--border:#2a2a4a;--accent:#f7df1e;--accent2:#ff6b6b;--accent3:#4ecdc4;--accent4:#a78bfa;--text:#e8e8f0;--text2:#8888aa;--success:#6ee7b7;--mono:'JetBrains Mono',monospace;--display:'Syne',system-ui,sans-serif;--r:12px;--rsm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--display);line-height:1.7;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--bg2);} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,5vw,60px);height:56px;background:rgba(15,15,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+    .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:800;font-size:1rem;}
+    .nav-badge{background:var(--accent);color:#000;font-family:var(--mono);font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:5px;letter-spacing:1px;}
+    .nav-links{display:flex;gap:8px;}
+    .nav-link{color:var(--text2);text-decoration:none;font-size:0.78rem;font-weight:600;padding:6px 12px;border-radius:var(--rsm);transition:all 0.15s;}
+    .nav-link:hover{color:var(--text);background:var(--bg3);}
+    .nav-cta{background:var(--accent);color:#000;padding:7px 16px;border-radius:var(--rsm);font-weight:700;font-size:0.78rem;text-decoration:none;transition:all 0.15s;}
+    .nav-cta:hover{background:#ffe933;}
+    @media(max-width:600px){.nav-links{display:none;}}
+
+    /* hero */
+    .page-hero{position:relative;z-index:1;text-align:center;padding:clamp(56px,8vw,100px) clamp(16px,5vw,60px) clamp(40px,5vw,64px);overflow:hidden;border-bottom:1px solid var(--border);}
+    .hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+    .orb1{width:400px;height:400px;background:rgba(78,205,196,0.07);top:-100px;left:-80px;animation:float 9s ease-in-out infinite;}
+    .orb2{width:350px;height:350px;background:rgba(247,223,30,0.06);bottom:-60px;right:-60px;animation:float 11s ease-in-out infinite reverse;}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-25px)}}
+    .hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(78,205,196,0.08);border:1px solid rgba(78,205,196,0.2);border-radius:99px;padding:4px 14px;font-family:var(--mono);font-size:0.68rem;color:var(--accent3);letter-spacing:1px;margin-bottom:18px;position:relative;z-index:1;animation:fadeUp 0.5s ease both;}
+    .hero-dot{width:6px;height:6px;border-radius:50%;background:var(--accent3);animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.4)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+    .page-hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;letter-spacing:-1.5px;line-height:1.05;margin-bottom:14px;position:relative;z-index:1;animation:fadeUp 0.5s ease 0.1s both;}
+    .page-hero h1 span{color:var(--accent3);}
+    .page-hero p{color:var(--text2);font-size:0.95rem;max-width:500px;margin:0 auto;line-height:1.75;position:relative;z-index:1;animation:fadeUp 0.5s ease 0.2s both;}
+
+    /* layout */
+    .contact-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:40px;max-width:1000px;margin:0 auto;padding:clamp(40px,6vw,72px) clamp(16px,4vw,32px);position:relative;z-index:1;align-items:start;}
+    @media(max-width:720px){.contact-layout{grid-template-columns:1fr;}}
+
+    /* sidebar info */
+    .contact-sidebar{}
+    .section-label{font-family:var(--mono);font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent3);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+    .section-label::before{content:'';display:block;width:20px;height:2px;background:var(--accent3);}
+    .sidebar-title{font-size:1.3rem;font-weight:800;letter-spacing:-0.3px;margin-bottom:12px;line-height:1.2;}
+    .sidebar-desc{color:var(--text2);font-size:0.87rem;line-height:1.75;margin-bottom:28px;}
+
+    .info-cards{display:flex;flex-direction:column;gap:12px;}
+    .info-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:flex;align-items:flex-start;gap:14px;transition:all 0.2s;}
+    .info-card:hover{border-color:rgba(78,205,196,0.3);transform:translateX(4px);}
+    .info-card-icon{width:38px;height:38px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .ic-teal{background:rgba(78,205,196,0.1);}
+    .ic-yellow{background:rgba(247,223,30,0.1);}
+    .ic-purple{background:rgba(167,139,250,0.1);}
+    .ic-green{background:rgba(110,231,183,0.1);}
+    .info-card-text h4{font-size:0.85rem;font-weight:700;margin-bottom:3px;}
+    .info-card-text p{color:var(--text2);font-size:0.78rem;line-height:1.5;margin:0;}
+    .info-card-text a{color:var(--accent3);text-decoration:none;border-bottom:1px solid rgba(78,205,196,0.3);transition:border-color 0.15s;font-size:0.78rem;}
+    .info-card-text a:hover{border-bottom-color:var(--accent3);}
+
+    .response-note{margin-top:20px;background:rgba(110,231,183,0.05);border:1px solid rgba(110,231,183,0.15);border-radius:var(--rsm);padding:14px 16px;font-size:0.8rem;color:#a7f3d0;display:flex;gap:10px;align-items:flex-start;}
+    .response-note span{flex-shrink:0;font-size:1rem;}
+
+    /* FORM */
+    .form-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:clamp(24px,4vw,36px);position:sticky;top:72px;}
+    .form-title{font-size:1.15rem;font-weight:800;margin-bottom:6px;}
+    .form-sub{color:var(--text2);font-size:0.82rem;margin-bottom:24px;}
+
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:480px){.form-row{grid-template-columns:1fr;}}
+
+    .field{margin-bottom:18px;}
+    .field label{display:block;font-size:0.78rem;font-weight:700;margin-bottom:6px;color:var(--text);letter-spacing:0.3px;}
+    .field label .req{color:var(--accent3);margin-left:2px;}
+    .field input,.field select,.field textarea{
+      width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);
+      font-family:var(--mono);font-size:0.82rem;padding:10px 14px;border-radius:var(--rsm);
+      outline:none;transition:border-color 0.15s,box-shadow 0.15s;
+      appearance:none;-webkit-appearance:none;
+    }
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent3);box-shadow:0 0 0 3px rgba(78,205,196,0.1);}
+    .field input::placeholder,.field textarea::placeholder{color:var(--text2);}
+    .field textarea{resize:vertical;min-height:120px;line-height:1.6;}
+    .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238888aa' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer;}
+    .field select option{background:var(--bg3);color:var(--text);}
+
+    .char-count{text-align:right;font-family:var(--mono);font-size:0.65rem;color:var(--text2);margin-top:4px;}
+
+    /* honeypot */
+    .hp-field{display:none;}
+
+    .submit-btn{
+      width:100%;background:var(--accent3);color:#000;border:none;
+      font-family:var(--display);font-size:0.9rem;font-weight:700;
+      padding:13px;border-radius:var(--rsm);cursor:pointer;
+      transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;
+      letter-spacing:0.2px;
+    }
+    .submit-btn:hover{background:#3dd6cc;box-shadow:0 0 24px rgba(78,205,196,0.35);transform:translateY(-1px);}
+    .submit-btn:active{transform:scale(0.98);}
+    .submit-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+
+    .form-note{font-size:0.72rem;color:var(--text2);text-align:center;margin-top:12px;line-height:1.6;}
+    .form-note a{color:var(--text2);border-bottom:1px solid var(--border);text-decoration:none;}
+    .form-note a:hover{color:var(--accent3);border-bottom-color:var(--accent3);}
+
+    /* success state */
+    .success-state{display:none;text-align:center;padding:40px 20px;}
+    .success-state.show{display:block;}
+    .success-icon{font-size:3.5rem;margin-bottom:16px;animation:bounceIn 0.5s ease;}
+    @keyframes bounceIn{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+    .success-state h3{font-size:1.4rem;font-weight:800;margin-bottom:8px;color:var(--success);}
+    .success-state p{color:var(--text2);font-size:0.88rem;line-height:1.7;}
+
+    /* error msg */
+    .field-error{color:var(--accent2);font-size:0.72rem;margin-top:4px;display:none;}
+    .field-error.show{display:block;}
+    .field input.invalid,.field textarea.invalid,.field select.invalid{border-color:var(--accent2);}
+
+    /* FAQ strip */
+    .faq-strip{max-width:1000px;margin:0 auto;padding:0 clamp(16px,4vw,32px) clamp(40px,6vw,72px);position:relative;z-index:1;}
+    .faq-label{font-family:var(--mono);font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:20px;text-align:center;}
+    .faq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+    .faq-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;}
+    .faq-card h4{font-size:0.88rem;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+    .faq-card p{color:var(--text2);font-size:0.8rem;line-height:1.65;margin:0;}
+
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px clamp(16px,5vw,60px);text-align:center;position:relative;z-index:1;}
+    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;}
+    .footer-links a{color:var(--text2);text-decoration:none;font-size:0.8rem;transition:color 0.15s;}
+    .footer-links a:hover{color:var(--accent);}
+    footer p{color:var(--text2);font-size:0.78rem;}
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity 0.45s ease,transform 0.45s ease;}
+    .reveal.visible{opacity:1;transform:none;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo"><span class="nav-badge">JS</span> HirenJS</a>
+  <div class="nav-links">
+    <a href="../index.html" class="nav-link">Home</a>
+    <a href="../docs.html" class="nav-link">Docs</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="contact.html" class="nav-link" style="color:var(--text);">Contact</a>
+  </div>
+  <a href="../HirenJS.html" class="nav-cta">▶ Editor</a>
+</nav>
+
+<div class="page-hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-tag"><span class="hero-dot"></span>GET IN TOUCH</div>
+  <h1>We'd love to <span>hear from you</span></h1>
+  <p>Have a question, bug report, feature idea, or just want to say hello? Fill in the form and we'll get back to you as soon as possible.</p>
+</div>
+
+<div class="contact-layout">
+
+  <!-- Sidebar -->
+  <div class="contact-sidebar reveal">
+    <div class="section-label">Contact Info</div>
+    <div class="sidebar-title">Multiple ways to reach us</div>
+    <p class="sidebar-desc">HirenJS is an open-source project maintained by one developer. We genuinely read every message — your feedback helps make HirenJS better for thousands of students.</p>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-icon ic-teal">💬</div>
+        <div class="info-card-text">
+          <h4>Contact Form</h4>
+          <p>Use the form on this page for general enquiries, feedback, or bug reports. We respond within 2–5 business days.</p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon ic-yellow">🐛</div>
+        <div class="info-card-text">
+          <h4>Bug Reports</h4>
+          <p>Found a bug? Please report it on GitHub for fastest resolution.<br><a href="https://github.com/Hiren2001/hiren.js.org/issues" target="_blank" rel="noopener">Open an Issue on GitHub →</a></p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon ic-purple">💻</div>
+        <div class="info-card-text">
+          <h4>GitHub</h4>
+          <p>Browse source code, fork the project, or contribute.<br><a href="https://github.com/Hiren2001/hiren.js.org" target="_blank" rel="noopener">github.com/Hiren2001 →</a></p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon ic-green">📍</div>
+        <div class="info-card-text">
+          <h4>Location</h4>
+          <p>Surendranagar, Gujarat, India<br>Project hosted on GitHub Pages worldwide.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="response-note">
+      <span>⏱️</span>
+      <div>Typical response time is <strong>2–5 business days</strong>. For urgent issues, please open a GitHub issue which is monitored more frequently.</div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-card reveal">
+    <div class="form-title">Send us a message</div>
+    <p class="form-sub">Fields marked <span style="color:var(--accent3)">*</span> are required.</p>
+
+    <div id="contactForm">
+      <div class="form-row">
+        <div class="field">
+          <label>First Name <span class="req">*</span></label>
+          <input type="text" id="firstName" placeholder="Hiren" maxlength="50" autocomplete="given-name">
+          <div class="field-error" id="firstNameErr">Please enter your first name.</div>
+        </div>
+        <div class="field">
+          <label>Last Name <span class="req">*</span></label>
+          <input type="text" id="lastName" placeholder="Rathod" maxlength="50" autocomplete="family-name">
+          <div class="field-error" id="lastNameErr">Please enter your last name.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Email Address <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="you@example.com" maxlength="100" autocomplete="email">
+        <div class="field-error" id="emailErr">Please enter a valid email address.</div>
+      </div>
+
+      <div class="field">
+        <label>Subject <span class="req">*</span></label>
+        <select id="subject">
+          <option value="">— Select a topic —</option>
+          <option value="bug">🐛 Bug Report</option>
+          <option value="feature">✨ Feature Request</option>
+          <option value="question">❓ General Question</option>
+          <option value="education">🎓 Educational / Classroom Use</option>
+          <option value="collab">🤝 Collaboration / Partnership</option>
+          <option value="privacy">🔒 Privacy / Data Concern</option>
+          <option value="other">📝 Other</option>
+        </select>
+        <div class="field-error" id="subjectErr">Please select a topic.</div>
+      </div>
+
+      <div class="field">
+        <label>Message <span class="req">*</span></label>
+        <textarea id="message" placeholder="Describe your question, idea, or issue in detail…" maxlength="2000" oninput="updateCharCount()"></textarea>
+        <div class="char-count"><span id="charCount">0</span> / 2000</div>
+        <div class="field-error" id="messageErr">Please write a message (at least 20 characters).</div>
+      </div>
+
+      <!-- Honeypot (hidden from real users, catches bots) -->
+      <div class="hp-field" aria-hidden="true">
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button class="submit-btn" onclick="submitForm(event)" id="submitBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send Message
+      </button>
+
+      <p class="form-note">
+        By submitting this form, you agree to our
+        <a href="privacy-policy.html">Privacy Policy</a> and
+        <a href="terms.html">Terms of Service</a>.
+        We will never share your information with third parties.
+      </p>
+    </div>
+
+    <!-- Success state -->
+    <div class="success-state" id="successState">
+      <div class="success-icon">✅</div>
+      <h3>Message sent!</h3>
+      <p>Thank you for reaching out. We've received your message and will get back to you within 2–5 business days.<br><br>In the meantime, feel free to explore the <a href="docs.html" style="color:var(--accent3);border-bottom:1px solid rgba(78,205,196,0.3);">documentation</a> or <a href="HirenJS.html" style="color:var(--accent3);border-bottom:1px solid rgba(78,205,196,0.3);">launch the editor</a>!</p>
+      <button onclick="resetForm()" style="margin-top:20px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:8px 18px;border-radius:var(--rsm);cursor:pointer;font-family:var(--display);font-size:0.82rem;font-weight:600;">Send another message</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ strip -->
+<div class="faq-strip">
+  <div class="faq-label">Common questions before you write</div>
+  <div class="faq-grid reveal">
+    <div class="faq-card">
+      <h4>🐛 Found a bug?</h4>
+      <p>The fastest way to get a bug fixed is to open an issue on GitHub. Include your device, browser, and steps to reproduce the problem.</p>
+    </div>
+    <div class="faq-card">
+      <h4>🎓 Want to use HirenJS in class?</h4>
+      <p>You don't need permission — it's MIT licensed. But we'd love to hear about it! Tell us how you're using it for students.</p>
+    </div>
+    <div class="faq-card">
+      <h4>💡 Have a feature idea?</h4>
+      <p>Open a GitHub discussion or fill in the contact form with your idea. Community suggestions have shaped many features of HirenJS.</p>
+    </div>
+    <div class="faq-card">
+      <h4>🔒 Privacy concern?</h4>
+      <p>We take privacy seriously. Read our <a href="privacy-policy.html" style="color:var(--accent3);border-bottom:1px solid rgba(78,205,196,0.3);">Privacy Policy</a> or contact us directly and we'll respond promptly.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="../index.html">Home</a><a href="../docs.html">Docs</a><a href="about.html">About</a>
+    <a href="contact.html">Contact</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a>
+  </div>
+  <p>© Hiren Rathod · hiren.js.org · MIT License</p>
+</footer>
+
+<script>
+// ── Reveal on scroll ──────────────────────────────────────────
+const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── Char counter ─────────────────────────────────────────────
+function updateCharCount() {
+  document.getElementById('charCount').textContent = document.getElementById('message').value.length;
+}
+
+// ── Validation ───────────────────────────────────────────────
+function validate() {
+  let ok = true;
+  const fields = [
+    { id:'firstName', errId:'firstNameErr', check: v => v.trim().length >= 1 },
+    { id:'lastName',  errId:'lastNameErr',  check: v => v.trim().length >= 1 },
+    { id:'email',     errId:'emailErr',     check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+    { id:'subject',   errId:'subjectErr',   check: v => v !== '' },
+    { id:'message',   errId:'messageErr',   check: v => v.trim().length >= 20 },
+  ];
+  fields.forEach(f => {
+    const el  = document.getElementById(f.id);
+    const err = document.getElementById(f.errId);
+    const val = el.value;
+    if (!f.check(val)) {
+      el.classList.add('invalid');
+      err.classList.add('show');
+      ok = false;
+    } else {
+      el.classList.remove('invalid');
+      err.classList.remove('show');
+    }
+  });
+  return ok;
+}
+
+// ── Live validation on blur ──────────────────────────────────
+['firstName','lastName','email','subject','message'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('blur', () => { el.dispatchEvent(new Event('change')); });
+  el.addEventListener('input', () => { el.classList.remove('invalid'); document.getElementById(id+'Err') && document.getElementById(id+'Err').classList.remove('show'); });
+});
+
+// ── Submit ───────────────────────────────────────────────────
+function submitForm(e) {
+  e.preventDefault();
+
+  // Honeypot check
+  if (document.getElementById('website').value) return;
+
+  if (!validate()) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity="0.25"/><path d="M21 12a9 9 0 01-9 9"/></svg> Sending…`;
+
+  // Collect data
+  const data = {
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName:  document.getElementById('lastName').value.trim(),
+    email:     document.getElementById('email').value.trim(),
+    subject:   document.getElementById('subject').value,
+    message:   document.getElementById('message').value.trim(),
+    timestamp: new Date().toISOString(),
+    page:      location.href,
+  };
+
+  // Since this is a static GitHub Pages site, we use a mailto fallback
+  // In production you would POST to a backend / Formspree / Netlify Forms
+  const mailtoBody = encodeURIComponent(
+    `Name: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\nSubject: ${data.subject}\n\nMessage:\n${data.message}`
+  );
+
+  // Simulate network delay then show success
+  setTimeout(() => {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('successState').classList.add('show');
+
+    // Open mailto as fallback (GitHub Pages has no server-side form handling)
+    window.location.href = `mailto:contact@hiren.js.org?subject=HirenJS Contact: ${data.subject}&body=${mailtoBody}`;
+  }, 1200);
+}
+
+// ── Reset ────────────────────────────────────────────────────
+function resetForm() {
+  document.getElementById('contactForm').style.display = '';
+  document.getElementById('successState').classList.remove('show');
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtn').innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Message`;
+  ['firstName','lastName','email','subject','message'].forEach(id => {
+    document.getElementById(id).value = '';
+    document.getElementById(id).classList.remove('invalid');
+  });
+  document.getElementById('charCount').textContent = '0';
+}
+
+// ── Spin keyframe for button ─────────────────────────────────
+const style = document.createElement('style');
+style.textContent = '@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

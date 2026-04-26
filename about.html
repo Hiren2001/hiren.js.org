@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About HirenJS — Learn about our mission to make JavaScript education accessible to every student, regardless of what device they own.">
+  <meta name="robots" content="index, follow">
+  <title>About Us — HirenJS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23f7df1e'/><text y='.9em' font-size='85' x='8'>JS</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;--border:#2a2a4a;--accent:#f7df1e;--accent2:#ff6b6b;--accent3:#4ecdc4;--accent4:#a78bfa;--text:#e8e8f0;--text2:#8888aa;--success:#6ee7b7;--mono:'JetBrains Mono',monospace;--display:'Syne',system-ui,sans-serif;--r:12px;--rsm:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--display);line-height:1.7;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--bg2);} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,5vw,60px);height:56px;background:rgba(15,15,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+    .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:800;font-size:1rem;}
+    .nav-badge{background:var(--accent);color:#000;font-family:var(--mono);font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:5px;letter-spacing:1px;}
+    .nav-links{display:flex;gap:8px;}
+    .nav-link{color:var(--text2);text-decoration:none;font-size:0.78rem;font-weight:600;padding:6px 12px;border-radius:var(--rsm);transition:all 0.15s;}
+    .nav-link:hover{color:var(--text);background:var(--bg3);}
+    .nav-cta{background:var(--accent);color:#000;padding:7px 16px;border-radius:var(--rsm);font-weight:700;font-size:0.78rem;text-decoration:none;transition:all 0.15s;}
+    .nav-cta:hover{background:#ffe933;}
+    @media(max-width:600px){.nav-links{display:none;}}
+
+    /* hero */
+    .page-hero{position:relative;z-index:1;padding:clamp(64px,10vw,120px) clamp(16px,5vw,60px) clamp(48px,6vw,80px);overflow:hidden;border-bottom:1px solid var(--border);}
+    .orb1{position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(247,223,30,0.06);filter:blur(80px);top:-150px;left:-100px;pointer-events:none;animation:float 8s ease-in-out infinite;}
+    .orb2{position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(167,139,250,0.06);filter:blur(80px);bottom:-80px;right:-80px;pointer-events:none;animation:float 10s ease-in-out infinite reverse;}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+    .hero-inner{max-width:700px;position:relative;z-index:1;}
+    .hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(247,223,30,0.08);border:1px solid rgba(247,223,30,0.2);border-radius:99px;padding:4px 14px;font-family:var(--mono);font-size:0.68rem;color:var(--accent);letter-spacing:1px;margin-bottom:20px;animation:fadeUp 0.5s ease both;}
+    .hero-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.4)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+    .page-hero h1{font-size:clamp(2.5rem,6vw,4rem);font-weight:800;letter-spacing:-1.5px;line-height:1.05;margin-bottom:18px;animation:fadeUp 0.5s ease 0.1s both;}
+    .page-hero h1 span{color:var(--accent);}
+    .page-hero p{color:var(--text2);font-size:1.05rem;line-height:1.75;max-width:580px;animation:fadeUp 0.5s ease 0.2s both;}
+
+    /* main */
+    .page-inner{max-width:900px;margin:0 auto;padding:clamp(40px,6vw,72px) clamp(16px,5vw,32px);position:relative;z-index:1;}
+
+    /* section */
+    .about-section{margin-bottom:64px;}
+    .section-label{font-family:var(--mono);font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+    .section-label::before{content:'';display:block;width:20px;height:2px;background:var(--accent);}
+    h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;letter-spacing:-0.8px;margin-bottom:16px;line-height:1.15;}
+    p{color:var(--text2);font-size:0.92rem;line-height:1.8;margin-bottom:14px;}
+    a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(247,223,30,0.3);transition:border-color 0.15s;}
+    a:hover{border-bottom-color:var(--accent);}
+    strong{color:var(--text);font-weight:700;}
+
+    /* creator card */
+    .creator-card{display:grid;grid-template-columns:auto 1fr;gap:32px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:32px;position:relative;overflow:hidden;margin-top:28px;}
+    .creator-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(247,223,30,0.04),transparent 60%);pointer-events:none;}
+    @media(max-width:580px){.creator-card{grid-template-columns:1fr;}.creator-avatar{width:64px;height:64px;font-size:1.4rem;}}
+    .creator-avatar{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent4));display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:#000;font-family:var(--mono);flex-shrink:0;}
+    .creator-info h3{font-size:1.35rem;font-weight:800;margin-bottom:4px;}
+    .creator-role{font-family:var(--mono);font-size:0.72rem;color:var(--accent);margin-bottom:14px;display:block;}
+    .creator-info p{margin:0;font-size:0.88rem;}
+    .creator-links{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+    .creator-link{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);text-decoration:none;border:none;font-size:0.78rem;font-weight:600;padding:6px 12px;border-radius:var(--rsm);transition:all 0.15s;border:1px solid var(--border);}
+    .creator-link:hover{color:var(--text);border-color:var(--text2);}
+
+    /* mission grid */
+    .mission-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:28px;}
+    .mission-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:24px;transition:all 0.2s;}
+    .mission-card:hover{border-color:rgba(247,223,30,0.3);transform:translateY(-3px);}
+    .mission-icon{font-size:1.6rem;margin-bottom:12px;}
+    .mission-card h3{font-size:0.95rem;font-weight:700;margin-bottom:8px;}
+    .mission-card p{color:var(--text2);font-size:0.82rem;line-height:1.65;margin:0;}
+
+    /* timeline */
+    .timeline{margin-top:28px;display:flex;flex-direction:column;gap:0;}
+    .tl-item{display:grid;grid-template-columns:80px 1fr;gap:20px;padding-bottom:28px;position:relative;}
+    .tl-item:last-child{padding-bottom:0;}
+    .tl-item::before{content:'';position:absolute;left:36px;top:28px;bottom:0;width:1px;background:var(--border);}
+    .tl-item:last-child::before{display:none;}
+    .tl-year{font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--accent);padding-top:4px;text-align:right;}
+    .tl-dot{position:absolute;left:30px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg2);border:2px solid var(--accent);}
+    .tl-content h3{font-size:0.95rem;font-weight:700;margin-bottom:5px;}
+    .tl-content p{color:var(--text2);font-size:0.82rem;line-height:1.6;margin:0;}
+
+    /* stats */
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-top:28px;}
+    .stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:24px;text-align:center;}
+    .stat-num{font-family:var(--mono);font-size:2rem;font-weight:800;color:var(--accent);display:block;line-height:1;}
+    .stat-label{color:var(--text2);font-size:0.78rem;margin-top:6px;}
+
+    /* tech stack */
+    .tech-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+    .tech-tag{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);padding:6px 14px;font-family:var(--mono);font-size:0.75rem;color:var(--text2);transition:all 0.15s;}
+    .tech-tag:hover{border-color:var(--accent);color:var(--accent);}
+
+    /* oss card */
+    .oss-card{background:linear-gradient(135deg,rgba(247,223,30,0.06),rgba(167,139,250,0.06));border:1px solid rgba(247,223,30,0.2);border-radius:var(--r);padding:32px;text-align:center;margin-top:28px;}
+    .oss-card h3{font-size:1.3rem;font-weight:800;margin-bottom:10px;}
+    .oss-card p{color:var(--text2);max-width:480px;margin:0 auto 20px;font-size:0.88rem;}
+    .btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--rsm);font-weight:700;font-size:0.82rem;text-decoration:none;border:none;transition:all 0.15s;}
+    .btn-primary{background:var(--accent);color:#000;}
+    .btn-primary:hover{background:#ffe933;box-shadow:0 0 20px rgba(247,223,30,0.3);}
+    .btn-secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+    .btn-secondary:hover{color:var(--text);border-color:var(--text2);}
+
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px clamp(16px,5vw,60px);text-align:center;position:relative;z-index:1;}
+    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;}
+    .footer-links a{color:var(--text2);text-decoration:none;font-size:0.8rem;border:none;transition:color 0.15s;}
+    .footer-links a:hover{color:var(--accent);}
+    footer p{color:var(--text2);font-size:0.78rem;}
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity 0.45s ease,transform 0.45s ease;}
+    .reveal.visible{opacity:1;transform:none;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-badge">JS</span> HirenJS</a>
+  <div class="nav-links">
+    <a href="../index.html" class="nav-link">Home</a>
+    <a href="../docs.html" class="nav-link">Docs</a>
+    <a href="about.html" class="nav-link" style="color:var(--text);">About</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </div>
+  <a href="../HirenJS.html" class="nav-cta">▶ Editor</a>
+</nav>
+
+<div class="page-hero">
+  <div class="orb1"></div>
+  <div class="orb2"></div>
+  <div class="hero-inner">
+    <div class="hero-tag"><span class="hero-dot"></span>ABOUT HIRENJS</div>
+    <h1>Built for students.<br>Runs on <span>any phone.</span></h1>
+    <p>HirenJS is a free, open-source JavaScript playground created by one developer who believed that learning to code shouldn't require an expensive laptop. Every feature is designed with mobile students in mind.</p>
+  </div>
+</div>
+
+<div class="page-inner">
+
+  <!-- Creator -->
+  <div class="about-section reveal">
+    <div class="section-label">The Creator</div>
+    <h2>Meet Hiren Rathod</h2>
+    <p>HirenJS was created and is actively maintained by <strong>Hiren Rathod</strong>, a developer from Surendranagar, Gujarat, India. Hiren built HirenJS after noticing that most online code editors were desktop-only, required sign-up, or were too heavy to load comfortably on low-end smartphones — the devices most students in India and developing countries actually own.</p>
+
+    <div class="creator-card">
+      <div class="creator-avatar">HR</div>
+      <div class="creator-info">
+        <h3>Hiren Rathod</h3>
+        <span class="creator-role">// Creator, Developer &amp; Maintainer · hiren.js.org</span>
+        <p>A self-taught developer passionate about open-source software and accessible education. Hiren believes that every student, regardless of their economic background or device, deserves a professional-quality coding environment. HirenJS is his answer to that belief — and it will always be free.</p>
+        <div class="creator-links">
+          <a href="https://github.com/Hiren2001" class="creator-link" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+          <a href="https://doi.org/10.5281/zenodo.7978764" class="creator-link" target="_blank" rel="noopener">📄 DOI Citation</a>
+          <a href="https://github.com/Hiren2001/hiren.js.org/blob/main/LICENSE" class="creator-link" target="_blank" rel="noopener">⚖️ MIT License</a>
+          <a href="contact.html" class="creator-link">📬 Contact</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <div class="about-section reveal">
+    <div class="section-label">Our Mission</div>
+    <h2>Code should be accessible to everyone</h2>
+    <p>The digital divide is real. Millions of students in India and across the world have a smartphone but no laptop. Traditional online code editors are unusable on small screens — they require mouse hover interactions, have tiny text, and often need fast internet connections.</p>
+    <p>HirenJS was built from the ground up to solve exactly this problem. Our mission is simple: <strong>give every student, everywhere, a world-class JavaScript learning environment that fits in their pocket.</strong></p>
+
+    <div class="mission-grid">
+      <div class="mission-card">
+        <div class="mission-icon">📱</div>
+        <h3>Mobile First</h3>
+        <p>Designed for touchscreens first. Every button is thumb-sized. The layout adapts to any screen. No mouse needed.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">🆓</div>
+        <h3>Always Free</h3>
+        <p>No subscriptions, no paywalls, no "premium" features. Every student gets the same full-featured editor — forever.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">🔓</div>
+        <h3>Open Source</h3>
+        <p>Every line of code is public. Fork it, modify it, use it in your school. MIT licensed with no restrictions.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">📖</div>
+        <h3>Learn by Doing</h3>
+        <p>Built-in snippets and documentation let you learn concepts and immediately experiment — all in one place.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">⚡</div>
+        <h3>No Setup</h3>
+        <p>Open a URL and start coding. No account, no download, no configuration. Zero friction to learning.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">🌍</div>
+        <h3>For Everyone</h3>
+        <p>Designed with students in India in mind, but available and useful to anyone on the planet with a browser.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="about-section reveal">
+    <div class="section-label">By the Numbers</div>
+    <h2>HirenJS at a glance</h2>
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="stat-num" data-target="12">0</span>
+        <div class="stat-label">Built-in Snippets</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" data-target="5">0</span>
+        <div class="stat-label">Languages</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" data-target="6">0</span>
+        <div class="stat-label">Editor Themes</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" data-target="14">0</span>
+        <div class="stat-label">Doc Topics</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">∞</span>
+        <div class="stat-label">Free Forever</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History / Timeline -->
+  <div class="about-section reveal">
+    <div class="section-label">Project History</div>
+    <h2>How HirenJS grew</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">2023</div>
+        <div style="position:relative;">
+          <div class="tl-dot"></div>
+          <div class="tl-content" style="padding-left:28px;">
+            <h3>🚀 Initial Release</h3>
+            <p>HirenJS launched as a simple mobile-friendly JavaScript editor on GitHub Pages. The first version featured basic code execution, syntax highlighting, and a clean mobile layout.</p>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2024</div>
+        <div style="position:relative;">
+          <div class="tl-dot"></div>
+          <div class="tl-content" style="padding-left:28px;">
+            <h3>📄 Academic Recognition</h3>
+            <p>HirenJS was assigned a Digital Object Identifier (DOI: 10.5281/zenodo.7978764) through Zenodo, making it formally citable in academic papers and educational research.</p>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2025</div>
+        <div style="position:relative;">
+          <div class="tl-dot"></div>
+          <div class="tl-content" style="padding-left:28px;">
+            <h3>⚡ Beta v2 — Major Upgrade</h3>
+            <p>A complete redesign launched as "beta.html" — bringing 6 editor themes, a snippet library, share-via-URL, HTML preview mode, a resizable split panel, and an all-new mobile bottom toolbar.</p>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2026</div>
+        <div style="position:relative;">
+          <div class="tl-dot"></div>
+          <div class="tl-content" style="padding-left:28px;">
+            <h3>📚 Docs &amp; Homepage Redesign</h3>
+            <p>Full documentation and learning guide launched alongside a redesigned homepage and legal pages. HirenJS becomes a complete learning platform — not just an editor.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech stack -->
+  <div class="about-section reveal">
+    <div class="section-label">Technology</div>
+    <h2>Built with simplicity</h2>
+    <p>HirenJS is intentionally built using only <strong>HTML, CSS, and JavaScript</strong> — no build tools, no frameworks, no node_modules. This means it loads fast, works offline after first load, and can be hosted anywhere — including GitHub Pages.</p>
+    <div class="tech-grid">
+      <span class="tech-tag">HTML5</span>
+      <span class="tech-tag">CSS3 / Custom Properties</span>
+      <span class="tech-tag">Vanilla JavaScript (ES2023)</span>
+      <span class="tech-tag">Ace Editor</span>
+      <span class="tech-tag">Google Fonts</span>
+      <span class="tech-tag">GitHub Pages</span>
+      <span class="tech-tag">localStorage API</span>
+      <span class="tech-tag">URL Hash API</span>
+      <span class="tech-tag">Intersection Observer</span>
+      <span class="tech-tag">Sandboxed iframes</span>
+    </div>
+  </div>
+
+  <!-- Open Source CTA -->
+  <div class="about-section reveal">
+    <div class="oss-card">
+      <div style="font-size:2.5rem;margin-bottom:16px;">⚡</div>
+      <h3>HirenJS is Open Source</h3>
+      <p>Every line of code is available on GitHub under the MIT License. Contribute a feature, report a bug, or fork it for your own classroom — the community makes it better for everyone.</p>
+      <div style="margin-bottom:20px;">
+        <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.7978764.svg" alt="DOI Badge" style="height:22px;">
+      </div>
+      <div class="btn-row">
+        <a href="https://github.com/Hiren2001/hiren.js.org" class="btn btn-primary" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          View on GitHub
+        </a>
+        <a href="https://github.com/Hiren2001/hiren.js.org/issues" class="btn btn-secondary" target="_blank" rel="noopener">🐛 Report Issue</a>
+        <a href="contact.html" class="btn btn-secondary">📬 Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="../index.html">Home</a><a href="../docs.html">Docs</a><a href="about.html">About</a>
+    <a href="contact.html">Contact</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a>
+  </div>
+  <p>© Hiren Rathod · hiren.js.org · MIT License</p>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// Counter
+const counters = document.querySelectorAll('[data-target]');
+const cObs = new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,t=parseInt(el.dataset.target);
+  let c=0;const timer=setInterval(()=>{c+=t/40;if(c>=t){c=t;clearInterval(timer);}el.textContent=Math.floor(c);},20);
+  cObs.unobserve(el);
+}),{threshold:0.5});
+counters.forEach(c=>cObs.observe(c));
+</script>
+</body>
+</html>
