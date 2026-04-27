@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <title id="docTitle">Loading… — HirenJS Blog</title>
+  <meta name="description" id="docDesc" content="HirenJS Blog — JavaScript tutorials and tips for students.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="HirenJS Blog">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23f7df1e'/><text y='.9em' font-size='85' x='8'>JS</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;--panel:#1a1a2e;
+      --border:#2a2a4a;--border2:#3a3a5a;
+      --accent:#f7df1e;--accent2:#ff6b6b;--accent3:#4ecdc4;--accent4:#a78bfa;
+      --text:#e8e8f0;--text2:#8888aa;--text3:#5a5a7a;
+      --success:#6ee7b7;--warn:#fcd34d;
+      --mono:'JetBrains Mono',monospace;
+      --display:'Syne',system-ui,sans-serif;
+      --serif:'Lora',Georgia,serif;
+      --r:12px;--rsm:8px;
+      --content-width:720px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--display);overflow-x:hidden;line-height:1.7;}
+    ::selection{background:rgba(247,223,30,0.2);}
+    ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg2);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.025;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+
+    /* ── Reading progress ── */
+    .progress-bar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--border);z-index:300;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));width:0%;transition:width 0.1s;}
+
+    /* ── NAV ── */
+    nav{position:sticky;top:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(12px,4vw,48px);gap:12px;background:rgba(15,15,26,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+    .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:800;font-size:1rem;}
+    .nav-badge{background:var(--accent);color:#000;font-family:var(--mono);font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:5px;letter-spacing:1px;}
+    .nav-breadcrumb{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:0.7rem;color:var(--text2);overflow:hidden;}
+    .nav-breadcrumb a{color:var(--text2);text-decoration:none;transition:color 0.13s;white-space:nowrap;}
+    .nav-breadcrumb a:hover{color:var(--accent);}
+    .nav-breadcrumb span{color:var(--border2);}
+    .nav-breadcrumb .current{color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
+    @media(max-width:640px){.nav-breadcrumb .current{max-width:100px;}}
+    .nav-actions{display:flex;gap:6px;flex-shrink:0;}
+    .nav-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:var(--rsm);font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+    .nav-btn:hover{color:var(--text);border-color:var(--text2);}
+    .nav-btn-accent{background:var(--accent);color:#000;border-color:var(--accent);}
+    .nav-btn-accent:hover{background:#ffe933;}
+
+    /* ── ARTICLE LAYOUT ── */
+    .article-layout{display:grid;grid-template-columns:var(--content-width) 1fr;max-width:1200px;margin:0 auto;gap:48px;padding:clamp(32px,5vw,60px) clamp(16px,4vw,48px) 80px;position:relative;z-index:1;}
+    @media(max-width:1050px){.article-layout{grid-template-columns:1fr;}.toc-sidebar{display:none;}}
+
+    /* ── ARTICLE ── */
+    article{min-width:0;}
+
+    /* Post header */
+    .post-header{margin-bottom:36px;padding-bottom:32px;border-bottom:1px solid var(--border);}
+    .post-category-line{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+    .cat-badge{font-family:var(--mono);font-size:0.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:4px;}
+    .cat-tutorial{background:rgba(78,205,196,0.1);color:var(--accent3);}
+    .cat-update{background:rgba(167,139,250,0.1);color:var(--accent4);}
+    .cat-tips{background:rgba(252,211,77,0.1);color:var(--warn);}
+    .cat-community{background:rgba(110,231,183,0.1);color:var(--success);}
+    .read-time{font-family:var(--mono);font-size:0.7rem;color:var(--text2);}
+
+    .post-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:16px;color:var(--text);}
+    .post-excerpt{font-family:var(--serif);font-size:1.05rem;color:var(--text2);line-height:1.75;margin-bottom:20px;font-style:italic;}
+
+    /* Author bar */
+    .author-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+    .author-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent4));display:flex;align-items:center;justify-content:center;font-weight:800;color:#000;font-family:var(--mono);flex-shrink:0;}
+    .author-info h4{font-size:0.88rem;font-weight:700;}
+    .author-info p{font-size:0.72rem;color:var(--text2);font-family:var(--mono);}
+    .share-row{margin-left:auto;display:flex;gap:8px;}
+    .share-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:var(--rsm);font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:5px;}
+    .share-btn:hover{color:var(--text);border-color:var(--text2);}
+
+    /* Tags row */
+    .post-tags{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0;}
+    .tag{font-family:var(--mono);font-size:0.68rem;padding:3px 9px;border-radius:4px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;transition:all 0.13s;}
+    .tag:hover{border-color:var(--accent);color:var(--accent);}
+
+    /* ── POST BODY ── */
+    .post-body{font-family:var(--serif);font-size:1.05rem;line-height:1.85;color:var(--text2);}
+    .post-body h2{font-family:var(--display);font-size:1.45rem;font-weight:800;color:var(--text);letter-spacing:-0.5px;margin:36px 0 12px;padding-top:4px;}
+    .post-body h3{font-family:var(--display);font-size:1.1rem;font-weight:700;color:var(--text);margin:28px 0 10px;}
+    .post-body p{margin-bottom:18px;}
+    .post-body strong{color:var(--text);font-weight:700;}
+    .post-body a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(247,223,30,0.3);}
+    .post-body a:hover{border-bottom-color:var(--accent);}
+    .post-body ul,.post-body ol{padding-left:22px;margin-bottom:18px;}
+    .post-body li{margin-bottom:6px;}
+    .post-body blockquote{border-left:3px solid var(--accent);background:rgba(247,223,30,0.04);padding:14px 18px;margin:20px 0;border-radius:0 var(--rsm) var(--rsm) 0;font-style:italic;color:var(--text2);}
+    .post-body code{font-family:var(--mono);font-size:0.82em;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 5px;color:var(--accent3);}
+    .post-body pre{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px;overflow-x:auto;margin:20px 0;position:relative;}
+    .post-body pre code{background:none;border:none;padding:0;font-size:0.85rem;color:var(--text);line-height:1.8;}
+    .copy-code-btn{position:absolute;top:10px;right:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-family:var(--mono);font-size:0.65rem;padding:3px 9px;border-radius:4px;cursor:pointer;transition:all 0.13s;opacity:0;transition:opacity 0.2s;}
+    .post-body pre:hover .copy-code-btn{opacity:1;}
+    .copy-code-btn:hover{color:var(--accent);border-color:var(--accent);}
+
+    /* ── TRY IT BOX ── */
+    .try-it-cta{background:linear-gradient(135deg,rgba(247,223,30,0.07),rgba(78,205,196,0.07));border:1px solid rgba(247,223,30,0.2);border-radius:var(--r);padding:24px;margin:32px 0;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+    .try-it-cta .icon{font-size:2rem;flex-shrink:0;}
+    .try-it-cta h4{font-size:0.95rem;font-weight:700;margin-bottom:4px;}
+    .try-it-cta p{color:var(--text2);font-size:0.82rem;margin:0;}
+    .try-it-cta a{background:var(--accent);color:#000;text-decoration:none;font-weight:700;font-size:0.8rem;padding:8px 18px;border-radius:var(--rsm);transition:all 0.15s;flex-shrink:0;display:inline-block;}
+    .try-it-cta a:hover{background:#ffe933;}
+
+    /* ── POST FOOTER ── */
+    .post-footer{margin-top:48px;padding-top:28px;border-top:1px solid var(--border);}
+    .author-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:24px;display:flex;gap:20px;align-items:flex-start;margin-bottom:32px;}
+    .author-card-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent4));display:flex;align-items:center;justify-content:center;font-weight:800;color:#000;font-family:var(--mono);font-size:1.1rem;flex-shrink:0;}
+    .author-card-info h3{font-size:1rem;font-weight:800;margin-bottom:3px;}
+    .author-card-info .role{font-family:var(--mono);font-size:0.7rem;color:var(--accent);margin-bottom:8px;display:block;}
+    .author-card-info p{color:var(--text2);font-size:0.82rem;line-height:1.6;}
+
+    /* Related posts */
+    .related-title{font-size:1.1rem;font-weight:800;margin-bottom:16px;}
+    .related-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    @media(max-width:520px){.related-grid{grid-template-columns:1fr;}}
+    .related-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-decoration:none;color:var(--text);transition:all 0.2s;}
+    .related-card:hover{border-color:rgba(247,223,30,0.3);transform:translateY(-3px);}
+    .related-cat{font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+    .related-card h4{font-size:0.85rem;font-weight:700;line-height:1.35;margin-bottom:6px;}
+    .related-meta{font-family:var(--mono);font-size:0.65rem;color:var(--text2);}
+
+    /* ── COMMENTS ── */
+    .comments-section{margin-top:56px;padding-top:36px;border-top:1px solid var(--border);}
+    .comments-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+    .comments-header h2{font-size:1.2rem;font-weight:800;}
+    .comment-count-badge{font-family:var(--mono);font-size:0.72rem;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:3px 10px;border-radius:99px;}
+
+    /* Comment form */
+    .comment-form{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:32px;position:relative;overflow:hidden;}
+    .comment-form::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 0%,rgba(247,223,30,0.03),transparent 50%);pointer-events:none;}
+    .form-title{font-size:0.95rem;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+    @media(max-width:520px){.form-grid{grid-template-columns:1fr;}}
+    .field label{display:block;font-size:0.75rem;font-weight:700;margin-bottom:5px;color:var(--text);letter-spacing:0.3px;}
+    .field label .req{color:var(--accent3);margin-left:2px;}
+    .field input,.field textarea,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.8rem;padding:9px 12px;border-radius:var(--rsm);outline:none;transition:border-color 0.15s,box-shadow 0.15s;}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(247,223,30,0.08);}
+    .field input::placeholder,.field textarea::placeholder{color:var(--text3);}
+    .field textarea{resize:vertical;min-height:100px;line-height:1.65;margin-bottom:0;}
+    .field{margin-bottom:0;}
+    .char-counter{text-align:right;font-family:var(--mono);font-size:0.65rem;color:var(--text2);margin-top:4px;}
+    .hp-hidden{display:none!important;}
+    .field-err{color:var(--accent2);font-size:0.7rem;margin-top:4px;display:none;}
+    .field-err.show{display:block;}
+    .field input.invalid,.field textarea.invalid{border-color:var(--accent2);}
+
+    /* Guidelines */
+    .guidelines{background:rgba(78,205,196,0.05);border:1px solid rgba(78,205,196,0.15);border-radius:var(--rsm);padding:12px 14px;margin:16px 0;font-size:0.78rem;color:#a7f3d0;display:flex;gap:10px;align-items:flex-start;}
+    .guidelines strong{display:block;margin-bottom:4px;}
+
+    .submit-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .submit-btn{background:var(--accent3);color:#000;border:none;font-family:var(--display);font-size:0.85rem;font-weight:700;padding:10px 22px;border-radius:var(--rsm);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:7px;}
+    .submit-btn:hover{background:#3dd6cc;box-shadow:0 0 20px rgba(78,205,196,0.35);}
+    .submit-btn:disabled{opacity:0.5;cursor:not-allowed;}
+    .submit-note{font-size:0.72rem;color:var(--text2);}
+
+    /* Comment list */
+    .comments-list{display:flex;flex-direction:column;gap:0;}
+    .comment-item{padding:20px 0;border-bottom:1px solid rgba(42,42,74,0.6);animation:fadeSlide 0.35s ease both;}
+    .comment-item:last-child{border-bottom:none;}
+    @keyframes fadeSlide{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .comment-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+    .comment-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;font-family:var(--mono);}
+    .comment-name{font-weight:700;font-size:0.88rem;}
+    .comment-date{font-family:var(--mono);font-size:0.65rem;color:var(--text2);margin-left:auto;}
+    .comment-verified{background:rgba(110,231,183,0.12);color:var(--success);font-family:var(--mono);font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:4px;letter-spacing:0.5px;}
+    .comment-text{color:var(--text2);font-size:0.88rem;line-height:1.75;}
+    .comment-text code{font-family:var(--mono);font-size:0.8em;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 4px;color:var(--accent3);}
+    .comment-actions{display:flex;gap:10px;margin-top:10px;}
+    .comment-action{background:none;border:none;color:var(--text2);font-size:0.72rem;cursor:pointer;padding:3px 6px;border-radius:4px;transition:all 0.13s;display:flex;align-items:center;gap:4px;font-family:var(--mono);}
+    .comment-action:hover{color:var(--accent);background:rgba(247,223,30,0.06);}
+    .comment-action.liked{color:var(--accent2);}
+
+    /* Reply */
+    .reply-form{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;margin-top:12px;display:none;}
+    .reply-form.open{display:block;}
+    .reply-input{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.78rem;padding:8px 11px;border-radius:var(--rsm);outline:none;resize:none;min-height:70px;transition:border-color 0.15s;}
+    .reply-input:focus{border-color:var(--accent);}
+    .reply-submit{background:var(--accent);color:#000;border:none;font-weight:700;font-size:0.75rem;padding:6px 14px;border-radius:var(--rsm);cursor:pointer;margin-top:8px;transition:background 0.15s;}
+    .reply-submit:hover{background:#ffe933;}
+
+    /* Replies */
+    .replies-list{margin-top:14px;padding-left:20px;border-left:2px solid var(--border);display:flex;flex-direction:column;gap:0;}
+    .reply-item{padding:14px 0;border-bottom:1px solid rgba(42,42,74,0.4);}
+    .reply-item:last-child{border-bottom:none;}
+
+    /* Spam filter feedback */
+    .spam-notice{background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);border-radius:var(--rsm);padding:10px 14px;font-size:0.78rem;color:var(--accent2);margin-top:12px;display:none;}
+    .spam-notice.show{display:block;}
+
+    /* Empty comments */
+    .no-comments{text-align:center;padding:40px 20px;color:var(--text2);font-size:0.88rem;}
+    .no-comments-icon{font-size:2.5rem;margin-bottom:12px;}
+
+    /* ── TOC SIDEBAR ── */
+    .toc-sidebar{width:220px;flex-shrink:0;}
+    .toc-sticky{position:sticky;top:72px;}
+    .toc-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;}
+    .toc-label{font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px;text-transform:uppercase;}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:4px;}
+    .toc-list a{color:var(--text2);text-decoration:none;font-size:0.78rem;padding:4px 8px;border-radius:var(--rsm);border-left:2px solid transparent;transition:all 0.13s;display:block;}
+    .toc-list a:hover,.toc-list a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(247,223,30,0.04);}
+    .share-sidebar{margin-top:16px;}
+    .share-sidebar-label{font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:1.5px;color:var(--text2);margin-bottom:10px;text-transform:uppercase;}
+    .share-btns{display:flex;flex-direction:column;gap:6px;}
+    .share-item{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 12px;border-radius:var(--rsm);font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.13s;display:flex;align-items:center;gap:7px;text-decoration:none;}
+    .share-item:hover{color:var(--text);border-color:var(--text2);}
+
+    /* ── HERO COVER ── */
+    .post-cover{position:relative;z-index:1;height:clamp(200px,25vw,320px);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:0;}
+    .cover-emoji{font-size:clamp(4rem,10vw,8rem);animation:coverFloat 4s ease-in-out infinite;position:relative;z-index:1;}
+    @keyframes coverFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-16px) rotate(2deg)}}
+
+    /* ── Back to blog ── */
+    .back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--text2);text-decoration:none;font-size:0.8rem;font-weight:600;padding:7px 14px;border-radius:var(--rsm);border:1px solid var(--border);background:var(--bg2);transition:all 0.15s;margin-bottom:24px;}
+    .back-btn:hover{color:var(--text);border-color:var(--text2);}
+
+    /* ── Back to top ── */
+    .back-top{position:fixed;bottom:24px;right:24px;z-index:100;width:40px;height:40px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all 0.2s;opacity:0;transform:translateY(8px);pointer-events:none;}
+    .back-top.visible{opacity:1;transform:none;pointer-events:all;}
+    .back-top:hover{background:var(--accent);color:#000;border-color:var(--accent);}
+
+    /* ── Toast ── */
+    .toast-wrap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none;}
+    .toast{background:var(--bg2);border:1px solid var(--success);color:var(--success);padding:8px 18px;border-radius:var(--rsm);font-size:0.8rem;font-family:var(--mono);animation:toastAnim 2.5s ease forwards;white-space:nowrap;}
+    @keyframes toastAnim{0%{opacity:0;transform:translateY(8px)}15%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+
+    /* ── 404 ── */
+    .not-found{text-align:center;padding:80px 20px;position:relative;z-index:1;}
+    .not-found h1{font-size:4rem;font-weight:800;color:var(--accent);margin-bottom:12px;}
+
+    /* ── Reveal ── */
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity 0.4s ease,transform 0.4s ease;}
+    .reveal.visible{opacity:1;transform:none;}
+
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px clamp(16px,5vw,60px);text-align:center;position:relative;z-index:1;}
+    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+    .footer-links a{color:var(--text2);text-decoration:none;font-size:0.78rem;transition:color 0.13s;}
+    .footer-links a:hover{color:var(--accent);}
+    footer p{color:var(--text2);font-size:0.75rem;}
+  </style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<nav>
+  <a href="../index.html" class="nav-logo"><span class="nav-badge">JS</span> HirenJS</a>
+  <div class="nav-breadcrumb">
+    <a href="index.html">Blog</a>
+    <span>/</span>
+    <span class="current" id="navTitle">Loading…</span>
+  </div>
+  <div class="nav-actions">
+    <a href="index.html" class="nav-btn">← Blog</a>
+    <a href="../HirenJS.html" class="nav-btn nav-btn-accent">▶ Editor</a>
+  </div>
+</nav>
+
+<div id="appRoot"></div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<footer>
+  <div class="footer-links">
+    <a href="../index.html">Home</a><a href="index.html">Blog</a><a href="../docs.html">Docs</a>
+    <a href="/legal/about.html">About</a><a href="/legal/contact.html">Contact</a><a href="/legal/privacy-policy.html">Privacy</a>
+  </div>
+  <p>© Hiren Rathod · HirenJS · MIT License</p>
+</footer>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────────
+const COVERS = {
+  closure:{bg:'linear-gradient(135deg,#1e1e35,#0f0f1a)',emoji:'🔒'},
+  array:{bg:'linear-gradient(135deg,#16162a,#1a2a1a)',emoji:'🗂️'},
+  async:{bg:'linear-gradient(135deg,#1e1535,#0f0f1a)',emoji:'⏳'},
+  update:{bg:'linear-gradient(135deg,#1e2035,#0a0a1a)',emoji:'⚡'},
+  tips:{bg:'linear-gradient(135deg,#1e1a10,#0f0f1a)',emoji:'💡'},
+  scope:{bg:'linear-gradient(135deg,#1a1035,#0f0f1a)',emoji:'📐'},
+  default:{bg:'linear-gradient(135deg,#16162a,#0f0f1a)',emoji:'📝'},
+};
+const CAT_COLORS = {tutorial:'cat-tutorial',update:'cat-update',tips:'cat-tips',community:'cat-community'};
+const CAT_LABELS = {tutorial:'📘 Tutorial',update:'⚡ Update',tips:'💡 Tips',community:'🌍 Community'};
+const AVATAR_COLORS = ['#f7df1e','#4ecdc4','#a78bfa','#ff6b6b','#6ee7b7','#fb923c','#60a5fa'];
+
+// ── Spam filter ─────────────────────────────────────────────────────
+const SPAM_PATTERNS = [
+  /\b(buy now|click here|free money|make money fast|earn \$|casino|poker|viagra|cialis|crypto|bitcoin|forex|investment opportunity|work from home|mlm|pyramid|get rich|100% free|limited offer|act now|winner|congratulations you|prize|click below|visit our site|check out our|cheap meds|online pharmacy|lose weight fast|weight loss guaranteed)\b/i,
+  /https?:\/\/(?!hiren\.js\.org|github\.com\/Hiren)/i,
+  /(.)\1{6,}/,
+  /[^\u0000-\u007F]{30,}/,
+];
+const MIN_COMMENT_LENGTH = 15;
+const MAX_COMMENT_LENGTH = 1000;
+
+function checkSpam(text) {
+  if (text.length < MIN_COMMENT_LENGTH) return { spam: true, reason: `Comment too short. Please write at least ${MIN_COMMENT_LENGTH} characters.` };
+  if (text.length > MAX_COMMENT_LENGTH) return { spam: true, reason: `Comment too long. Maximum ${MAX_COMMENT_LENGTH} characters.` };
+  for (const p of SPAM_PATTERNS) {
+    if (p.test(text)) return { spam: true, reason: 'Your comment was flagged as potential spam. Please avoid promotional content or external links.' };
+  }
+  // Rate limit: 3 comments per 10 minutes per slug
+  const key = 'hirenjs_comment_times_' + getSlug();
+  const times = JSON.parse(localStorage.getItem(key) || '[]').filter(t => Date.now()-t < 600000);
+  if (times.length >= 3) return { spam: true, reason: 'You\'ve posted too many comments recently. Please wait a few minutes.' };
+  return { spam: false };
+}
+
+// ── Storage helpers ──────────────────────────────────────────────────
+function getSlug() { return new URLSearchParams(location.search).get('slug') || ''; }
+
+function loadComments(slug) {
+  return JSON.parse(localStorage.getItem('hirenjs_comments_' + slug) || '[]');
+}
+
+function saveComments(slug, comments) {
+  localStorage.setItem('hirenjs_comments_' + slug, JSON.stringify(comments));
+}
+
+function loadLikes(slug) {
+  return JSON.parse(localStorage.getItem('hirenjs_likes_' + slug) || '{}');
+}
+
+function saveLikes(slug, likes) {
+  localStorage.setItem('hirenjs_likes_' + slug, JSON.stringify(likes));
+}
+
+// ── Main boot ────────────────────────────────────────────────────────
+async function boot() {
+  const slug = getSlug();
+  if (!slug) { renderNotFound(); return; }
+
+  let posts;
+  try {
+    const res = await fetch('posts.json');
+    posts = await res.json();
+  } catch { posts = []; }
+
+  const post = posts.find(p => p.slug === slug);
+  if (!post) { renderNotFound(); return; }
+
+  // SEO meta
+  document.getElementById('docTitle').textContent = `${post.title} — HirenJS Blog`;
+  document.getElementById('docDesc').content = post.excerpt;
+  document.getElementById('navTitle').textContent = post.title;
+
+  // Render
+  renderPost(post, posts);
+  setupScrollEffects();
+}
+
+function renderPost(post, allPosts) {
+  const cov = COVERS[post.cover] || COVERS.default;
+  const related = allPosts.filter(p => p.slug !== post.slug && (p.category === post.category || p.tags.some(t => post.tags.includes(t)))).slice(0, 4);
+
+  document.getElementById('appRoot').innerHTML = `
+    <div class="post-cover" style="background:${cov.bg}">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,0.04),transparent 70%)"></div>
+      <span class="cover-emoji">${cov.emoji}</span>
+    </div>
+
+    <div class="article-layout">
+      <article>
+        <a href="index.html" class="back-btn">← Back to Blog</a>
+
+        <!-- Header -->
+        <div class="post-header reveal">
+          <div class="post-category-line">
+            <span class="cat-badge ${CAT_COLORS[post.category]||''}">${CAT_LABELS[post.category]||post.category}</span>
+            <span class="read-time">⏱️ ${post.readTime} min read</span>
+          </div>
+          <h1 class="post-title">${post.title}</h1>
+          <p class="post-excerpt">${post.excerpt}</p>
+          <div class="author-bar">
+            <div class="author-avatar">HR</div>
+            <div class="author-info">
+              <h4>${post.author}</h4>
+              <p>${formatDate(post.date)} · ${post.readTime} min read</p>
+            </div>
+            <div class="share-row">
+              <button class="share-btn" onclick="sharePost()">🔗 Share</button>
+              <button class="share-btn" onclick="copyLink()">📋 Copy link</button>
+            </div>
+          </div>
+          <div class="post-tags">${post.tags.map(t=>`<a class="tag" href="index.html" onclick="return false" style="cursor:default">#${t}</a>`).join('')}</div>
+        </div>
+
+        <!-- Body -->
+        <div class="post-body reveal" id="postBody">${processContent(post.content)}</div>
+
+        <!-- Try it CTA -->
+        <div class="try-it-cta reveal">
+          <span class="icon">⚡</span>
+          <div>
+            <h4>Try the code examples yourself!</h4>
+            <p>Open the HirenJS editor — paste any code snippet from this article and run it instantly, even on your phone.</p>
+          </div>
+          <a href="../HirenJS.html">▶ Open Editor</a>
+        </div>
+
+        <!-- Post footer -->
+        <div class="post-footer reveal">
+          <div class="author-card">
+            <div class="author-card-avatar">HR</div>
+            <div class="author-card-info">
+              <h3>Hiren Rathod</h3>
+              <span class="role">// Creator of HirenJS · hiren.js.org</span>
+              <p>Developer from Surendranagar, India. Built HirenJS to give every student a professional JS learning environment — regardless of what device they own. All articles are written to be understood on first read.</p>
+            </div>
+          </div>
+
+          ${related.length ? `
+          <div class="related-title">You might also like</div>
+          <div class="related-grid">
+            ${related.slice(0,4).map(p=>`
+            <a class="related-card" href="post.html?slug=${p.slug}">
+              <div class="related-cat ${CAT_COLORS[p.category]||''}">${CAT_LABELS[p.category]||p.category}</div>
+              <h4>${p.title}</h4>
+              <span class="related-meta">⏱️ ${p.readTime} min</span>
+            </a>`).join('')}
+          </div>` : ''}
+        </div>
+
+        <!-- Comments -->
+        <div class="comments-section" id="commentsSection">
+          <div class="comments-header">
+            <h2>💬 Comments</h2>
+            <span class="comment-count-badge" id="commentCountBadge">0 comments</span>
+          </div>
+
+          <!-- Form -->
+          <div class="comment-form reveal">
+            <div class="form-title">✍️ Leave a Comment</div>
+            <div class="form-grid">
+              <div class="field">
+                <label>Name <span class="req">*</span></label>
+                <input type="text" id="cName" placeholder="Your name" maxlength="60" autocomplete="name">
+                <div class="field-err" id="cNameErr">Please enter your name.</div>
+              </div>
+              <div class="field">
+                <label>Email <span class="req" style="color:var(--accent3)">*</span><span style="font-weight:400;color:var(--text2)"> (private)</span></label>
+                <input type="email" id="cEmail" placeholder="your@email.com" maxlength="100" autocomplete="email">
+                <div class="field-err" id="cEmailErr">Enter a valid email.</div>
+              </div>
+            </div>
+            <div class="field" style="margin-top:14px;">
+              <label>Comment <span class="req">*</span></label>
+              <textarea id="cText" placeholder="Share your thoughts, ask a question, or say what you learned…" maxlength="1000" oninput="document.getElementById('cCharCount').textContent=this.value.length"></textarea>
+              <div class="char-counter"><span id="cCharCount">0</span>/1000</div>
+              <div class="field-err" id="cTextErr">Comment must be at least 15 characters.</div>
+            </div>
+            <!-- Honeypot -->
+            <div class="hp-hidden" aria-hidden="true"><input type="text" id="cHp" name="website" tabindex="-1" autocomplete="off"></div>
+            <div class="guidelines">
+              <span>📋</span>
+              <div>
+                <strong>Community Guidelines</strong>
+                Be respectful. No spam, promotions, or offensive content. Code questions welcome! Comments are moderated automatically.
+              </div>
+            </div>
+            <div class="spam-notice" id="spamNotice"></div>
+            <div class="submit-row">
+              <button class="submit-btn" id="commentSubmitBtn" onclick="submitComment()">
+                💬 Post Comment
+              </button>
+              <span class="submit-note">Your email is never displayed publicly.</span>
+            </div>
+          </div>
+
+          <!-- List -->
+          <div class="comments-list" id="commentsList"></div>
+        </div>
+      </article>
+
+      <!-- TOC Sidebar -->
+      <aside class="toc-sidebar">
+        <div class="toc-sticky">
+          <div class="toc-card">
+            <div class="toc-label">In this article</div>
+            <ul class="toc-list" id="tocList"></ul>
+          </div>
+          <div class="share-sidebar">
+            <div class="share-sidebar-label">Share</div>
+            <div class="share-btns">
+              <button class="share-item" onclick="copyLink()">🔗 Copy Link</button>
+              <a class="share-item" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(location.href)}" target="_blank" rel="noopener">𝕏 Share on X</a>
+              <a class="share-item" href="https://wa.me/?text=${encodeURIComponent(post.title+' — '+location.href)}" target="_blank" rel="noopener">💬 WhatsApp</a>
+              <a class="share-item" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(location.href)}" target="_blank" rel="noopener">💼 LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  `;
+
+  buildTOC();
+  renderComments(post.slug);
+  addCodeCopyButtons();
+  revealAll();
+}
+
+// ── Process content ──────────────────────────────────────────────────
+function processContent(html) {
+  // Add IDs to h2 for TOC
+  let idx = 0;
+  return html.replace(/<h2>(.*?)<\/h2>/g, (_,t) => `<h2 id="h-${idx++}">${t}</h2>`);
+}
+
+// ── TOC ──────────────────────────────────────────────────────────────
+function buildTOC() {
+  const headings = document.querySelectorAll('#postBody h2');
+  const toc = document.getElementById('tocList');
+  if (!toc || !headings.length) return;
+  toc.innerHTML = [...headings].map((h,i)=>`<li><a href="#h-${i}">${h.textContent}</a></li>`).join('');
+}
+
+// ── Code copy buttons ────────────────────────────────────────────────
+function addCodeCopyButtons() {
+  document.querySelectorAll('.post-body pre').forEach(pre => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-code-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+      navigator.clipboard.writeText(pre.querySelector('code')?.innerText || pre.innerText).then(()=>{
+        btn.textContent = '✓ Copied'; setTimeout(()=>btn.textContent='Copy',1500);
+      });
+    };
+    pre.style.position='relative';
+    pre.appendChild(btn);
+  });
+}
+
+// ── Comments ─────────────────────────────────────────────────────────
+function renderComments(slug) {
+  const comments = loadComments(slug);
+  const likes = loadLikes(slug);
+  const badge = document.getElementById('commentCountBadge');
+  if (badge) badge.textContent = `${comments.length} comment${comments.length!==1?'s':''}`;
+
+  const list = document.getElementById('commentsList');
+  if (!list) return;
+
+  if (!comments.length) {
+    list.innerHTML = `<div class="no-comments"><div class="no-comments-icon">💬</div><p>No comments yet. Be the first to start the conversation!</p></div>`;
+    return;
+  }
+
+  list.innerHTML = comments.map((c,i) => buildCommentHTML(c, i, slug, likes)).join('');
+}
+
+function buildCommentHTML(c, i, slug, likes) {
+  const colIdx = c.name.charCodeAt(0) % AVATAR_COLORS.length;
+  const avatarBg = AVATAR_COLORS[colIdx];
+  const initials = c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const isLiked = (likes[i] || []).includes('me');
+  const likeCount = (likes[i] || []).length;
+
+  const repliesHTML = (c.replies||[]).map(r => {
+    const rColIdx = r.name.charCodeAt(0) % AVATAR_COLORS.length;
+    const rBg = AVATAR_COLORS[rColIdx];
+    const rInit = r.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    return `<div class="reply-item">
+      <div class="comment-header">
+        <div class="comment-avatar" style="background:${rBg};color:#000;width:30px;height:30px;font-size:0.75rem;">${rInit}</div>
+        <span class="comment-name" style="font-size:0.82rem;">${esc(r.name)}</span>
+        <span class="comment-date">${formatDate(r.date)}</span>
+      </div>
+      <div class="comment-text">${esc(r.text)}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="comment-item" id="comment-${i}">
+    <div class="comment-header">
+      <div class="comment-avatar" style="background:${avatarBg};color:#000;">${initials}</div>
+      <div>
+        <span class="comment-name">${esc(c.name)}</span>
+        ${c.verified ? '<span class="comment-verified">✓ Author</span>' : ''}
+      </div>
+      <span class="comment-date">${formatDate(c.date)}</span>
+    </div>
+    <div class="comment-text">${esc(c.text)}</div>
+    <div class="comment-actions">
+      <button class="comment-action ${isLiked?'liked':''}" onclick="toggleLike('${slug}',${i})">
+        ${isLiked?'❤️':'🤍'} ${likeCount>0?likeCount:'Like'}
+      </button>
+      <button class="comment-action" onclick="toggleReply(${i})">💬 Reply</button>
+    </div>
+    <div class="reply-form" id="reply-${i}">
+      <textarea class="reply-input" id="replyText-${i}" placeholder="Write a reply…" maxlength="500"></textarea>
+      <br>
+      <input type="text" id="replyName-${i}" placeholder="Your name" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.75rem;padding:6px 10px;border-radius:var(--rsm);outline:none;margin-top:6px;width:180px;">
+      <button class="reply-submit" onclick="submitReply('${slug}',${i})">Post Reply</button>
+    </div>
+    ${repliesHTML ? `<div class="replies-list">${repliesHTML}</div>` : ''}
+  </div>`;
+}
+
+function submitComment() {
+  // Honeypot
+  if (document.getElementById('cHp').value) return;
+
+  const name  = document.getElementById('cName').value.trim();
+  const email = document.getElementById('cEmail').value.trim();
+  const text  = document.getElementById('cText').value.trim();
+  let ok = true;
+
+  if (!name) { showFieldErr('cNameErr', true); ok = false; } else showFieldErr('cNameErr', false);
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldErr('cEmailErr', true); ok = false; } else showFieldErr('cEmailErr', false);
+  if (!text) { showFieldErr('cTextErr', true); ok = false; } else showFieldErr('cTextErr', false);
+  if (!ok) return;
+
+  // Spam check
+  const spamResult = checkSpam(text);
+  if (spamResult.spam) {
+    const notice = document.getElementById('spamNotice');
+    notice.textContent = spamResult.reason;
+    notice.classList.add('show');
+    setTimeout(()=>notice.classList.remove('show'),5000);
+    return;
+  }
+
+  document.getElementById('spamNotice').classList.remove('show');
+
+  const slug = getSlug();
+  const comments = loadComments(slug);
+  comments.push({ name, text, date: new Date().toISOString(), replies: [] });
+  saveComments(slug, comments);
+
+  // Rate limit tracking
+  const key = 'hirenjs_comment_times_' + slug;
+  const times = JSON.parse(localStorage.getItem(key)||'[]');
+  times.push(Date.now());
+  localStorage.setItem(key, JSON.stringify(times));
+
+  // Reset form
+  ['cName','cEmail','cText'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cCharCount').textContent='0';
+
+  renderComments(slug);
+  showToast('Comment posted! 🎉');
+  document.getElementById('commentsSection').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function toggleLike(slug, idx) {
+  const likes = loadLikes(slug);
+  likes[idx] = likes[idx] || [];
+  const meIdx = likes[idx].indexOf('me');
+  if (meIdx === -1) likes[idx].push('me'); else likes[idx].splice(meIdx,1);
+  saveLikes(slug, likes);
+  renderComments(slug);
+}
+
+function toggleReply(idx) {
+  const rf = document.getElementById(`reply-${idx}`);
+  rf.classList.toggle('open');
+  if (rf.classList.contains('open')) rf.querySelector('.reply-input').focus();
+}
+
+function submitReply(slug, idx) {
+  const text = document.getElementById(`replyText-${idx}`).value.trim();
+  const name = document.getElementById(`replyName-${idx}`).value.trim();
+  if (!name || !text || text.length < 5) { showToast('Please enter your name and a reply.','error'); return; }
+  const spam = checkSpam(text);
+  if (spam.spam) { showToast(spam.reason,'error'); return; }
+  const comments = loadComments(slug);
+  if (!comments[idx].replies) comments[idx].replies = [];
+  comments[idx].replies.push({ name, text, date: new Date().toISOString() });
+  saveComments(slug, comments);
+  renderComments(slug);
+  showToast('Reply posted!');
+}
+
+function showFieldErr(id, show) {
+  document.getElementById(id).classList.toggle('show', show);
+  const input = document.getElementById(id.replace('Err',''));
+  if (input) input.classList.toggle('invalid', show);
+}
+
+// ── Share ────────────────────────────────────────────────────────────
+function copyLink() {
+  navigator.clipboard.writeText(location.href).then(()=>showToast('Link copied to clipboard! 🔗'));
+}
+function sharePost() {
+  if (navigator.share) {
+    navigator.share({ title: document.title, url: location.href }).catch(()=>{});
+  } else copyLink();
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────
+function formatDate(d) {
+  return new Date(d).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>');
+}
+function renderNotFound() {
+  document.getElementById('appRoot').innerHTML=`<div class="not-found"><h1>404</h1><p style="color:var(--text2);margin-bottom:20px;">Post not found.</p><a href="index.html" style="background:var(--accent);color:#000;padding:10px 22px;border-radius:var(--rsm);text-decoration:none;font-weight:700;">← Back to Blog</a></div>`;
+}
+function showToast(msg,type='success') {
+  const w=document.getElementById('toastWrap');
+  const t=document.createElement('div');
+  t.className='toast';
+  t.style.borderColor=type==='error'?'var(--accent2)':'var(--success)';
+  t.style.color=type==='error'?'var(--accent2)':'var(--success)';
+  t.textContent=msg;
+  w.appendChild(t);
+  setTimeout(()=>t.remove(),2700);
+}
+
+// ── Reveal ───────────────────────────────────────────────────────────
+const obs=new IntersectionObserver(es=>es.forEach((e,i)=>{
+  if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*40);obs.unobserve(e.target);}
+}),{threshold:0.06});
+function revealAll(){document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));}
+
+// ── Scroll ───────────────────────────────────────────────────────────
+function setupScrollEffects() {
+  window.addEventListener('scroll',()=>{
+    const max=document.body.scrollHeight-window.innerHeight;
+    document.getElementById('progressFill').style.width=(window.scrollY/max*100)+'%';
+    document.getElementById('backTop').classList.toggle('visible',window.scrollY>300);
+    // TOC highlight
+    document.querySelectorAll('#postBody h2').forEach((h,i)=>{
+      const rect=h.getBoundingClientRect();
+      const link=document.querySelector(`#tocList a[href="#h-${i}"]`);
+      if(link) link.classList.toggle('active',rect.top<=100&&rect.top>-200);
+    });
+  });
+}
+
+// ── Boot ─────────────────────────────────────────────────────────────
+boot();
+</script>
+</body>
+</html>

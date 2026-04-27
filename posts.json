@@ -1,0 +1,80 @@
+[
+  {
+    "slug": "javascript-closures-explained",
+    "title": "JavaScript Closures Explained for Beginners",
+    "excerpt": "Closures are one of the most powerful and misunderstood concepts in JavaScript. In this guide we break them down with real examples you can run right in HirenJS.",
+    "category": "tutorial",
+    "tags": ["closures", "functions", "beginner", "javascript"],
+    "author": "Hiren Rathod",
+    "date": "2026-04-27",
+    "readTime": 8,
+    "featured": true,
+    "cover": "closure",
+    "content": "<p>A <strong>closure</strong> is a function that remembers the variables from the place where it was created, even after that outer function has finished running. This sounds confusing at first, but once it clicks, you'll see closures everywhere in JavaScript.</p><h2>What is a Closure?</h2><p>Every time you create a function inside another function, the inner function forms a closure. It holds a reference to the outer function's variables — even after the outer function returns.</p><pre><code>function makeCounter() {\n  let count = 0;  // this variable is 'closed over'\n  return function() {\n    count++;\n    return count;\n  };\n}\n\nconst counter = makeCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3</code></pre><p>Notice that <code>count</code> persists between calls. The inner function has a reference to <code>count</code> in its closure — it's not a copy, it's the actual variable.</p><h2>Why Are Closures Useful?</h2><p>Closures let you create <strong>private variables</strong> — data that only the inner function can access and modify. This is a fundamental pattern for data encapsulation in JavaScript.</p><pre><code>function createBankAccount(initialBalance) {\n  let balance = initialBalance; // private!\n\n  return {\n    deposit(amount) { balance += amount; },\n    withdraw(amount) {\n      if (amount > balance) return 'Insufficient funds';\n      balance -= amount;\n    },\n    getBalance() { return balance; }\n  };\n}\n\nconst account = createBankAccount(1000);\naccount.deposit(500);\nconsole.log(account.getBalance()); // 1500\nconsole.log(account.balance);      // undefined — it's private!</code></pre><h2>Closures in the Real World</h2><p>You use closures constantly in modern JavaScript — in React hooks, event listeners, setTimeout callbacks, and module patterns. Understanding closures makes all of these click into place.</p><h2>Try It in HirenJS</h2><p>Open the HirenJS editor and paste these examples in. Experiment with modifying the counter or bank account to build your intuition. The best way to understand closures is to break them and fix them!</p>"
+  },
+  {
+    "slug": "top-10-array-methods-javascript",
+    "title": "Top 10 Array Methods Every JS Developer Must Know",
+    "excerpt": "From map() to reduce(), these array methods are the secret weapon of every productive JavaScript developer. Master them and your code will never be the same.",
+    "category": "tutorial",
+    "tags": ["arrays", "es6", "methods", "intermediate"],
+    "author": "Hiren Rathod",
+    "date": "2026-04-03",
+    "readTime": 12,
+    "featured": false,
+    "cover": "array",
+    "content": "<p>Arrays are the most used data structure in JavaScript. Knowing the right method for the right job makes your code cleaner, shorter, and easier to understand. Here are the 10 array methods you'll use every single day.</p><h2>1. map() — Transform Every Element</h2><p>Returns a new array where every element has been transformed by a function.</p><pre><code>const prices = [10, 20, 30];\nconst withTax = prices.map(p => p * 1.18);\nconsole.log(withTax); // [11.8, 23.6, 35.4]</code></pre><h2>2. filter() — Keep Only What Matches</h2><p>Returns a new array containing only elements that pass a test.</p><pre><code>const scores = [45, 78, 32, 90, 55, 88];\nconst passing = scores.filter(s => s >= 50);\nconsole.log(passing); // [78, 90, 55, 88]</code></pre><h2>3. reduce() — Collapse to One Value</h2><p>The most powerful array method. Reduces an array to a single value.</p><pre><code>const cart = [299, 149, 89, 599];\nconst total = cart.reduce((sum, item) => sum + item, 0);\nconsole.log(total); // 1136</code></pre><h2>4. find() — Get the First Match</h2><pre><code>const users = [{id:1,name:'Hiren'},{id:2,name:'Raj'}];\nconst user = users.find(u => u.id === 2);\nconsole.log(user.name); // Raj</code></pre><h2>5. some() and every()</h2><pre><code>const nums = [1, 2, 3, 4, 5];\nconsole.log(nums.some(n => n > 4));  // true\nconsole.log(nums.every(n => n > 0)); // true</code></pre><h2>6. flat() and flatMap()</h2><pre><code>const nested = [[1,2],[3,4],[5,6]];\nconsole.log(nested.flat()); // [1,2,3,4,5,6]\n\nconst sentences = ['Hello World', 'JS Rocks'];\nconst words = sentences.flatMap(s => s.split(' '));\nconsole.log(words); // ['Hello','World','JS','Rocks']</code></pre><h2>7. sort() — with a Comparator</h2><pre><code>const items = [30, 1, 21, 8];\nitems.sort((a, b) => a - b); // ascending\nconsole.log(items); // [1, 8, 21, 30]</code></pre><h2>8. includes()</h2><pre><code>const fruits = ['mango','apple','banana'];\nconsole.log(fruits.includes('apple')); // true</code></pre><h2>9. Array.from()</h2><pre><code>// Create array of 5 zeros\nconst zeros = Array.from({length: 5}, () => 0);\nconsole.log(zeros); // [0,0,0,0,0]\n\n// Numbers 1-10\nconst oneToTen = Array.from({length:10}, (_,i) => i+1);\nconsole.log(oneToTen);</code></pre><h2>10. Chaining Them Together</h2><p>The real power comes from chaining these methods:</p><pre><code>const students = [\n  {name:'Arjun', score:85},\n  {name:'Priya', score:42},\n  {name:'Rahul', score:91},\n  {name:'Meena', score:38},\n];\n\nconst topStudents = students\n  .filter(s => s.score >= 50)\n  .sort((a,b) => b.score - a.score)\n  .map(s => `${s.name}: ${s.score}`);\n\nconsole.log(topStudents);\n// ['Rahul: 91', 'Arjun: 85']</code></pre><p>Practice all of these in HirenJS — copy each snippet, run it, then modify the data to see how the output changes.</p>"
+  },
+  {
+    "slug": "async-await-complete-guide",
+    "title": "Async/Await: The Complete Guide for Students",
+    "excerpt": "Asynchronous JavaScript used to be painful. async/await makes it feel like normal code. Here's everything you need to know, with mobile-friendly examples.",
+    "category": "tutorial",
+    "tags": ["async", "promises", "advanced", "fetch"],
+    "author": "Hiren Rathod",
+    "date": "2026-03-20",
+    "readTime": 15,
+    "featured": false,
+    "cover": "async",
+    "content": "<p>JavaScript runs on a single thread — it can only do one thing at a time. But modern apps need to fetch data, read files, and wait for timers without freezing the page. <strong>async/await</strong> is how you handle this elegantly.</p><h2>The Problem: Callbacks</h2><pre><code>// Old way — callback hell\ngetUser(id, function(user) {\n  getPosts(user.id, function(posts) {\n    getComments(posts[0].id, function(comments) {\n      // deeply nested and hard to read!\n    });\n  });\n});</code></pre><h2>The Evolution: Promises</h2><pre><code>getUser(id)\n  .then(user => getPosts(user.id))\n  .then(posts => getComments(posts[0].id))\n  .then(comments => console.log(comments))\n  .catch(err => console.error(err));</code></pre><h2>The Modern Way: async/await</h2><pre><code>async function loadData(id) {\n  try {\n    const user     = await getUser(id);\n    const posts    = await getPosts(user.id);\n    const comments = await getComments(posts[0].id);\n    console.log(comments);\n  } catch (err) {\n    console.error('Something went wrong:', err);\n  }\n}</code></pre><p>See how <strong>async/await</strong> reads like regular synchronous code? That's the whole point.</p><h2>Real Example: Fetching from an API</h2><pre><code>async function getJoke() {\n  const response = await fetch(\n    'https://v2.jokeapi.dev/joke/Programming?type=single'\n  );\n  const data = await response.json();\n  console.log('Joke:', data.joke);\n}\n\ngetJoke();</code></pre><h2>Running Multiple Requests at Once</h2><pre><code>// Sequential — slow (one waits for the other)\nconst user  = await getUser(1);\nconst posts = await getPosts(1);\n\n// Parallel — fast (both run at the same time!)\nconst [user, posts] = await Promise.all([\n  getUser(1),\n  getPosts(1)\n]);</code></pre><p>Use <code>Promise.all()</code> whenever your requests don't depend on each other — it can make your app significantly faster.</p><h2>Error Handling</h2><p>Always wrap async code in try/catch. Without it, unhandled promise rejections can silently break your app.</p>"
+  },
+  {
+    "slug": "hirenjs-v2-launch",
+    "title": "HirenJS v2 is Here — Everything That's New",
+    "excerpt": "After months of work, HirenJS v2 launches with a complete redesign, 6 editor themes, snippet library, HTML preview mode, and a brand new mobile experience.",
+    "category": "update",
+    "tags": ["release", "update", "features", "v2"],
+    "author": "Hiren Rathod",
+    "date": "2026-03-18",
+    "readTime": 5,
+    "featured": false,
+    "cover": "update",
+    "content": "<p>After months of building, testing on real student devices, and gathering feedback, <strong>HirenJS v2</strong> is officially live. Here's a full rundown of everything that's changed.</p><h2>Complete Visual Redesign</h2><p>The entire UI has been rebuilt from scratch with a dark-first design that's easier on the eyes for long coding sessions. The new design uses a consistent colour system, better typography (JetBrains Mono for code, Syne for UI), and subtle animations that make the editor feel premium without being distracting.</p><h2>6 Editor Themes</h2><p>You can now cycle through six built-in Ace Editor themes: One Dark, Monokai, Dracula, GitHub, Night Bright, and Cobalt. Tap the Theme button in the toolbar or use the bottom bar on mobile.</p><h2>Snippet Library</h2><p>12 hand-crafted code snippets are now built in — from Hello World to Design Patterns. Open the snippet library with Ctrl+K, search for what you want, and the code is inserted instantly. Each snippet is written to teach a real concept, not just be a boilerplate.</p><h2>HTML Preview Mode</h2><p>Switch to HTML mode and the new Preview tab shows your HTML rendered live in a sandboxed iframe. Great for learning DOM manipulation and CSS without needing a separate editor.</p><h2>Share Your Code via URL</h2><p>The Share button encodes your code into a URL that anyone can open to see exactly what you wrote. No login, no account — just copy and send the link to your teacher or friend.</p><h2>Mobile Bottom Toolbar</h2><p>On phones, five essential actions now live in a fixed bottom bar: Run, Undo, Clear, Format, and Theme. The Run button is a large yellow circle — impossible to miss, even on a small screen.</p><h2>Auto-Save</h2><p>Your code is saved to localStorage automatically as you type. Close the tab, come back later — everything is still there.</p><h2>What's Next?</h2><p>We're working on a collaborative mode, more snippets, and a built-in mini debugger. Follow the project on GitHub to stay updated!</p>"
+  },
+  {
+    "slug": "mobile-coding-tips-students",
+    "title": "5 Tips to Code Effectively on Your Smartphone",
+    "excerpt": "Most students in India learn to code on a phone. Here are 5 practical tips to make mobile coding faster, smarter, and less frustrating.",
+    "category": "tips",
+    "tags": ["mobile", "productivity", "students", "tips"],
+    "author": "Hiren Rathod",
+    "date": "2026-03-01",
+    "readTime": 6,
+    "featured": false,
+    "cover": "tips",
+    "content": "<p>Coding on a smartphone is genuinely possible — HirenJS was built specifically for it. But there are habits and tricks that make the experience dramatically better. Here are the five most impactful ones.</p><h2>1. Use Landscape Mode for More Space</h2><p>Rotating your phone to landscape gives you significantly more horizontal space for code. Most mobile editors, including HirenJS, lay out much better in landscape for writing. Switch to portrait to read output.</p><h2>2. Use the Snippet Library as a Starting Point</h2><p>Don't type boilerplate from scratch on a phone keyboard. In HirenJS, press the 📦 icon to open the snippet library. Find the pattern closest to what you need, insert it, then modify it. You'll type maybe 20% as much.</p><h2>3. Learn the Mobile Bottom Bar</h2><p>HirenJS's bottom toolbar puts Run, Undo, Format, and Theme one tap away. The Format button (✨) auto-indents your code — incredibly useful when phone keyboards mess up your spacing.</p><h2>4. Use the Share Button to Save Your Work</h2><p>Before closing your browser, hit 🔗 Share and copy the URL. Paste it in your notes app. If your browser clears localStorage, you still have your code in that link.</p><h2>5. Write Short, Test Often</h2><p>On a phone, it's harder to scroll through long files. The best habit is to write 5-10 lines, hit Run, check the output, then continue. This short feedback loop also makes debugging much easier — you always know which few lines caused the problem.</p><h2>Bonus: Use a Bluetooth Keyboard</h2><p>If you have access to a cheap Bluetooth keyboard (they're available for under ₹500), pairing it with your phone transforms the coding experience entirely. HirenJS has full keyboard shortcut support including Ctrl+Enter to run.</p>"
+  },
+  {
+    "slug": "understanding-javascript-scope",
+    "title": "JavaScript Scope: Let, Const, Var and the Temporal Dead Zone",
+    "excerpt": "Why does var behave so strangely? What's the Temporal Dead Zone? This deep-dive into JavaScript scope will answer questions you didn't even know you had.",
+    "category": "tutorial",
+    "tags": ["scope", "hoisting", "variables", "intermediate"],
+    "author": "Hiren Rathod",
+    "date": "2026-03-12",
+    "readTime": 10,
+    "featured": false,
+    "cover": "scope",
+    "content": "<p>Scope determines where variables are accessible in your code. JavaScript has three types of scope: global, function, and block. Understanding this is essential to avoiding bugs that are incredibly hard to trace.</p><h2>var — Function Scoped (and Weird)</h2><pre><code>function example() {\n  if (true) {\n    var x = 10; // var is function-scoped, not block-scoped\n  }\n  console.log(x); // 10 — still accessible outside the if block!\n}\nexample();</code></pre><p>This surprises beginners. <code>var</code> leaks out of <code>if</code>, <code>for</code>, and <code>while</code> blocks — it only respects function boundaries.</p><h2>let and const — Block Scoped</h2><pre><code>function betterExample() {\n  if (true) {\n    let y = 20;\n    const z = 30;\n  }\n  console.log(y); // ReferenceError — y is not defined\n}</code></pre><p><code>let</code> and <code>const</code> are block-scoped — they only exist inside the <code>{ }</code> where they were declared.</p><h2>Hoisting</h2><p>JavaScript moves variable and function declarations to the top of their scope before executing. This is called hoisting.</p><pre><code>console.log(name); // undefined (not an error!)\nvar name = 'Hiren';\n\n// What JS actually does:\nvar name;\nconsole.log(name); // undefined\nname = 'Hiren';</code></pre><h2>The Temporal Dead Zone (TDZ)</h2><p><code>let</code> and <code>const</code> are also hoisted, but they're not initialised — accessing them before declaration throws a ReferenceError. The gap between the start of the block and the declaration is called the Temporal Dead Zone.</p><pre><code>console.log(age); // ReferenceError: Cannot access 'age' before initialization\nlet age = 22;</code></pre><h2>The Rule</h2><p>Always use <code>const</code> first. Use <code>let</code> only if you need to reassign. Never use <code>var</code> in new code. This simple rule prevents 90% of scope-related bugs.</p>"
+  }
+]
