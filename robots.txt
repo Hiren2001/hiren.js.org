@@ -1,12 +1,21 @@
 User-agent: *
-Disallow: /404.html
+
 Disallow: /CNAME
 Disallow: /CODE_OF_CONDUCT.md
 Disallow: /CONTRIBUTING.md
-Disallow: /LICENSE 
+Disallow: /LICENSE
 Disallow: /SECURITY.md
+Disallow: /ads.txt
+Disallow: /404.html
+Disallow: /legacy/
 
-Allow: /H.png
-Allow: /README.md
+Allow: /
 Allow: /index.html
 Allow: /HirenJS.html
+Allow: /docs.html
+Allow: /blog/
+Allow: /blog/index.html
+Allow: /blog/post.html
+Allow: /legal/
+Allow: /H.png
+Allow: /README.md
