@@ -1,5 +1,329 @@
 [
   {
+    "slug": "javascript-promises-for-beginners",
+    "title": "JavaScript Promises Explained Step by Step",
+    "excerpt": "Promises are the foundation of async JavaScript. Learn pending, fulfilled and rejected states with small examples you can run on your phone.",
+    "category": "tutorial",
+    "tags": [
+      "promises",
+      "async",
+      "beginner",
+      "javascript"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-09-30",
+    "readTime": 9,
+    "featured": false,
+    "cover": "promise",
+    "content": "<p>A <strong>Promise</strong> is an object that represents a value you don't have yet, but will get in the future. Think of it like ordering food: you get a token now, and the food arrives later (or the order gets cancelled).</p><h2>The 3 States</h2><p>Every promise is in one of three states: <strong>pending</strong> (waiting), <strong>fulfilled</strong> (success) or <strong>rejected</strong> (failed). Once it moves out of pending, it never changes again.</p><h2>Creating a Promise</h2><pre><code>const order = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    const ok = true;\n    if (ok) resolve('Pizza delivered');\n    else reject('Order cancelled');\n  }, 1000);\n});\n\norder\n  .then(msg => console.log(msg))\n  .catch(err => console.error(err))\n  .finally(() => console.log('Done'));</code></pre><h2>Chaining</h2><p>Every <code>.then()</code> returns a new promise, so you can chain steps one after another.</p><pre><code>Promise.resolve(5)\n  .then(n => n * 2)\n  .then(n => n + 1)\n  .then(result => console.log(result)); // 11</code></pre><h2>Useful Helpers</h2><pre><code>Promise.all([p1, p2, p3]);        // wait for all, fail if any fails\nPromise.allSettled([p1, p2, p3]); // wait for all, never fails\nPromise.race([p1, p2]);           // first one to finish wins</code></pre><p>Paste these into HirenJS, change <code>ok</code> to false and see how the catch block runs.</p>"
+  },
+  {
+    "slug": "destructuring-in-javascript",
+    "title": "Destructuring in JavaScript: Write Less, Do More",
+    "excerpt": "Pull values out of arrays and objects in one line. Destructuring makes your code shorter and much easier to read.",
+    "category": "tutorial",
+    "tags": [
+      "destructuring",
+      "es6",
+      "objects",
+      "arrays"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-09-21",
+    "readTime": 7,
+    "featured": false,
+    "cover": "destructure",
+    "content": "<p>Destructuring is a shortcut to unpack values from arrays or properties from objects into separate variables.</p><h2>Array Destructuring</h2><pre><code>const colors = ['red', 'green', 'blue'];\nconst [first, second] = colors;\nconsole.log(first, second); // red green\n\n// skip items\nconst [, , third] = colors;\nconsole.log(third); // blue</code></pre><h2>Object Destructuring</h2><pre><code>const user = { name: 'Arjun', age: 21, city: 'Surat' };\nconst { name, city } = user;\nconsole.log(name, city); // Arjun Surat\n\n// rename + default value\nconst { age: years, country = 'India' } = user;\nconsole.log(years, country); // 21 India</code></pre><h2>In Function Parameters</h2><pre><code>function greet({ name, city = 'Unknown' }) {\n  return `Hello ${name} from ${city}`;\n}\nconsole.log(greet({ name: 'Priya' })); // Hello Priya from Unknown</code></pre><h2>Swapping Variables</h2><pre><code>let a = 1, b = 2;\n[a, b] = [b, a];\nconsole.log(a, b); // 2 1</code></pre><p>Once you start using destructuring, you will not want to go back to <code>user.name</code>, <code>user.city</code> everywhere.</p>"
+  },
+  {
+    "slug": "spread-and-rest-operators",
+    "title": "Spread and Rest Operators: The Three Dots Explained",
+    "excerpt": "Same three dots, two different jobs. Learn when ... expands and when it collects.",
+    "category": "tutorial",
+    "tags": [
+      "spread",
+      "rest",
+      "es6",
+      "beginner"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-09-12",
+    "readTime": 6,
+    "featured": false,
+    "cover": "dots",
+    "content": "<p>The <code>...</code> syntax looks the same everywhere, but it does two opposite things depending on where you use it.</p><h2>Spread: Expand Things</h2><pre><code>const a = [1, 2, 3];\nconst b = [...a, 4, 5];\nconsole.log(b); // [1,2,3,4,5]\n\nconst base = { theme: 'dark', size: 14 };\nconst custom = { ...base, size: 18 };\nconsole.log(custom); // { theme: 'dark', size: 18 }</code></pre><p>Spread makes a <strong>shallow copy</strong>. Nested objects are still shared, so be careful.</p><h2>Rest: Collect Things</h2><pre><code>function sum(...numbers) {\n  return numbers.reduce((t, n) => t + n, 0);\n}\nconsole.log(sum(1, 2, 3, 4)); // 10\n\nconst [head, ...others] = [10, 20, 30, 40];\nconsole.log(head, others); // 10 [20,30,40]</code></pre><h2>Easy Rule</h2><p>If the dots are where values are <em>given</em> (calling a function, building an array), it is spread. If they are where values are <em>received</em> (function parameters, destructuring), it is rest.</p>"
+  },
+  {
+    "slug": "arrow-functions-and-this",
+    "title": "Arrow Functions vs Normal Functions (and the this Keyword)",
+    "excerpt": "Arrow functions are shorter, but they also behave differently with this. Know exactly when to use which.",
+    "category": "tutorial",
+    "tags": [
+      "arrow-functions",
+      "this",
+      "functions",
+      "intermediate"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-09-03",
+    "readTime": 9,
+    "featured": false,
+    "cover": "arrow",
+    "content": "<p>Arrow functions came with ES6 and give a shorter syntax. But the real difference is how they treat <code>this</code>.</p><h2>Syntax</h2><pre><code>// normal\nfunction add(a, b) { return a + b; }\n\n// arrow\nconst add2 = (a, b) => a + b;\n\n// single parameter, no brackets needed\nconst square = n => n * n;</code></pre><h2>The this Difference</h2><p>A normal function gets its own <code>this</code> depending on how it is called. An arrow function does not have its own <code>this</code>, it uses the one from the surrounding code.</p><pre><code>const timer = {\n  seconds: 0,\n  startBad() {\n    setTimeout(function () {\n      console.log(this.seconds); // undefined (this is not timer)\n    }, 100);\n  },\n  startGood() {\n    setTimeout(() => {\n      console.log(this.seconds); // 0 (this is timer)\n    }, 100);\n  }\n};\ntimer.startBad();\ntimer.startGood();</code></pre><h2>When NOT to Use Arrows</h2><p>Do not use arrow functions as object methods or constructors. Use them for callbacks like <code>map</code>, <code>filter</code> and <code>setTimeout</code>.</p>"
+  },
+  {
+    "slug": "dom-manipulation-basics",
+    "title": "DOM Manipulation Basics: Select, Change, Create",
+    "excerpt": "The DOM is how JavaScript talks to a web page. Learn the five operations you will use in every project.",
+    "category": "tutorial",
+    "tags": [
+      "dom",
+      "html",
+      "beginner",
+      "browser"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-08-25",
+    "readTime": 11,
+    "featured": false,
+    "cover": "dom",
+    "content": "<p>The <strong>DOM</strong> (Document Object Model) is the page represented as objects. With JavaScript you can read it, change it and add new elements.</p><h2>1. Selecting Elements</h2><pre><code>const title = document.querySelector('h1');\nconst items = document.querySelectorAll('.item');</code></pre><h2>2. Changing Content</h2><pre><code>title.textContent = 'Hello HirenJS';\ntitle.style.color = 'orange';\ntitle.classList.add('highlight');</code></pre><h2>3. Creating Elements</h2><pre><code>const li = document.createElement('li');\nli.textContent = 'New item';\ndocument.querySelector('ul').appendChild(li);</code></pre><h2>4. Removing Elements</h2><pre><code>li.remove();</code></pre><h2>5. Attributes</h2><pre><code>const link = document.querySelector('a');\nlink.setAttribute('href', 'https://hiren.js.org');\nconsole.log(link.getAttribute('href'));</code></pre><p>Tip: prefer <code>textContent</code> over <code>innerHTML</code> when showing user input. It prevents script injection bugs.</p><p>Switch HirenJS to HTML mode and try these in the live preview.</p>"
+  },
+  {
+    "slug": "event-listeners-and-delegation",
+    "title": "Event Listeners and Event Delegation Made Simple",
+    "excerpt": "Click, input, keydown: handle user actions the right way, and learn the delegation trick that saves dozens of listeners.",
+    "category": "tutorial",
+    "tags": [
+      "events",
+      "dom",
+      "intermediate",
+      "browser"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-08-16",
+    "readTime": 8,
+    "featured": false,
+    "cover": "events",
+    "content": "<p>Events are things that happen on a page: clicks, typing, scrolling. You react to them with <code>addEventListener</code>.</p><h2>Basic Listener</h2><pre><code>const btn = document.querySelector('#btn');\nbtn.addEventListener('click', (e) => {\n  console.log('Clicked!', e.target);\n});</code></pre><h2>The Event Object</h2><p>The callback receives an event object. Useful properties: <code>e.target</code> (what was clicked), <code>e.key</code> (keyboard), <code>e.preventDefault()</code> (stop default behaviour like form submit).</p><h2>Event Delegation</h2><p>Instead of adding a listener to every list item, add one to the parent. Events bubble up, so the parent can catch them all, even for items added later.</p><pre><code>const list = document.querySelector('ul');\nlist.addEventListener('click', (e) => {\n  if (e.target.matches('li')) {\n    e.target.classList.toggle('done');\n  }\n});</code></pre><h2>Removing a Listener</h2><pre><code>function onClick() { console.log('hi'); }\nbtn.addEventListener('click', onClick);\nbtn.removeEventListener('click', onClick);</code></pre><p>Delegation is the pattern behind every todo app. Build one in HirenJS to practise.</p>"
+  },
+  {
+    "slug": "localstorage-complete-guide",
+    "title": "localStorage: Save Data in the Browser",
+    "excerpt": "Make your apps remember things. A practical guide to localStorage with a working todo-saving example.",
+    "category": "tutorial",
+    "tags": [
+      "localstorage",
+      "storage",
+      "browser",
+      "beginner"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-08-07",
+    "readTime": 7,
+    "featured": false,
+    "cover": "storage",
+    "content": "<p><code>localStorage</code> lets you store key-value pairs in the browser. Data stays even after you close the tab.</p><h2>The 4 Methods</h2><pre><code>localStorage.setItem('theme', 'dark');\nconsole.log(localStorage.getItem('theme')); // dark\nlocalStorage.removeItem('theme');\nlocalStorage.clear(); // removes everything</code></pre><h2>Only Strings Allowed</h2><p>localStorage stores only strings. To save arrays or objects, convert them with <code>JSON.stringify</code> and back with <code>JSON.parse</code>.</p><pre><code>const todos = [{ text: 'Learn JS', done: false }];\nlocalStorage.setItem('todos', JSON.stringify(todos));\n\nconst saved = JSON.parse(localStorage.getItem('todos')) || [];\nconsole.log(saved);</code></pre><h2>Safe Helper</h2><pre><code>function load(key, fallback) {\n  try {\n    return JSON.parse(localStorage.getItem(key)) ?? fallback;\n  } catch {\n    return fallback;\n  }\n}</code></pre><h2>Limits</h2><p>You get around 5 MB per site. Never store passwords or tokens in it, because any script on the page can read it.</p>"
+  },
+  {
+    "slug": "fetch-api-and-json",
+    "title": "Fetch API and JSON: Get Data from the Internet",
+    "excerpt": "Learn to call APIs with fetch, read JSON responses and handle errors properly.",
+    "category": "tutorial",
+    "tags": [
+      "fetch",
+      "api",
+      "json",
+      "intermediate"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-07-29",
+    "readTime": 10,
+    "featured": false,
+    "cover": "fetch",
+    "content": "<p>Almost every modern app talks to an API. In the browser you do this with <code>fetch</code>.</p><h2>GET Request</h2><pre><code>async function getUsers() {\n  const res = await fetch('https://jsonplaceholder.typicode.com/users');\n  if (!res.ok) throw new Error('HTTP ' + res.status);\n  const users = await res.json();\n  console.log(users.map(u => u.name));\n}\ngetUsers().catch(console.error);</code></pre><p>Important: <code>fetch</code> does not throw on 404 or 500. You must check <code>res.ok</code> yourself.</p><h2>POST Request</h2><pre><code>async function createPost() {\n  const res = await fetch('https://jsonplaceholder.typicode.com/posts', {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({ title: 'Hello', body: 'From HirenJS', userId: 1 })\n  });\n  console.log(await res.json());\n}\ncreatePost();</code></pre><h2>What is JSON?</h2><p>JSON is a text format for data. Keys must be in double quotes and there are no functions or comments. Use <code>JSON.parse()</code> to text-to-object and <code>JSON.stringify()</code> for object-to-text.</p>"
+  },
+  {
+    "slug": "javascript-classes-and-oop",
+    "title": "JavaScript Classes and OOP for Beginners",
+    "excerpt": "Classes, constructors, inheritance and private fields explained with a simple Vehicle example.",
+    "category": "tutorial",
+    "tags": [
+      "classes",
+      "oop",
+      "inheritance",
+      "intermediate"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-07-20",
+    "readTime": 12,
+    "featured": false,
+    "cover": "classes",
+    "content": "<p>A <strong>class</strong> is a blueprint for creating objects with the same structure and behaviour.</p><h2>Your First Class</h2><pre><code>class Vehicle {\n  constructor(name, speed) {\n    this.name = name;\n    this.speed = speed;\n  }\n  describe() {\n    return `${this.name} runs at ${this.speed} km/h`;\n  }\n}\n\nconst bike = new Vehicle('Bike', 80);\nconsole.log(bike.describe());</code></pre><h2>Inheritance</h2><pre><code>class Car extends Vehicle {\n  constructor(name, speed, doors) {\n    super(name, speed);\n    this.doors = doors;\n  }\n  describe() {\n    return super.describe() + ` with ${this.doors} doors`;\n  }\n}\n\nconsole.log(new Car('Swift', 160, 4).describe());</code></pre><h2>Private Fields and Static Methods</h2><pre><code>class Wallet {\n  #balance = 0;\n  static currency = 'INR';\n  add(n) { this.#balance += n; }\n  get balance() { return this.#balance; }\n}\n\nconst w = new Wallet();\nw.add(500);\nconsole.log(w.balance, Wallet.currency);</code></pre><p>The <code>#</code> prefix makes a field truly private. Nobody outside the class can touch it.</p>"
+  },
+  {
+    "slug": "es6-modules-import-export",
+    "title": "ES6 Modules: import and export Explained",
+    "excerpt": "Split your code into clean files. Learn named exports, default exports and common mistakes.",
+    "category": "tutorial",
+    "tags": [
+      "modules",
+      "import",
+      "export",
+      "intermediate"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-07-11",
+    "readTime": 8,
+    "featured": false,
+    "cover": "modules",
+    "content": "<p>As projects grow, one giant file becomes painful. <strong>Modules</strong> let you split code into files and share only what you want.</p><h2>Named Exports</h2><pre><code>// math.js\nexport const PI = 3.14159;\nexport function area(r) { return PI * r * r; }\n\n// app.js\nimport { PI, area } from './math.js';\nconsole.log(area(5));</code></pre><h2>Default Export</h2><pre><code>// logger.js\nexport default function log(msg) {\n  console.log('[LOG]', msg);\n}\n\n// app.js\nimport log from './logger.js';\nlog('Hello');</code></pre><h2>Rename and Import Everything</h2><pre><code>import { area as circleArea } from './math.js';\nimport * as MathUtils from './math.js';\nconsole.log(MathUtils.PI);</code></pre><h2>Using Modules in HTML</h2><pre><code>&lt;script type=\"module\" src=\"app.js\"&gt;&lt;/script&gt;</code></pre><p>Remember: modules need a server (even a simple local one). Opening the file directly with file:// will usually give a CORS error.</p>"
+  },
+  {
+    "slug": "debugging-with-console-methods",
+    "title": "Debugging Like a Pro: Beyond console.log",
+    "excerpt": "console.table, console.group, console.time and more. Find bugs faster with the tools already in your browser.",
+    "category": "tips",
+    "tags": [
+      "debugging",
+      "console",
+      "productivity",
+      "tips"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-06-30",
+    "readTime": 6,
+    "featured": false,
+    "cover": "debug",
+    "content": "<p>Most beginners only know <code>console.log</code>. The console has many more methods that save hours.</p><h2>console.table()</h2><pre><code>const students = [\n  { name: 'Arjun', score: 85 },\n  { name: 'Priya', score: 92 }\n];\nconsole.table(students);</code></pre><h2>console.group()</h2><pre><code>console.group('User Info');\nconsole.log('Name: Hiren');\nconsole.log('City: Gujarat');\nconsole.groupEnd();</code></pre><h2>console.time()</h2><pre><code>console.time('loop');\nfor (let i = 0; i &lt; 1000000; i++) {}\nconsole.timeEnd('loop');</code></pre><h2>console.error and console.warn</h2><p>Use these to separate real problems from normal logs. They show in different colours and are easy to filter.</p><h2>The debugger Keyword</h2><pre><code>function calc(a, b) {\n  debugger; // pauses here if DevTools is open\n  return a + b;\n}</code></pre><p>Bonus habit: when something breaks, log the <em>type</em> as well: <code>console.log(typeof value, value)</code>. Half of all bugs are the wrong type.</p>"
+  },
+  {
+    "slug": "javascript-event-loop-explained",
+    "title": "The JavaScript Event Loop in Plain Language",
+    "excerpt": "Why does setTimeout(0) run last? Understand the call stack, task queue and microtasks once and for all.",
+    "category": "tutorial",
+    "tags": [
+      "event-loop",
+      "async",
+      "advanced",
+      "javascript"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-06-23",
+    "readTime": 13,
+    "featured": false,
+    "cover": "eventloop",
+    "content": "<p>JavaScript has one thread, yet it handles timers, network calls and clicks without freezing. The secret is the <strong>event loop</strong>.</p><h2>The Pieces</h2><p><strong>Call stack</strong>: where your code runs, one function at a time. <strong>Web APIs</strong>: the browser handles timers and network outside the stack. <strong>Task queue</strong>: callbacks (like setTimeout) wait here. <strong>Microtask queue</strong>: promise callbacks wait here, with higher priority.</p><h2>Guess the Output</h2><pre><code>console.log('1');\n\nsetTimeout(() => console.log('2'), 0);\n\nPromise.resolve().then(() => console.log('3'));\n\nconsole.log('4');</code></pre><p>The answer is <strong>1, 4, 3, 2</strong>. Synchronous code runs first (1, 4). Then the event loop empties the microtask queue (3) before taking the next task (2).</p><h2>Why Heavy Loops Freeze the Page</h2><p>If the call stack is busy, the event loop cannot run anything else. A long <code>for</code> loop blocks clicks and rendering. Break big work into small chunks or use Web Workers.</p><p>Run the example in HirenJS, then add more logs and predict the order before running.</p>"
+  },
+  {
+    "slug": "callbacks-and-higher-order-functions",
+    "title": "Callbacks and Higher-Order Functions Demystified",
+    "excerpt": "Functions that take or return other functions are everywhere in JavaScript. Learn the idea once, use it forever.",
+    "category": "tutorial",
+    "tags": [
+      "callbacks",
+      "functions",
+      "higher-order",
+      "beginner"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-06-14",
+    "readTime": 7,
+    "featured": false,
+    "cover": "callback",
+    "content": "<p>In JavaScript, functions are values. You can store them in variables, pass them to other functions and return them. A function that does this is called a <strong>higher-order function</strong>.</p><h2>Passing a Function (Callback)</h2><pre><code>function repeat(times, action) {\n  for (let i = 0; i &lt; times; i++) action(i);\n}\n\nrepeat(3, (i) => console.log('Run number', i));</code></pre><h2>Returning a Function</h2><pre><code>function multiplier(factor) {\n  return (n) => n * factor;\n}\n\nconst double = multiplier(2);\nconst triple = multiplier(3);\nconsole.log(double(10), triple(10)); // 20 30</code></pre><h2>You Already Use Them</h2><p><code>map</code>, <code>filter</code>, <code>reduce</code>, <code>forEach</code>, <code>setTimeout</code> and <code>addEventListener</code> are all higher-order functions that accept callbacks.</p><h2>Build Your Own filter</h2><pre><code>function myFilter(arr, test) {\n  const result = [];\n  for (const item of arr) {\n    if (test(item)) result.push(item);\n  }\n  return result;\n}\nconsole.log(myFilter([1, 2, 3, 4, 5, 6], n => n % 2 === 0)); // [2,4,6]</code></pre>"
+  },
+  {
+    "slug": "javascript-string-methods-cheatsheet",
+    "title": "JavaScript String Methods Cheat Sheet",
+    "excerpt": "slice, split, replace, includes, padStart and more. The string methods you will actually use, with examples.",
+    "category": "tips",
+    "tags": [
+      "strings",
+      "methods",
+      "cheatsheet",
+      "beginner"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-06-05",
+    "readTime": 6,
+    "featured": false,
+    "cover": "strings",
+    "content": "<p>Strings are everywhere: usernames, URLs, messages. Here are the methods worth remembering.</p><h2>Search and Check</h2><pre><code>const s = 'Learn JavaScript on HirenJS';\nconsole.log(s.includes('Java'));   // true\nconsole.log(s.startsWith('Learn')); // true\nconsole.log(s.indexOf('on'));      // 17</code></pre><h2>Extract</h2><pre><code>console.log(s.slice(0, 5));  // Learn\nconsole.log(s.split(' '));   // ['Learn','JavaScript','on','HirenJS']</code></pre><h2>Change</h2><pre><code>console.log(s.toUpperCase());\nconsole.log(s.replace('Learn', 'Master'));\nconsole.log('  spaces  '.trim()); // 'spaces'\nconsole.log('ha'.repeat(3));     // hahaha</code></pre><h2>Formatting</h2><pre><code>console.log('7'.padStart(2, '0')); // 07\nconst name = 'Priya';\nconsole.log(`Hello ${name}!`);     // template literal</code></pre><h2>Remember</h2><p>Strings are <strong>immutable</strong>. Methods never change the original, they return a new string. Always save the result in a variable.</p>"
+  },
+  {
+    "slug": "working-with-dates-in-javascript",
+    "title": "Working with Dates in JavaScript Without Pain",
+    "excerpt": "The Date object has strange behaviour. Learn the safe way to create, format and compare dates.",
+    "category": "tutorial",
+    "tags": [
+      "date",
+      "time",
+      "intermediate",
+      "javascript"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-05-28",
+    "readTime": 8,
+    "featured": false,
+    "cover": "date",
+    "content": "<p>Dates look simple, but they have traps. Let's learn the safe parts.</p><h2>Creating Dates</h2><pre><code>const now = new Date();\nconst d = new Date('2026-10-06');\nconst custom = new Date(2026, 9, 6); // month starts from 0! 9 = October\nconsole.log(now.getFullYear(), custom.getMonth());</code></pre><h2>Formatting for Indian Users</h2><pre><code>const date = new Date('2026-10-06');\nconsole.log(date.toLocaleDateString('en-IN', {\n  day: 'numeric', month: 'long', year: 'numeric'\n})); // 6 October 2026</code></pre><h2>Comparing and Calculating</h2><pre><code>const a = new Date('2026-01-01');\nconst b = new Date('2026-03-01');\nconst days = (b - a) / (1000 * 60 * 60 * 24);\nconsole.log(days); // 59</code></pre><h2>Adding Days</h2><pre><code>function addDays(date, n) {\n  const copy = new Date(date);\n  copy.setDate(copy.getDate() + n);\n  return copy;\n}\nconsole.log(addDays(new Date('2026-10-06'), 10));</code></pre><p>Biggest trap: months are zero-based (0 = January) but days are one-based. Also always use ISO format <code>YYYY-MM-DD</code> when creating from strings.</p>"
+  },
+  {
+    "slug": "error-handling-try-catch-custom-errors",
+    "title": "Error Handling in JavaScript: try, catch and Custom Errors",
+    "excerpt": "Stop your app from crashing. Learn try/catch/finally, throwing errors and creating your own error types.",
+    "category": "tutorial",
+    "tags": [
+      "errors",
+      "try-catch",
+      "intermediate",
+      "javascript"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-05-19",
+    "readTime": 9,
+    "featured": false,
+    "cover": "errors",
+    "content": "<p>Errors will happen: bad input, network failure, missing data. Good developers plan for them.</p><h2>try / catch / finally</h2><pre><code>try {\n  const data = JSON.parse('{ bad json }');\n} catch (err) {\n  console.error('Parsing failed:', err.message);\n} finally {\n  console.log('This always runs');\n}</code></pre><h2>Throwing Your Own Errors</h2><pre><code>function divide(a, b) {\n  if (b === 0) throw new Error('Cannot divide by zero');\n  return a / b;\n}\n\ntry {\n  divide(10, 0);\n} catch (e) {\n  console.log(e.message);\n}</code></pre><h2>Custom Error Classes</h2><pre><code>class ValidationError extends Error {\n  constructor(field, message) {\n    super(message);\n    this.name = 'ValidationError';\n    this.field = field;\n  }\n}\n\ntry {\n  throw new ValidationError('email', 'Email is invalid');\n} catch (e) {\n  if (e instanceof ValidationError) {\n    console.log(e.field + ': ' + e.message);\n  }\n}</code></pre><h2>Rule of Thumb</h2><p>Catch errors only where you can do something useful about them, like showing a message to the user. Do not swallow them silently with an empty catch block.</p>"
+  },
+  {
+    "slug": "7-common-javascript-mistakes-beginners",
+    "title": "7 Common JavaScript Mistakes Every Beginner Makes",
+    "excerpt": "== vs ===, forgetting await, mutating arrays and more. Avoid these and you will save hours of debugging.",
+    "category": "tips",
+    "tags": [
+      "mistakes",
+      "beginner",
+      "best-practices",
+      "tips"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-05-11",
+    "readTime": 8,
+    "featured": false,
+    "cover": "mistakes",
+    "content": "<p>Every developer made these mistakes. Knowing them early saves a lot of frustration.</p><h2>1. Using == Instead of ===</h2><pre><code>console.log(0 == '0');  // true (confusing)\nconsole.log(0 === '0'); // false (clear)</code></pre><h2>2. Forgetting await</h2><pre><code>const res = fetch(url);        // Promise, not data!\nconst res2 = await fetch(url); // correct</code></pre><h2>3. Comparing Objects and Arrays</h2><pre><code>console.log([1,2] === [1,2]); // false, different references</code></pre><h2>4. Modifying an Array While Looping</h2><p>Removing items inside a <code>for</code> loop shifts indexes and skips elements. Use <code>filter()</code> to create a new array instead.</p><h2>5. Using var in Loops with Callbacks</h2><pre><code>for (var i = 0; i &lt; 3; i++) setTimeout(() => console.log(i)); // 3 3 3\nfor (let j = 0; j &lt; 3; j++) setTimeout(() => console.log(j)); // 0 1 2</code></pre><h2>6. Trusting typeof null</h2><pre><code>console.log(typeof null); // 'object' (an old JS bug)</code></pre><h2>7. Floating Point Surprises</h2><pre><code>console.log(0.1 + 0.2); // 0.30000000000000004\nconsole.log((0.1 + 0.2).toFixed(2)); // '0.30'</code></pre><p>Try each one in HirenJS and see the output yourself. Seeing the bug once is the best way to remember it.</p>"
+  },
+  {
+    "slug": "5-mini-projects-to-learn-javascript",
+    "title": "5 Mini Projects to Learn JavaScript Faster",
+    "excerpt": "Tutorials are not enough. Build these five small projects and your JavaScript skills will grow quickly.",
+    "category": "tips",
+    "tags": [
+      "projects",
+      "practice",
+      "beginner",
+      "tips"
+    ],
+    "author": "Hiren Rathod",
+    "date": "2026-05-02",
+    "readTime": 7,
+    "featured": false,
+    "cover": "projects",
+    "content": "<p>Watching tutorials feels productive, but real learning happens when you build. Here are five small projects, each teaching a different skill.</p><h2>1. Counter App</h2><p>Buttons to increase, decrease and reset a number. Teaches DOM selection, events and updating text.</p><h2>2. Todo List with Saving</h2><p>Add, delete and mark tasks done. Save everything to localStorage. Teaches arrays, event delegation and JSON.</p><h2>3. Random Quote Generator</h2><p>Show a new quote on each click, first from an array, then from a public API. Teaches fetch and async/await.</p><h2>4. Simple Calculator</h2><p>Buttons for digits and operators with a display. Teaches functions, state and handling edge cases like dividing by zero.</p><h2>5. Quiz Game</h2><p>Questions stored as objects, track score, show result at the end.</p><pre><code>const questions = [\n  { q: 'Which keyword declares a constant?', options: ['var', 'let', 'const'], answer: 2 },\n  { q: 'What does === check?', options: ['value only', 'value and type'], answer: 1 }\n];\nlet score = 0;\nquestions.forEach(item => {\n  // show question, read the choice, then:\n  // if (choice === item.answer) score++;\n});</code></pre><h2>How to Practise</h2><p>Build the first version ugly and working. Then improve it one feature at a time. Even 30 minutes a day on a phone adds up fast.</p>"
+  },
+  {
     "slug": "javascript-closures-explained",
     "title": "JavaScript Closures Explained for Beginners",
     "excerpt": "Closures are one of the most powerful and misunderstood concepts in JavaScript. In this guide we break them down with real examples you can run right in HirenJS.",
