@@ -400,7 +400,7 @@ function renderPost(post, allPosts) {
         </div>
 
         <!-- Body -->
-        <div class="post-body reveal" id="postBody">${processContent(post.content)}</div>
+        <div class="post-body" id="postBody">${processContent(post.content)}</div>
 
         <!-- Try it CTA -->
         <div class="try-it-cta reveal">
@@ -725,7 +725,7 @@ function showToast(msg,type='success') {
 // ── Reveal ───────────────────────────────────────────────────────────
 const obs=new IntersectionObserver(es=>es.forEach((e,i)=>{
   if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*40);obs.unobserve(e.target);}
-}),{threshold:0.06});
+}),{threshold:0,rootMargin:'0px 0px -5% 0px'});
 function revealAll(){document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));}
 
 // ── Scroll ───────────────────────────────────────────────────────────
